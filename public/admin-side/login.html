@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victoria Mansions - Login</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .left-panel {
+            width: 50%;
+            background: linear-gradient(135deg, #8B0000 0%, #A52A2A 50%, #8B0000 100%);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            overflow: hidden;
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%);
+            z-index: 1;
+        }
+
+        .right-panel {
+            width: 50%;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            position: relative;
+        }
+
+        .right-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(139, 0, 0, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(165, 42, 42, 0.02) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.08),
+                0 10px 30px rgba(139, 0, 0, 0.1),
+                0 0 0 1px rgba(139, 0, 0, 0.05);
+            padding: 50px 45px;
+            width: 450px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand-content {
+            text-align: center;
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-v {
+            color: white;
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 6px;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-align: center;
+            line-height: 1.3;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .company-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .tagline {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            margin-bottom: 40px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .decorative-element {
+            width: 200px;
+            height: 200px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            position: absolute;
+            top: 20%;
+            right: -100px;
+            z-index: 1;
+        }
+
+        .decorative-element::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c2c2c;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .login-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .role-selection {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 8px;
+            margin-bottom: 40px;
+            width: 100%;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+        }
+
+        .role-tab {
+            flex: 1;
+            padding: 16px 28px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            color: #666;
+        }
+
+        .role-tab.active {
+            background: linear-gradient(135deg, #8B0000 0%, #A52A2A 100%);
+            color: white;
+            box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .role-tab:not(.active):hover {
+            background: rgba(139, 0, 0, 0.08);
+            color: #8B0000;
+            transform: translateY(-1px);
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 22px;
+            color: #999;
+            font-size: 20px;
+            z-index: 2;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 20px 22px 20px 60px;
+            border: 2px solid #e1e5e9;
+            border-radius: 14px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 17px;
+            background: white;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            height: 60px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #8B0000;
+            box-shadow: 0 0 0 4px rgba(139, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-input::placeholder {
+            color: #999;
+            font-weight: 400;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 22px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #999;
+            font-size: 20px;
+            transition: color 0.2s ease;
+            z-index: 2;
+        }
+
+        .password-toggle:hover {
+            color: #8B0000;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .checkbox.checked {
+            background: #8B0000;
+            border-color: #8B0000;
+            color: white;
+        }
+
+        .remember-text {
+            font-family: 'Poppins', sans-serif;
+            color: #666;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .forgot-password {
+            font-family: 'Poppins', sans-serif;
+            color: #8B0000;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .forgot-password:hover {
+            color: #A52A2A;
+            text-decoration: underline;
+        }
+
+        .signin-button {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #8B0000 0%, #A52A2A 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 28px rgba(139, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            height: 60px;
+        }
+
+        .signin-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .signin-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(139, 0, 0, 0.4);
+        }
+
+        .signin-button:hover::before {
+            left: 100%;
+        }
+
+        .signin-button:active {
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 1024px) {
+            .left-panel {
+                width: 45%;
+            }
+            
+            .right-panel {
+                width: 55%;
+                padding: 40px;
+            }
+            
+            .login-card {
+                width: 400px;
+                padding: 40px 35px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .left-panel {
+                width: 100%;
+                height: 40vh;
+                padding: 40px 20px;
+            }
+            
+            .right-panel {
+                width: 100%;
+                height: 60vh;
+                padding: 30px 20px;
+            }
+            
+            .login-card {
+                width: 100%;
+                padding: 35px 30px;
+            }
+            
+            .company-name {
+                font-size: 28px;
+            }
+            
+            .tagline {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="left-panel">
+        <div class="decorative-element"></div>
+        <div class="brand-content">
+            <div class="logo">
+                <div class="logo-v">V</div>
+                <div class="logo-text">VICTORIA<br>MANSIONS</div>
+            </div>
+            <h1 class="company-name">Victoria Mansions</h1>
+            <p class="tagline">Luxury Living Redefined</p>
+        </div>
+    </div>
+    
+    <div class="right-panel">
+        <div class="login-card">
+            <div class="login-header">
+                <h2 class="login-title">Welcome Back</h2>
+                <p class="login-subtitle">Sign in to your account</p>
+                <p style="margin-top:10px;color:#6c757d;font-size:14px;">
+                    Note: Use <strong>user:</strong> <code>princegallardo</code> and <strong>password:</strong> <code>12345</code>
+                </p>
+            </div>
+            
+            <div class="role-selection">
+                <div class="role-tab active">Admin</div>
+                <div class="role-tab">Receptionist</div>
+            </div>
+            
+            <form class="login-form">
+                <div class="form-group">
+                    <div class="input-container">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" class="form-input" placeholder="Username" id="username">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="password-container">
+                        <div class="input-container">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" class="form-input" placeholder="Password" id="password">
+                        </div>
+                        <i class="fas fa-eye password-toggle" onclick="togglePassword()"></i>
+                    </div>
+                </div>
+                
+                <div class="form-options">
+                    <div class="remember-me">
+                        <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                        <span class="remember-text">Remember me</span>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+                
+                <button type="submit" class="signin-button">Sign In</button>
+                <div id="loginError" style="margin-top:12px;color:#dc3545;font-weight:600;display:none;">Invalid credentials. Please try again.</div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.password-toggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        function toggleCheckbox(element) {
+            element.classList.toggle('checked');
+            if (element.classList.contains('checked')) {
+                element.innerHTML = '<i class="fas fa-check" style="font-size: 12px;"></i>';
+            } else {
+                element.innerHTML = '';
+            }
+        }
+
+        // Role selection functionality
+        document.querySelectorAll('.role-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Add smooth focus animations
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // Simple client-side authentication and routing
+        document.querySelector('.login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const activeRoleTab = document.querySelector('.role-tab.active');
+            const selectedRole = activeRoleTab && activeRoleTab.textContent.trim().toLowerCase();
+            const errorEl = document.getElementById('loginError');
+
+            // Provided credentials
+            const validUser = (username === 'princegallardo' && password === '12345');
+            if (!validUser) {
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            // Persist minimal session
+            localStorage.setItem('vm_user', JSON.stringify({ username: 'princegallardo', role: selectedRole }));
+
+            // Route based on selected role
+            if (selectedRole === 'receptionist') {
+                window.location.href = '../receptionist/receptionistdashboard.html';
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>

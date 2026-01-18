@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - H+Hotel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+     <link href="../css/styles.css" rel="stylesheet">
+    <script>
+        (function() {
+            try {
+                if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                    document.documentElement.classList.add('precollapsed');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <style>
+        /* Font Family Declarations */
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Headers and Titles */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .hotel-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .admin-label {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        /* Navigation */
+        .nav-link {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .nav-link span {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        /* Profile Section */
+        .profile-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .profile-role {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Section Titles */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        /* Report Cards */
+        .report-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .report-description {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Metric Values */
+        .metric-value {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .metric-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .metric-change {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        /* Breakdown and Trend Items */
+        .breakdown-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .breakdown-value {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .trend-date {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .trend-value {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        /* Search and Input Elements */
+        .search-input {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Reports specific styles */
+        .reports-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .report-card {
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .report-card:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .report-card.revenue {
+            border-left: 4px solid #28a745;
+            background-color: #d4edda;
+            border: 2px solid #28a745;
+        }
+
+        .report-card.occupancy {
+            border-left: 4px solid #007bff;
+            background-color: white;
+            border: 1px solid #e9ecef;
+        }
+
+        .report-card.reservation {
+            border-left: 4px solid #ffc107;
+            background-color: white;
+            border: 1px solid #e9ecef;
+        }
+
+        .report-card.feedback {
+            border-left: 4px solid #17a2b8;
+            background-color: white;
+            border: 1px solid #e9ecef;
+        }
+
+        .report-card.export-pdf {
+            border-left: 4px solid #dc3545;
+            background-color: white;
+            border: 1px solid #e9ecef;
+        }
+
+        .report-card.export-excel {
+            border-left: 4px solid #28a745;
+            background-color: white;
+            border: 1px solid #e9ecef;
+        }
+
+        .report-card.export-email {
+            border-left: 4px solid #343a40;
+            background-color: white;
+            border: 1px solid #e9ecef;
+        }
+
+        .report-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .report-icon.revenue {
+            background-color: #d4edda;
+            color: #28a745;
+        }
+
+        .report-icon.occupancy {
+            background-color: #cce7ff;
+            color: #007bff;
+        }
+
+        .report-icon.reservation {
+            background-color: #fff3cd;
+            color: #ffc107;
+        }
+
+        .report-icon.feedback {
+            background-color: #d1ecf1;
+            color: #17a2b8;
+        }
+
+        .report-icon.export-pdf {
+            background-color: #f8d7da;
+            color: #dc3545;
+        }
+
+        .report-icon.export-excel {
+            background-color: #d4edda;
+            color: #28a745;
+        }
+
+        .report-icon.export-email {
+            background-color: #e2e3e5;
+            color: #343a40;
+        }
+
+        .report-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .report-description {
+            font-size: 14px;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
+        /* Revenue Metrics */
+        .metric-card {
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            height: 100%;
+        }
+
+        .metric-card.total-revenue {
+            background-color: #e9f7ef; /* light green */
+            border: 1px solid #badbcc;
+        }
+
+        .metric-card.avg-rate {
+            background-color: #e7f1ff; /* light blue */
+            border: 1px solid #cfe2ff;
+        }
+
+        .metric-card.revpar {
+            background-color: #f3e9ff; /* light purple */
+            border: 1px solid #dac7f7;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .metric-value.total-revenue {
+            color: #28a745;
+        }
+
+        /* When the main value is green, make the supporting text green too */
+        .metric-card.total-revenue .metric-label,
+        .metric-card.total-revenue .metric-change { color: #28a745; }
+
+        .metric-value.avg-rate { color: #0d6efd; }
+        .metric-card.avg-rate .metric-label,
+        .metric-card.avg-rate .metric-change { color: #0d6efd; }
+
+        .metric-value.revpar { color: #6f42c1; }
+        .metric-card.revpar .metric-label,
+        .metric-card.revpar .metric-change { color: #6f42c1; }
+
+        .metric-value.avg-rate {
+            color: #007bff;
+        }
+
+        .metric-value.revpar {
+            color: #6f42c1;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .metric-change {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .metric-change.positive {
+            color: #28a745;
+        }
+
+        .metric-change.positive::before {
+            content: "+";
+        }
+
+        /* Revenue Breakdown */
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .breakdown-label {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .breakdown-bar {
+            flex: 1;
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            margin: 0 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .breakdown-fill {
+            height: 100%;
+            background-color: #28a745;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* Daily Trend */
+        .trend-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .trend-date {
+            font-weight: 500;
+            color: #2c3e50;
+            min-width: 80px;
+        }
+
+        .trend-bar {
+            flex: 1;
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            margin: 0 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trend-fill {
+            height: 100%;
+            background-color: #28a745;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .trend-value {
+            font-weight: 600;
+            color: #2c3e50;
+            min-width: 50px;
+            text-align: right;
+        }
+
+        /* Page Title Styling */
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 20px 0 0 0;
+        }
+
+        /* Ensure proper scrolling */
+        body {
+            overflow-x: hidden;
+            overflow-y: auto;
+            height: auto;
+        }
+        
+        .container-fluid {
+            min-height: 100vh;
+            height: auto;
+        }
+        
+        .sidebar {
+            height: 100vh;
+            overflow-y: auto;
+            position: fixed;
+        }
+        
+        main {
+            margin-left: 0;
+            padding: 20px;
+            min-height: 100vh;
+            height: auto;
+            overflow-y: visible;
+        }
+
+        @media (min-width: 768px) {
+            main {
+                margin-left: 250px;
+            }
+        }
+
+
+        /* Nested reports section for side-by-side layout */
+        .nested-reports-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: 100%;
+        }
+
+        /* Specific styling for revenue breakdown and trend sections */
+        .revenue-breakdown-section,
+        .daily-trend-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .revenue-breakdown-section .section-title,
+        .daily-trend-section .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        /* Content distribution within the sections */
+        .revenue-breakdown-section .breakdown-item,
+        .daily-trend-section .trend-item {
+            margin-bottom: 20px;
+        }
+
+        .revenue-breakdown-section .breakdown-item:last-child,
+        .daily-trend-section .trend-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Better spacing for revenue breakdown (3 items) */
+        .revenue-breakdown-section {
+            justify-content: flex-start;
+        }
+
+        .revenue-breakdown-section .breakdown-item {
+            margin-bottom: 25px;
+        }
+
+        /* Better spacing for daily trend (8 items) */
+        .daily-trend-section {
+            justify-content: space-between;
+        }
+
+        .daily-trend-section .trend-item {
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="sidebar-header clickable" id="sidebarToggle">
+                    <span class="logo-text">logo</span>
+                    <h4 class="hotel-name">H+Hotel</h4>
+                    <i class="fas fa-bars toggle-icon" aria-label="Collapse sidebar"></i>
+                </div>
+                
+                <ul class="nav flex-column main-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html" data-tooltip="Dashboard">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reservations.html" data-tooltip="Reservations">
+                            <i class="fas fa-calendar"></i>
+                            <span>Reservations</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="payment.html" data-tooltip="Payments">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Payments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="usermanagement.html" data-tooltip="User Management">
+                            <i class="fas fa-users"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="roommanagement.html" data-tooltip="Room Management">
+                            <i class="fas fa-bed"></i>
+                            <span>Room Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="reports.html" data-tooltip="Reports">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="nav flex-column secondary-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html" data-tooltip="Settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html" data-tooltip="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="profile-section">
+                    <div class="profile-info" data-tooltip="Prince Gallardo - Admin">
+                        <i class="fas fa-user-circle profile-icon"></i>
+                        <div>
+                            <div class="profile-name">Prince Gallardo</div>
+                            <div class="profile-role">Admin</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="top-bar-header d-flex justify-content-between align-items-center">
+                    <div class="left-section">
+                        <span class="admin-label">Admin</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="search-container me-4">
+                            <input type="text" class="form-control search-input" placeholder="Search reservations...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                        <div class="notification-icon me-3">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="user-dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <div class="mb-4">
+                    <h1 class="page-title">Reports</h1>
+                </div>
+
+                <!-- Available Reports Section -->
+                <div class="reports-section">
+                    <h2 class="section-title">Available Reports</h2>
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="report-card revenue">
+                                <div class="report-icon revenue">
+                                    <i class="fas fa-peso-sign"></i>
+                                </div>
+                                <h3 class="report-title">Revenue Report</h3>
+                                <p class="report-description">Financial performance and revenue analysis</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <a href="occupancy.html" style="text-decoration: none; color: inherit;">
+                                <div class="report-card occupancy">
+                                    <div class="report-icon occupancy">
+                                        <i class="fas fa-bed"></i>
+                                    </div>
+                                    <h3 class="report-title">Occupancy Report</h3>
+                                    <p class="report-description">Room utilization and occupancy trends</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <a href="reservationReport.html" style="text-decoration: none; color: inherit;">
+                                <div class="report-card reservation">
+                                    <div class="report-icon reservation">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                    <h3 class="report-title">Reservation Report</h3>
+                                    <p class="report-description">Reservation analytics and booking trends</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <a href="feedback.html" style="text-decoration: none; color: inherit;">
+                                <div class="report-card feedback">
+                                    <div class="report-icon feedback">
+                                        <i class="fas fa-comments"></i>
+                                    </div>
+                                    <h3 class="report-title">Feedback Report</h3>
+                                    <p class="report-description">Customer feedback and satisfaction analysis</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Revenue Report Section -->
+                <div class="reports-section">
+                    <h2 class="section-title">Revenue Report</h2>
+                    
+                    <!-- Revenue Metrics -->
+                    <div class="row mb-4">
+                        <div class="col-xl-4 col-md-6 mb-3">
+                            <div class="metric-card total-revenue">
+                                <div class="metric-value total-revenue">₱3,310,000</div>
+                                <div class="metric-label">Total Revenue</div>
+                                <div class="metric-change positive">15.3% from last month</div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 mb-3">
+                            <div class="metric-card avg-rate">
+                                <div class="metric-value avg-rate">₱3,500</div>
+                                <div class="metric-label">Average Daily Rate</div>
+                                <div class="metric-change positive">8.1% from last month</div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 mb-3">
+                            <div class="metric-card revpar">
+                                <div class="metric-value revpar">₱3,310</div>
+                                <div class="metric-label">RevPAR</div>
+                                <div class="metric-change positive">12.3% from last month</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Revenue Breakdown and Daily Revenue Trend Side by Side -->
+                <div class="row">
+                    <div class="col-xl-6 mb-4">
+                        <div class="revenue-breakdown-section">
+                            <h2 class="section-title">Revenue Breakdown</h2>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Room Revenue</span>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" style="width: 85%;"></div>
+                                </div>
+                                <span class="breakdown-value">₱265k</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Food & Beverage</span>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" style="width: 30%;"></div>
+                                </div>
+                                <span class="breakdown-value">₱100k</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Other Services</span>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" style="width: 10%;"></div>
+                                </div>
+                                <span class="breakdown-value">₱10k</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xl-6 mb-4">
+                        <div class="daily-trend-section">
+                            <h2 class="section-title">Daily Revenue Trend</h2>
+                            <div class="trend-item">
+                                <span class="trend-date">Sept 15</span>
+                                <div class="trend-bar">
+                                    <div class="trend-fill" style="width: 100%;"></div>
+                                </div>
+                                <span class="trend-value">₱65k</span>
+                            </div>
+                            <div class="trend-item">
+                                <span class="trend-date">Sept 16</span>
+                                <div class="trend-bar">
+                                    <div class="trend-fill" style="width: 85%;"></div>
+                                </div>
+                                <span class="trend-value">₱55k</span>
+                            </div>
+                            <div class="trend-item">
+                                <span class="trend-date">Sept 17</span>
+                                <div class="trend-bar">
+                                    <div class="trend-fill" style="width: 95%;"></div>
+                                </div>
+                                <span class="trend-value">₱63k</span>
+                            </div>
+                            <div class="trend-item">
+                                <span class="trend-date">Sept 18</span>
+                                <div class="trend-bar">
+                                    <div class="trend-fill" style="width: 98%;"></div>
+                                </div>
+                                <span class="trend-value">₱64k</span>
+                            </div>
+                            <div class="trend-item">
+                                <span class="trend-date">Sept 19</span>
+                                <div class="trend-bar">
+                                    <div class="trend-fill" style="width: 88%;"></div>
+                                </div>
+                                <span class="trend-value">₱57k</span>
+                            </div>
+                            <div class="trend-item">
+                                <span class="trend-date">Sept 20</span>
+                                <div class="trend-bar">
+                                    <div class="trend-fill" style="width: 92%;"></div>
+                                </div>
+                                <span class="trend-value">₱60k</span>
+                            </div>
+                            <div class="trend-item">
+                                <span class="trend-date">Sept 21</span>
+                                <div class="trend-bar">
+                                    <div class="trend-fill" style="width: 100%;"></div>
+                                </div>
+                                <span class="trend-value">₱65k</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Reports Section -->
+                <div class="reports-section">
+                    <h2 class="section-title">Export Reports</h2>
+                    <div class="row">
+                        <div class="col-xl-4 col-md-6 mb-3">
+                            <div class="report-card export-pdf">
+                                <div class="report-icon export-pdf">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <h3 class="report-title">PDF Report</h3>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 mb-3">
+                            <div class="report-card export-excel">
+                                <div class="report-icon export-excel">
+                                    <i class="fas fa-file-excel"></i>
+                                </div>
+                                <h3 class="report-title">Excel Report</h3>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 mb-3">
+                            <div class="report-card export-email">
+                                <div class="report-icon export-email">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <h3 class="report-title">Email Report</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../script.js"></script>
+    <script>
+        // Animate progress bars on load
+        window.addEventListener('load', function() {
+            const progressBars = document.querySelectorAll('.breakdown-fill, .trend-fill');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
+    

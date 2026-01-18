@@ -1,0 +1,2156 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    overflow-x: hidden;
+    height: 100vh;
+}
+
+/* Global Font Family Declarations */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+}
+
+/* Headers and Titles */
+.welcome-banner h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
+.reservation-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
+.hotel-name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+}
+
+.admin-label {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
+/* Navigation */
+.nav-link {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.nav-link span {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+/* Profile Section */
+.profile-name {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.profile-role {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+/* KPI Cards */
+.kpi-number {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
+.kpi-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.kpi-trend {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+/* Info Cards */
+.info-card .card-header h5 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+}
+
+.info-card .card-header p {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+/* Guest Cards */
+.guest-name {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.guest-details {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+.status-badge {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    text-align: center;
+    min-width: 80px;
+}
+
+/* Search and Input Elements */
+.search-input {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+/* Buttons */
+.btn {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.btn-filter {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.new-reservation-btn {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+/* Table Headers */
+.reservations-table thead th {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+/* Guest and Room Info */
+.guest-count {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+.room-info span {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.room-number {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+/* Modal Elements */
+.modal-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+}
+
+.form-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.form-control, .form-select {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+/* User Management Styles */
+.user-name {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.user-joined {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+.contact-item {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+.role-badge {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+/* Room Management Styles */
+.room-rate {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+}
+
+.field-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.detail-value {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+
+.room-capacity {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+.amenity-item {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+.room-description {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+/* Settings Styles */
+.profile-form .form-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.profile-form .form-control {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+.save-changes-btn {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+/* Notification and Security Settings */
+.notification-item h6,
+.security-item h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+}
+
+.notification-item p,
+.security-item p {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+.preference-item label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+/* Prevent layout jump on navigation when previously collapsed */
+.precollapsed .sidebar { width: 60px; }
+.precollapsed main { margin-left: 16.666667%; width: calc(100% - 16.666667%); }
+.precollapsed .sidebar .hotel-name,
+.precollapsed .sidebar .logo-text,
+.precollapsed .sidebar .nav-link span,
+.precollapsed .sidebar .profile-name,
+.precollapsed .sidebar .profile-role { display: none; }
+
+/* Disable animations/transitions when loading in collapsed state */
+.precollapsed *,
+.precollapsed .sidebar,
+.precollapsed main {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* Pre-expand layout: used on pages that should widen content when collapsed */
+.preexpand main {
+    margin-left: 60px !important;
+    width: calc(100% - 60px) !important;
+}
+
+.preexpand *,
+.preexpand .sidebar,
+.preexpand main {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* Mirror key collapsed visual rules without resizing main */
+.precollapsed .sidebar .sidebar-header {
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+}
+
+.precollapsed .sidebar .nav-link {
+    text-align: center;
+    padding: 0.75rem 0.5rem;
+    justify-content: center;
+    position: relative;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.precollapsed .sidebar .nav-link i {
+    margin: 0;
+    font-size: 1rem;
+    width: auto;
+}
+
+.precollapsed .sidebar .profile-info {
+    justify-content: center;
+    padding: 0.75rem 0.5rem;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.precollapsed .sidebar .profile-icon { font-size: 1.5rem; margin: 0; }
+
+.sidebar {
+    background: white;
+    height: 100vh;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    padding: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 16.666667%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+    flex-shrink: 0;
+}
+
+
+.sidebar.collapsed .hotel-name,
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .nav-link span,
+.sidebar.collapsed .profile-name,
+.sidebar.collapsed .profile-role {
+    opacity: 0;
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-header {
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+}
+
+.sidebar.collapsed .hotel-name {
+    display: none;
+}
+
+.sidebar.collapsed .hotel-name i {
+    display: block;
+    margin: 0 auto;
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+.sidebar.collapsed .sidebar-header:hover .hotel-name i {
+    color: #495057;
+}
+
+.sidebar.collapsed .nav-link {
+    text-align: center;
+    padding: 0.75rem 0.5rem;
+    justify-content: center;
+    position: relative;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar.collapsed .nav-link:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #333;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    margin-left: 10px;
+    z-index: 1001;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.sidebar.collapsed .nav-link:hover::before {
+    content: '';
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-right-color: #333;
+    margin-left: 5px;
+    z-index: 1001;
+}
+
+.sidebar.collapsed .nav-link i {
+    margin: 0;
+    font-size: 1rem;
+    width: auto;
+}
+
+.sidebar.collapsed .profile-info {
+    justify-content: center;
+    padding: 0.75rem 0.5rem;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar.collapsed .profile-info:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #333;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    margin-left: 10px;
+    z-index: 1001;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.sidebar.collapsed .profile-info:hover::before {
+    content: '';
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-right-color: #333;
+    margin-left: 5px;
+    z-index: 1001;
+}
+
+.sidebar.collapsed .profile-icon {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.sidebar-header {
+    padding: 1.4rem 1rem;
+    border-bottom: 1px solid #e9ecef;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-header.clickable {
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.sidebar-header.clickable:hover {
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+.sidebar-header.clickable:active {
+    background-color: #e9ecef;
+}
+
+.sidebar-header.clickable:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+.sidebar-header.clickable:hover .hotel-name {
+    color: #495057;
+}
+
+.sidebar-header .toggle-icon {
+    display: inline-block;
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+.sidebar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sidebar.collapsed .hotel-name {
+    display: none;
+}
+
+.sidebar.collapsed .toggle-icon {
+    display: block;
+}
+
+.sidebar.collapsed .sidebar-header:hover .toggle-icon {
+    color: #495057;
+}
+
+.hotel-name {
+    color: #333;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    flex: 1 1 auto;
+    text-align: center;
+}
+
+.hotel-name i {
+    margin-right: 0.75rem;
+    font-size: 1rem;
+}
+
+.hotel-logo {
+    display: none !important;
+}
+
+.logo-text {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-right: 8px;
+    display: inline-block;
+}
+
+.sidebar .nav {
+    padding: 0.45rem 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sidebar .main-nav {
+    border-bottom: 1px solid #e9ecef;
+    margin-bottom: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.sidebar .secondary-nav {
+    border-bottom: 0;
+    margin-bottom: 0;
+    padding-top: 0.5rem;
+    flex-shrink: 0;
+}
+
+.sidebar .nav-item {
+    margin: 0.22rem 0;
+    position: relative;
+}
+
+/* Remove per-item dividers in sidebar */
+.sidebar .nav-item:not(:last-child)::after { content: none; }
+
+.sidebar .secondary-nav .nav-item:not(:last-child)::after { content: none; }
+
+.sidebar .nav-link {
+    color: #6c757d;
+    padding: 0.9rem 1.1rem;
+    text-decoration: none;
+    border-radius: 0;
+    font-weight: 500;
+    font-size: 0.97rem;
+    display: flex;
+    align-items: center;
+    min-height: 2.7rem;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+.sidebar .nav-link.active {
+    background: linear-gradient(180deg, #731919 0%, #e52b2b 100%);
+    color: white;
+    border-radius: 0;
+    border: none;
+    box-sizing: border-box;
+}
+
+.sidebar .nav-link i {
+    width: 17px;
+    text-align: center;
+    font-size: 0.95rem;
+    margin-right: 0.65rem;
+}
+
+.sidebar .nav-link span {
+    display: inline-block;
+    font-size: 0.97rem;
+}
+
+.profile-section {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.9rem;
+    border-top: 1px solid #e9ecef;
+    background: white;
+    margin-top: auto;
+    flex-shrink: 0;
+    min-height: 75px;
+}
+
+.profile-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 1rem;
+    right: 1rem;
+    height: 1px;
+    background-color: #e9ecef;
+    opacity: 0.6;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.45rem 0;
+}
+
+.profile-icon {
+    font-size: 1.4rem;
+    color: #6c757d;
+    flex-shrink: 0;
+}
+
+.profile-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.92rem;
+    margin-bottom: 0.22rem;
+}
+
+.profile-role {
+    color: #6c757d;
+    font-size: 0.77rem;
+}
+
+main {
+    margin-left: 16.666667%;
+    padding-top: 0.5rem;
+    overflow: hidden;
+    max-height: 100vh;
+    width: calc(100% - 16.666667%);
+    position: relative;
+}
+
+main.sidebar-collapsed {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+}
+
+@media (min-width: 992px) {
+    main {
+        margin-left: 16.666667%;
+        width: calc(100% - 16.666667%);
+    }
+    
+    main.sidebar-collapsed {
+        margin-left: 60px;
+        width: calc(100% - 60px);
+    }
+}
+
+.top-bar-header {
+    background: white;
+    border-radius: 0;
+    margin-bottom: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.hotel-name-top {
+    color: #333;
+    font-weight: 700;
+    margin: 0;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+}
+
+.header-separator {
+    width: 1px;
+    height: 20px;
+    background-color: #dee2e6;
+    margin: 0 1.5rem;
+}
+
+.admin-label {
+    color: #333;
+    font-weight: 700;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.left-section {
+    display: flex;
+    align-items: center;
+}
+
+.top-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+}
+
+.search-container {
+    position: relative;
+    width: 280px;
+}
+
+.search-input {
+    padding-left: 2.5rem;
+    border-radius: 20px;
+    border: 1px solid #e9ecef;
+    background-color: white;
+    font-size: 0.9rem;
+    height: 38px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.notification-icon, .user-dropdown {
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.notification-icon:hover, .user-dropdown:hover {
+    background-color: #f8f9fa;
+}
+
+.notification-icon i {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+.user-dropdown i:first-child {
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+.user-dropdown i:last-child {
+    font-size: 0.7rem;
+    color: #6c757d;
+}
+
+.welcome-banner {
+    background: linear-gradient(180deg, #731919 0%, #e52b2b 100%);
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    text-align: left;
+    box-shadow: 0 4px 15px rgba(115, 25, 25, 0.3);
+    margin: 2rem 0 1rem 0;
+}
+
+.welcome-banner h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.welcome-banner p {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.kpi-card {
+    background: white;
+    border-radius: 8px;
+    padding: 0.75rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.kpi-card:hover {
+    transform: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.kpi-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.4rem;
+}
+
+.kpi-icon.light-blue {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+}
+
+.kpi-icon.orange {
+    background: linear-gradient(135deg, #fd7e14 0%, #e55a00 100%);
+}
+
+.kpi-icon.green {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+}
+
+.kpi-icon.purple {
+    background: linear-gradient(135deg, #6f42c1 0%, #5a2d91 100%);
+}
+
+.kpi-icon i {
+    font-size: 0.7rem;
+    color: white;
+}
+
+.kpi-content {
+    flex: 1;
+}
+
+.kpi-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.4rem;
+}
+
+.kpi-label {
+    color: #6c757d;
+    font-size: 0.8rem;
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+}
+
+.kpi-trend {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.kpi-trend.positive {
+    color: #28a745;
+}
+
+.kpi-trend.negative {
+    color: #dc3545;
+}
+
+.kpi-chart {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    width: 35px;
+    height: 25px;
+}
+
+.info-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Disable hover lift for cards as requested */
+.info-card:hover {
+    transform: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.info-card .card-header {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+    flex-shrink: 0;
+}
+
+.info-card .card-header h5 {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.info-card .card-header p {
+    color: #6c757d;
+    margin: 0;
+    font-size: 0.8rem;
+}
+
+.info-card .card-body {
+    padding: 1.5rem;
+    /* Removed min-height to prevent scrolling */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.empty-state {
+    text-align: center;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    margin: 0;
+    font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: static;
+        min-height: auto;
+        width: 100% !important;
+    }
+    
+    .sidebar.collapsed {
+        width: 100% !important;
+    }
+    
+    .sidebar.collapsed .hotel-name,
+    .sidebar.collapsed .logo-text,
+    .sidebar.collapsed .nav-link span,
+    .sidebar.collapsed .profile-name,
+    .sidebar.collapsed .profile-role {
+        display: block;
+    }
+    
+    .sidebar.collapsed .nav-link {
+        text-align: left;
+        padding: 0.5rem 1rem;
+    }
+    
+    .sidebar.collapsed .nav-link i {
+        margin-right: 0.5rem;
+    }
+    
+    .sidebar.collapsed .profile-info {
+        justify-content: flex-start;
+    }
+    
+    main {
+        margin-left: 0;
+    }
+    
+    main.sidebar-collapsed {
+        margin-left: 0;
+    }
+    
+    .search-container {
+        width: 100%;
+        max-width: 250px;
+    }
+    
+    .welcome-banner h1 {
+        font-size: 2rem;
+    }
+    
+    .kpi-card {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .welcome-banner {
+        padding: 1.5rem;
+    }
+    
+    .welcome-banner h1 {
+        font-size: 1.75rem;
+    }
+    
+    .kpi-card {
+        padding: 1rem;
+    }
+    
+    .kpi-number {
+        font-size: 1.5rem;
+    }
+}
+
+.trend-chart {
+    opacity: 0.7;
+}
+
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    display: none;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    display: none;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    display: none;
+}
+
+.reservation-header {
+    margin-top: 1rem;
+}
+
+.reservation-title {
+    color: #333;
+    font-weight: 700;
+    font-size: 2rem;
+    margin: 0;
+}
+
+.new-reservation-btn {
+    background: linear-gradient(180deg, #731919 0%, #e52b2b 100%);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    color: #ffffff !important;
+}
+
+.new-reservation-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(115, 25, 25, 0.4);
+}
+
+/* Ensure icons inside gradient buttons are white */
+.new-reservation-btn i { color: #ffffff !important; }
+
+.search-filter-section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-filter {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    color: #6c757d;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-filter:hover {
+    background: #e9ecef;
+    color: #495057;
+    border-color: #dee2e6;
+}
+
+.btn-filter.active {
+    background: linear-gradient(180deg, #731919 0%, #e52b2b 100%);
+    color: white;
+    border-color: #731919;
+}
+
+.reservations-table-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.reservations-table {
+    margin: 0;
+}
+
+.reservations-table thead th {
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    color: #333;
+    font-weight: 600;
+    padding: 1rem;
+    font-size: 0.9rem;
+}
+
+.reservations-table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+/* Reservations table: remove gray hover */
+.reservations-table tbody tr:hover {
+    background-color: transparent !important;
+}
+
+.guest-info, .room-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.guest-info i, .room-info i {
+    color: #6c757d;
+    font-size: 0.8rem;
+}
+
+.guest-count, .room-number {
+    color: #6c757d;
+    font-size: 0.75rem;
+    font-style: italic;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+}
+
+/* Higher-contrast status badges for visibility */
+.status-booked {
+    background-color: #0d6efd;
+    color: #ffffff;
+}
+
+.status-checkedin {
+    background-color: #198754;
+    color: #ffffff;
+}
+
+.status-checkedout {
+    background-color: #6c757d;
+    color: #ffffff;
+}
+
+.status-cancelled {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-action {
+    background: none;
+    border: none;
+    color: #6c757d;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.btn-action:hover {
+    background-color: #f8f9fa;
+    color: #495057;
+    transform: scale(1.1);
+}
+
+.btn-action:active {
+    transform: scale(0.95);
+}
+
+/* Make Delete action solid red and remove hover animation */
+.action-buttons button[title="Delete"] {
+    background-color: #dc3545 !important;
+    color: #ffffff !important;
+    border-color: #dc3545 !important;
+}
+
+.action-buttons button[title="Delete"] i {
+    color: #ffffff !important;
+    font-size: 1.2rem !important;
+}
+
+.action-buttons button[title="Delete"]:hover,
+.action-buttons button[title="Delete"]:focus {
+    background-color: #c82333 !important;
+    color: #ffffff !important;
+    border-color: #c82333 !important;
+    transform: none !important;
+}
+
+/* Larger red trash for room management delete icon */
+.room-delete { 
+    color: #ffffff !important; 
+    font-size: 1.1rem; 
+    padding: 0.375rem 0.6rem; 
+    background-color: #dc3545 !important; 
+    border: 1px solid #dc3545 !important; 
+    border-radius: 6px; 
+    line-height: 1; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    text-decoration: none !important;
+    margin-left: 16px;
+}
+.room-delete i { color: #ffffff !important; font-size: 1.1rem; }
+.room-delete:hover { background-color: #c82333 !important; border-color: #c82333 !important; color: #ffffff !important; }
+
+/* Colorize View and Edit action buttons */
+.action-buttons button[title="View"] {
+    background-color: #0d6efd !important; /* Bootstrap primary */
+    color: #ffffff !important;
+    border-color: #0d6efd !important;
+}
+
+.action-buttons button[title="View"] i {
+    color: #ffffff !important;
+}
+
+.action-buttons button[title="View"]:hover,
+.action-buttons button[title="View"]:focus {
+    background-color: #0b5ed7 !important;
+    border-color: #0a58ca !important;
+    color: #ffffff !important;
+    transform: none !important;
+}
+
+.action-buttons button[title="Edit"] {
+    background-color: #ffc107 !important; /* Bootstrap warning */
+    color: #212529 !important;
+    border-color: #ffc107 !important;
+}
+
+.action-buttons button[title="Edit"] i {
+    color: #212529 !important;
+}
+
+.action-buttons button[title="Edit"]:hover,
+.action-buttons button[title="Edit"]:focus {
+    background-color: #ffca2c !important;
+    border-color: #ffc720 !important;
+    color: #212529 !important;
+    transform: none !important;
+}
+
+/* User Management Styles */
+.page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.search-filter-section {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.add-user-btn {
+    background: #dc3545;
+    border-color: #dc3545;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.add-user-btn:hover {
+    background: #c82333;
+    border-color: #bd2130;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #6c757d;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.filter-btn:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+    color: #495057;
+}
+
+.filter-btn.active {
+    background: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.filter-btn.active:hover {
+    background: #c82333;
+    border-color: #bd2130;
+}
+
+/* User Table Styles */
+.table-header th {
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    color: #333;
+    font-weight: 600;
+    padding: 1rem;
+    font-size: 0.9rem;
+}
+
+.table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.user-avatar {
+    font-size: 2.5rem;
+    color: #6c757d;
+}
+
+.user-name {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+.user-joined {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+.contact-item i {
+    color: #6c757d;
+    width: 16px;
+}
+
+.role-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+    color: white;
+}
+
+.role-badge.admin {
+    background-color: #6f42c1;
+}
+
+.role-badge.receptionist {
+    background-color: #0d6efd;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+    color: white;
+}
+
+.status-badge.active {
+    background-color: #198754;
+}
+
+.status-badge.inactive {
+    background-color: #dc3545;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-buttons .btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+    transition: all 0.3s ease;
+}
+
+.action-buttons .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Room Management Styles */
+.room-details {
+    padding: 0;
+}
+
+.room-rate {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.field-label {
+    color: #6c757d;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.detail-value {
+    font-weight: 700;
+    color: #333;
+}
+
+.room-capacity {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.room-amenities {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.amenity-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background-color: #f1f3f5;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    line-height: 1;
+}
+
+.amenity-item i {
+    color: #6c757d;
+    width: 14px;
+}
+
+.room-description {
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.room-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.room-actions .btn {
+    font-size: 0.8rem;
+    padding: 0.375rem 0.75rem;
+}
+
+/* Settings Page Styles */
+.settings-nav {
+    padding: 1rem 0;
+}
+
+/* Prevent scrolling on settings page */
+.info-card {
+    max-height: calc(100vh - 200px);
+    overflow: hidden;
+}
+
+.settings-nav-link {
+    color: #6c757d;
+    padding: 0.75rem 1rem;
+    border-radius: 0;
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.settings-nav-link:hover {
+    background-color: #f8f9fa;
+    color: #495057;
+    border-left-color: #dee2e6;
+}
+
+.settings-nav-link.active {
+    background-color: #dc3545;
+    color: white;
+    border-left-color: #dc3545;
+}
+
+.settings-nav-link.active:hover {
+    background-color: #c82333;
+    color: white;
+}
+
+.settings-content {
+    /* Removed min-height to prevent scrolling */
+    overflow: hidden;
+    max-height: 100vh;
+    height: auto;
+}
+
+.profile-avatar-large {
+    font-size: 4rem;
+    color: #6c757d;
+}
+
+.profile-form .form-label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.profile-form .form-control {
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.profile-form .form-control:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.profile-form .input-group-text {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #6c757d;
+}
+
+.save-changes-btn {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.save-changes-btn:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* Responsive adjustments for user management */
+@media (max-width: 768px) {
+    .search-filter-section .row {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .search-filter-section .col-md-6 {
+        width: 100%;
+        text-align: left;
+    }
+    
+    .filter-buttons {
+        justify-content: center;
+    }
+    
+    .filter-btn {
+        min-width: auto;
+        flex: 1;
+    }
+    
+    .table-responsive {
+        font-size: 0.85rem;
+    }
+    
+    .user-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .contact-info {
+        gap: 0.25rem;
+    }
+}
+
+/* Responsive adjustments for room management */
+@media (max-width: 768px) {
+    .room-amenities {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .amenity-item {
+        min-width: 80px;
+    }
+    
+    .room-actions {
+        flex-direction: column;
+    }
+    
+    .room-actions .btn {
+        width: 100%;
+    }
+}
+
+/* Responsive adjustments for settings */
+@media (max-width: 768px) {
+    .settings-nav {
+        border-bottom: 1px solid #dee2e6;
+        border-right: none;
+    }
+    
+    .settings-nav-link {
+        border-left: none;
+        border-bottom: 2px solid transparent;
+    }
+    
+    .settings-nav-link.active {
+        border-bottom-color: #dc3545;
+    }
+    
+    .profile-display {
+        text-align: center;
+    }
+    
+    .profile-avatar-large {
+        margin: 0 auto 1rem;
+    }
+}
+
+/* Settings content responsive to sidebar state */
+.settings-container {
+    width: 100%;
+}
+
+.settings-content-wrapper {
+    transition: all 0.3s ease;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* When sidebar is collapsed, expand settings content */
+main.sidebar-collapsed .settings-content-wrapper {
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+/* Override Bootstrap grid for settings when sidebar is collapsed */
+main.sidebar-collapsed .settings-content-wrapper .col-md-3 {
+    width: 20% !important;
+    flex: 0 0 20% !important;
+    max-width: 20% !important;
+}
+
+main.sidebar-collapsed .settings-content-wrapper .col-md-9 {
+    width: 80% !important;
+    flex: 0 0 80% !important;
+    max-width: 80% !important;
+}
+
+/* Expand settings header elements when sidebar is collapsed */
+main.sidebar-collapsed .settings-content-wrapper .info-card {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+/* Ensure settings content uses available space when sidebar is collapsed */
+main.sidebar-collapsed .settings-content-wrapper .info-card {
+    width: 100%;
+    max-width: none;
+}
+
+/* Responsive breakpoints for settings content */
+@media (min-width: 1200px) {
+    main.sidebar-collapsed .settings-content-wrapper {
+        max-width: 1400px !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    main.sidebar-collapsed .settings-content-wrapper {
+        max-width: 1600px !important;
+    }
+}
+
+/* Additional responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .settings-content-wrapper {
+        max-width: 100%;
+        margin: 0;
+    }
+}
+
+/* Dashboard content responsive to sidebar state */
+.dashboard-content-wrapper {
+    transition: all 0.3s ease;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* When sidebar is collapsed, expand dashboard content */
+main.sidebar-collapsed .dashboard-content-wrapper {
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Override Bootstrap grid when sidebar is collapsed to use more space */
+main.sidebar-collapsed .dashboard-content-wrapper .col-xl-3 {
+    width: 25% !important;
+    flex: 0 0 25% !important;
+    max-width: 25% !important;
+    padding: 0 15px !important;
+}
+
+main.sidebar-collapsed .dashboard-content-wrapper .col-xl-6 {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    padding: 0 15px !important;
+}
+
+/* Make all cards expand when sidebar is collapsed */
+main.sidebar-collapsed .dashboard-content-wrapper .col-md-6 {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    padding: 0 15px !important;
+}
+
+main.sidebar-collapsed .dashboard-content-wrapper .col-lg-6 {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    padding: 0 15px !important;
+}
+
+/* Remove any container constraints when sidebar is collapsed */
+main.sidebar-collapsed .dashboard-content-wrapper .row {
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+main.sidebar-collapsed .dashboard-content-wrapper .row > * {
+    padding: 0 15px !important;
+}
+
+/* Make cards fill the full width of their containers */
+main.sidebar-collapsed .dashboard-content-wrapper .kpi-card,
+main.sidebar-collapsed .dashboard-content-wrapper .info-card {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 160px !important;
+    padding: 25px !important;
+}
+
+/* Make arrival and departure cards longer when sidebar is not collapsed */
+.dashboard-content-wrapper .info-card {
+    min-height: 220px !important;
+}
+
+/* Make the entire main area responsive to sidebar state */
+main.sidebar-collapsed {
+    padding: 0 30px !important;
+}
+
+/* Expand header elements when sidebar is collapsed */
+main.sidebar-collapsed .top-bar-header {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 1rem 2rem !important;
+}
+
+main.sidebar-collapsed .top-bar-header .left-section {
+    margin-left: 0 !important;
+}
+
+main.sidebar-collapsed .welcome-banner {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 30px 2rem !important;
+}
+
+/* Expand search container when sidebar is collapsed */
+main.sidebar-collapsed .search-container {
+    width: 500px !important;
+    max-width: 500px !important;
+}
+
+/* Responsive breakpoints for dashboard content */
+@media (min-width: 1200px) {
+    main.sidebar-collapsed .dashboard-content-wrapper .col-xl-3 {
+        width: 25% !important;
+        flex: 0 0 25% !important;
+        max-width: 25% !important;
+    }
+    
+    main.sidebar-collapsed .dashboard-content-wrapper .col-xl-6 {
+        width: 50% !important;
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+    
+    main.sidebar-collapsed .search-container {
+        width: 600px !important;
+        max-width: 600px !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    main.sidebar-collapsed .dashboard-content-wrapper .col-xl-3 {
+        width: 25% !important;
+        flex: 0 0 25% !important;
+        max-width: 25% !important;
+    }
+    
+    main.sidebar-collapsed .dashboard-content-wrapper .col-xl-6 {
+        width: 50% !important;
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+    
+    main.sidebar-collapsed .search-container {
+        width: 700px !important;
+        max-width: 700px !important;
+    }
+}
+
+@media (min-width: 1600px) {
+    main.sidebar-collapsed .dashboard-content-wrapper .col-xl-3 {
+        width: 25% !important;
+        flex: 0 0 25% !important;
+        max-width: 25% !important;
+    }
+    
+    main.sidebar-collapsed .dashboard-content-wrapper .col-xl-6 {
+        width: 50% !important;
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+    
+    main.sidebar-collapsed .search-container {
+        width: 800px !important;
+        max-width: 800px !important;
+    }
+}
+
+/* Additional responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .dashboard-content-wrapper {
+        max-width: 100%;
+        margin: 0;
+    }
+}
+
+/* Notification settings styles */
+.notification-settings {
+    max-width: 600px;
+}
+
+.notification-item {
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.notification-item:hover {
+    background-color: #ffffff;
+    border-color: #007bff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+}
+
+.notification-item h6 {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.notification-item p {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.form-check-input:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.form-check-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Security settings styles */
+.security-settings {
+    max-width: 600px;
+}
+
+.security-item {
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.security-item:hover {
+    background-color: #ffffff;
+    border-color: #007bff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+}
+
+.security-item h6 {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.security-item p {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+/* Preferences settings styles */
+.preferences-settings {
+    max-width: 600px;
+}
+
+.preference-item {
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.preference-item:hover {
+    background-color: #ffffff;
+    border-color: #007bff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+}
+
+.preference-item label {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.preference-item .form-select {
+    border-color: #dee2e6;
+    transition: border-color 0.3s ease;
+}
+
+.preference-item .form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Reservations page responsive to sidebar state */
+.reservations-content-wrapper {
+    transition: all 0.3s ease;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* When sidebar is collapsed, expand reservations content */
+main.sidebar-collapsed .reservations-content-wrapper {
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+/* Make the entire main area responsive to sidebar state */
+main.sidebar-collapsed {
+    padding: 0 30px !important;
+}
+
+/* Expand header elements when sidebar is collapsed */
+main.sidebar-collapsed .top-bar-header {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 1rem 2rem !important;
+}
+
+main.sidebar-collapsed .top-bar-header .left-section {
+    margin-left: 0 !important;
+}
+
+/* Reservations specific responsive adjustments */
+main.sidebar-collapsed .reservation-header {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+}
+
+main.sidebar-collapsed .search-filter-section {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+main.sidebar-collapsed .search-filter-section .row {
+    justify-content: space-between !important;
+}
+
+main.sidebar-collapsed .search-filter-section .col-md-6:first-child {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+}
+
+main.sidebar-collapsed .search-filter-section .col-md-6:last-child {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+main.sidebar-collapsed .filter-buttons {
+    justify-content: flex-end !important;
+    gap: 10px !important;
+}
+
+main.sidebar-collapsed .reservations-table-container {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+/* Expand search container when sidebar is collapsed */
+main.sidebar-collapsed .search-container {
+    width: 400px !important;
+    max-width: 400px !important;
+}
+
+/* Responsive breakpoints for reservations content */
+@media (min-width: 1200px) {
+    main.sidebar-collapsed .search-container {
+        width: 500px !important;
+        max-width: 500px !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    main.sidebar-collapsed .search-container {
+        width: 600px !important;
+        max-width: 600px !important;
+    }
+}
+
+@media (min-width: 1600px) {
+    main.sidebar-collapsed .search-container {
+        width: 700px !important;
+        max-width: 700px !important;
+    }
+}

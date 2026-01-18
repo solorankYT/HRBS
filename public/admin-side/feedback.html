@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Report - H+Hotel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+     <link href="../css/styles.css" rel="stylesheet">
+    <script>
+        (function() {
+            try {
+                if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                    document.documentElement.classList.add('precollapsed');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <style>
+        /* Font Family Declarations */
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Headers and Titles */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .hotel-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .admin-label {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        /* Navigation */
+        .nav-link {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .nav-link span {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        /* Profile Section */
+        .profile-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .profile-role {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Section Titles */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        /* Report Cards */
+        .report-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .report-description {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Metric Values */
+        .metric-value {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .metric-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        /* Rating Labels and Values */
+        .rating-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .rating-value {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        /* Review Names and Text */
+        .review-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .review-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Modal Elements */
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .form-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .form-control, .form-select {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Search and Input Elements */
+        .search-input {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Reports specific styles */
+        .reports-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .report-card {
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .report-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .report-card.revenue {
+            border-left: 4px solid #28a745;
+            background-color: white;
+            border: 1px solid #e9ecef;
+        }
+
+        .report-card.occupancy {
+            border-left: 4px solid #007bff;
+            background-color: white;
+            border: 1px solid #e9ecef;
+        }
+
+        .report-card.reservation {
+            border-left: 4px solid #ffc107;
+            background-color: white;
+            border: 1px solid #e9ecef;
+        }
+
+        .report-card.feedback {
+            border-left: 4px solid #17a2b8;
+            background-color: #fff3cd;
+            border: 2px solid #ffc107;
+        }
+
+        .report-card.export-pdf {
+            border-left: 4px solid #dc3545;
+            background-color: white;
+            border: 1px solid #e9ecef;
+        }
+
+        .report-card.export-excel {
+            border-left: 4px solid #28a745;
+            background-color: white;
+            border: 1px solid #e9ecef;
+        }
+
+        .report-card.export-email {
+            border-left: 4px solid #343a40;
+            background-color: white;
+            border: 1px solid #e9ecef;
+        }
+
+        .report-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .report-icon.revenue {
+            background-color: #d4edda;
+            color: #28a745;
+        }
+
+        .report-icon.occupancy {
+            background-color: #cce7ff;
+            color: #007bff;
+        }
+
+        .report-icon.reservation {
+            background-color: #fff3cd;
+            color: #ffc107;
+        }
+
+        .report-icon.feedback {
+            background-color: #fff3cd;
+            color: #ffc107;
+        }
+
+        .report-icon.export-pdf {
+            background-color: #f8d7da;
+            color: #dc3545;
+        }
+
+        .report-icon.export-excel {
+            background-color: #d4edda;
+            color: #28a745;
+        }
+
+        .report-icon.export-email {
+            background-color: #e2e3e5;
+            color: #343a40;
+        }
+
+        .report-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .report-description {
+            font-size: 14px;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
+        /* Feedback Metrics */
+        .metric-card {
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            height: 100%;
+        }
+
+        .metric-card.average-rating {
+            background-color: #fff3cd;
+        }
+
+        .metric-card.total-reviews {
+            background-color: #cce7ff;
+        }
+
+        .metric-card.response-rate {
+            background-color: #d4edda;
+        }
+
+        .metric-card.recommendations {
+            background-color: #e2d9f3;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .metric-value.average-rating {
+            color: #ffc107;
+        }
+
+        .metric-value.total-reviews {
+            color: #007bff;
+        }
+
+        .metric-value.response-rate {
+            color: #28a745;
+        }
+
+        .metric-value.recommendations {
+            color: #6f42c1;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .stars {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            color: #ffc107;
+            font-size: 14px;
+            margin: 0 1px;
+        }
+
+        .star.empty {
+            color: #e9ecef;
+        }
+
+        /* Rating by Category */
+        .rating-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            gap: 12px;
+        }
+
+        .rating-label {
+            font-weight: 500;
+            color: #2c3e50;
+            flex: 0 0 160px; /* fixed width label for alignment */
+        }
+
+        .rating-stars {
+            display: flex;
+            margin: 0 15px;
+            flex: 1 1 auto; /* take remaining space */
+        }
+
+        .rating-stars .star {
+            font-size: 14px;
+            margin: 0 1px;
+        }
+
+        .rating-value {
+            font-weight: 600;
+            color: #2c3e50;
+            min-width: 40px;
+            text-align: right;
+            flex: 0 0 50px; /* fixed width values aligned right */
+        }
+
+        /* Recent Reviews */
+        .review-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .review-content {
+            flex: 1;
+        }
+
+        .review-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .review-stars {
+            display: flex;
+            margin-bottom: 8px;
+        }
+
+        .review-stars .star {
+            font-size: 14px;
+            margin: 0 1px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
+        .review-action {
+            margin-left: 15px;
+        }
+
+        .btn-view {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .btn-view:hover {
+            background-color: #218838;
+        }
+
+        /* Page Title Styling */
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 20px 0 0 0;
+        }
+
+        /* Ensure proper scrolling */
+        body {
+            overflow-x: hidden;
+            overflow-y: auto;
+            height: auto;
+        }
+        
+        .container-fluid {
+            min-height: 100vh;
+            height: auto;
+        }
+        
+        .sidebar {
+            height: 100vh;
+            overflow-y: auto;
+            position: fixed;
+        }
+        
+        main {
+            margin-left: 0;
+            padding: 20px;
+            min-height: 100vh;
+            height: auto;
+            overflow-y: visible;
+        }
+
+        @media (min-width: 768px) {
+            main {
+                margin-left: 250px;
+            }
+        }
+
+        /* Specific styling for rating and reviews sections */
+        .rating-category-section,
+        .recent-reviews-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .rating-category-section .section-title,
+        .recent-reviews-section .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        /* Content distribution within the sections */
+        .rating-category-section .rating-item,
+        .recent-reviews-section .review-item {
+            margin-bottom: 20px;
+        }
+
+        .rating-category-section .rating-item:last-child,
+        .recent-reviews-section .review-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Better spacing for rating category (5 items) */
+        .rating-category-section {
+            justify-content: flex-start;
+        }
+
+        .rating-category-section .rating-item {
+            margin-bottom: 20px;
+        }
+
+        /* Better spacing for recent reviews (3 items) */
+        .recent-reviews-section {
+            justify-content: space-between;
+        }
+
+        .recent-reviews-section .review-item {
+            margin-bottom: 15px;
+        }
+        
+        /* Make the "Rate Your Experience" box more compact in the modal */
+        #viewFeedbackModal .modal-body { padding: 8px !important; }
+        #viewFeedbackModal .modal-body .card:first-child {
+            padding: 6px !important;
+            max-height: 120px !important;
+            overflow: hidden !important;
+        }
+        #viewFeedbackModal .modal-body .card:first-child h6 {
+            margin-bottom: 4px !important;
+            font-size: 12px !important;
+            line-height: 1.1 !important;
+        }
+        #viewFeedbackModal .modal-body .row.g-2 {
+            margin-bottom: 2px !important;
+        }
+        #viewFeedbackModal .modal-body .col-6 { /* tighten columns */
+            padding-left: 4px !important;
+            padding-right: 4px !important;
+            font-size: 11px !important;
+        }
+        #viewFeedbackModal [data-rating-group] i {
+            font-size: 11px !important;
+            margin: 0 1px !important;
+            color: #ffc107 !important; /* gold */
+            opacity: .35; /* dim unfilled */
+            pointer-events: none; /* disable editing */
+        }
+        #viewFeedbackModal [data-rating-group] i.fas { opacity: 1; }
+        /* Compact the Additional Comments card */
+        #viewFeedbackModal .modal-body .card.p-3 { padding: 8px !important; }
+        #viewFeedbackModal #feedbackText { min-height: 40px !important; height: 40px !important; font-size: 12px !important; }
+        #viewFeedbackModal .modal-body .card.p-3 .form-label { margin-bottom: 2px !important; font-size: 11px !important; }
+        #viewFeedbackModal .modal-body small.text-muted { font-size: 9px !important; margin-bottom: 4px !important; }
+        #viewFeedbackModal .modal-body .border.rounded-3 { padding: 8px !important; }
+        #viewFeedbackModal .modal-body .border.rounded-3 .text-muted { font-size: 11px !important; }
+        
+        /* Ensure the whole modal fits without scroll on typical screens */
+        #viewFeedbackModal .modal-dialog { max-width: 720px !important; }
+        #viewFeedbackModal .modal-content { max-height: 92vh !important; }
+        #viewFeedbackModal .modal-body { max-height: calc(92vh - 110px) !important; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="sidebar-header clickable" id="sidebarToggle">
+                    <span class="logo-text">logo</span>
+                    <h4 class="hotel-name">H+Hotel</h4>
+                    <i class="fas fa-bars toggle-icon" aria-label="Collapse sidebar"></i>
+                </div>
+                
+                <ul class="nav flex-column main-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html" data-tooltip="Dashboard">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reservations.html" data-tooltip="Reservations">
+                            <i class="fas fa-calendar"></i>
+                            <span>Reservations</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="payment.html" data-tooltip="Payments">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Payments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="usermanagement.html" data-tooltip="User Management">
+                            <i class="fas fa-users"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="roommanagement.html" data-tooltip="Room Management">
+                            <i class="fas fa-bed"></i>
+                            <span>Room Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="reports.html" data-tooltip="Reports">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="nav flex-column secondary-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html" data-tooltip="Settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html" data-tooltip="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="profile-section">
+                    <div class="profile-info" data-tooltip="Prince Gallardo - Admin">
+                        <i class="fas fa-user-circle profile-icon"></i>
+                        <div>
+                            <div class="profile-name">Prince Gallardo</div>
+                            <div class="profile-role">Admin</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="top-bar-header d-flex justify-content-between align-items-center">
+                    <div class="left-section">
+                        <span class="admin-label">Admin</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="search-container me-4">
+                            <input type="text" class="form-control search-input" placeholder="Search reservations...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                        <div class="notification-icon me-3">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="user-dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page Title -->
+                <div class="mb-4">
+                    <h1 class="page-title">Reports</h1>
+                </div>
+
+                <!-- Available Reports Section -->
+                <div class="reports-section">
+                    <h2 class="section-title">Available Reports</h2>
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <a href="reports.html" style="text-decoration: none; color: inherit;">
+                                <div class="report-card revenue">
+                                    <div class="report-icon revenue">
+                                        <i class="fas fa-peso-sign"></i>
+                                    </div>
+                                    <h3 class="report-title">Revenue Report</h3>
+                                    <p class="report-description">Financial performance and revenue analysis</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <a href="occupancy.html" style="text-decoration: none; color: inherit;">
+                                <div class="report-card occupancy">
+                                    <div class="report-icon occupancy">
+                                        <i class="fas fa-bed"></i>
+                                    </div>
+                                    <h3 class="report-title">Occupancy Report</h3>
+                                    <p class="report-description">Room utilization and occupancy trends</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <a href="reservationReport.html" style="text-decoration: none; color: inherit;">
+                                <div class="report-card reservation">
+                                    <div class="report-icon reservation">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                    <h3 class="report-title">Reservation Report</h3>
+                                    <p class="report-description">Reservation analytics and booking trends</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-3">
+            <div class="report-card feedback" id="openFeedbackModal">
+                                <div class="report-icon feedback">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <h3 class="report-title">Feedback Report</h3>
+                                <p class="report-description">Customer feedback and satisfaction analysis</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback Report Section -->
+                <div class="reports-section">
+                    <h2 class="section-title">Feedback Report</h2>
+                    
+                    <!-- Feedback Metrics -->
+                    <div class="row mb-4">
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="metric-card average-rating">
+                                <div class="metric-value average-rating">4.7</div>
+                                <div class="stars">
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star-half-alt star"></i>
+                                </div>
+                                <div class="metric-label">Average Rating</div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="metric-card total-reviews">
+                                <div class="metric-value total-reviews">25</div>
+                                <div class="metric-label">Total Reviews</div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="metric-card response-rate">
+                                <div class="metric-value response-rate">75%</div>
+                                <div class="metric-label">Response Rate</div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="metric-card recommendations">
+                                <div class="metric-value recommendations">75%</div>
+                                <div class="metric-label">Recommendations</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Rating by Category and Recent Reviews Side by Side -->
+                <div class="row">
+                    <div class="col-xl-6 mb-4">
+                        <div class="rating-category-section">
+                            <h2 class="section-title">Rating by Category</h2>
+                            <div class="rating-item">
+                                <span class="rating-label">Cleanliness</span>
+                                <div class="rating-stars">
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star-half-alt star"></i>
+                                    <i class="far fa-star star empty"></i>
+                                </div>
+                                <span class="rating-value">3.3</span>
+                            </div>
+                            <div class="rating-item">
+                                <span class="rating-label">Staff Service</span>
+                                <div class="rating-stars">
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="far fa-star star empty"></i>
+                                </div>
+                                <span class="rating-value">4.1</span>
+                            </div>
+                            <div class="rating-item">
+                                <span class="rating-label">Facilities</span>
+                                <div class="rating-stars">
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star-half-alt star"></i>
+                                    <i class="far fa-star star empty"></i>
+                                </div>
+                                <span class="rating-value">3.5</span>
+                            </div>
+                            <div class="rating-item">
+                                <span class="rating-label">Food & Dining</span>
+                                <div class="rating-stars">
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="far fa-star star empty"></i>
+                                </div>
+                                <span class="rating-value">4.1</span>
+                            </div>
+                            <div class="rating-item">
+                                <span class="rating-label">Value for Money</span>
+                                <div class="rating-stars">
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="far fa-star star empty"></i>
+                                </div>
+                                <span class="rating-value">4.2</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xl-6 mb-4">
+                        <div class="recent-reviews-section">
+                            <h2 class="section-title">Recent Reviews</h2>
+                            <div class="review-item">
+                                <div class="review-content">
+                                    <div class="review-name">Prince Gallardo</div>
+                                    <div class="review-stars">
+                                        <i class="fas fa-star star"></i>
+                                        <i class="fas fa-star star"></i>
+                                        <i class="fas fa-star star"></i>
+                                        <i class="fas fa-star star"></i>
+                                        <i class="far fa-star star empty"></i>
+                                    </div>
+                                    <div class="review-text">Exceptional service and beautiful rooms!</div>
+                                </div>
+                                <div class="review-action">
+                                    <button class="btn-view">View</button>
+                                </div>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-content">
+                                    <div class="review-name">Prince Gallardo</div>
+                                    <div class="review-stars">
+                                        <i class="fas fa-star star"></i>
+                                        <i class="fas fa-star star"></i>
+                                        <i class="fas fa-star star"></i>
+                                        <i class="fas fa-star star"></i>
+                                        <i class="far fa-star star empty"></i>
+                                    </div>
+                                    <div class="review-text">Great location and friendly staff!</div>
+                                </div>
+                                <div class="review-action">
+                                    <button class="btn-view">View</button>
+                                </div>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-content">
+                                    <div class="review-name">Prince Gallardo</div>
+                                    <div class="review-stars">
+                                        <i class="fas fa-star star"></i>
+                                        <i class="fas fa-star star"></i>
+                                        <i class="fas fa-star star"></i>
+                                        <i class="fas fa-star star"></i>
+                                        <i class="far fa-star star empty"></i>
+                                    </div>
+                                    <div class="review-text">Perfect for business trips!</div>
+                                </div>
+                                <div class="review-action">
+                                    <button class="btn-view">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Reports Section -->
+                <div class="reports-section">
+                    <h2 class="section-title">Export Reports</h2>
+                    <div class="row">
+                        <div class="col-xl-4 col-md-6 mb-3">
+                            <div class="report-card export-pdf">
+                                <div class="report-icon export-pdf">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <h3 class="report-title">PDF Report</h3>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 mb-3">
+                            <div class="report-card export-excel">
+                                <div class="report-icon export-excel">
+                                    <i class="fas fa-file-excel"></i>
+                                </div>
+                                <h3 class="report-title">Excel Report</h3>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 mb-3">
+                            <div class="report-card export-email">
+                                <div class="report-icon export-email">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <h3 class="report-title">Email Report</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../script.js"></script>
+    
+    <!-- Feedback View Modal -->
+    <div class="modal fade" id="viewFeedbackModal" tabindex="-1" aria-labelledby="viewFeedbackLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <div class="text-center w-100">
+                        <h5 class="modal-title mb-0" id="viewFeedbackLabel">Share Your Experience</h5>
+                        <div class="text-muted" style="font-size: 12px; line-height: 1.2;">Your feedback helps us improve our service and hospitality</div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="card mb-3 p-3">
+                        <h6 class="mb-3">Rate Your Experience</h6>
+                        <div class="container-fluid px-0">
+                            <div class="row g-2 align-items-center mb-2">
+                                <div class="col-6">Overall Experience</div>
+                                <div class="col-6 text-end" data-rating-group="overall">
+                                    <i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i>
+                                </div>
+                            </div>
+                            <div class="row g-2 align-items-center mb-2">
+                                <div class="col-6">Cleanliness</div>
+                                <div class="col-6 text-end" data-rating-group="clean">
+                                    <i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i>
+                                </div>
+                            </div>
+                            <div class="row g-2 align-items-center mb-2">
+                                <div class="col-6">Staff Service</div>
+                                <div class="col-6 text-end" data-rating-group="staff">
+                                    <i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i>
+                                </div>
+                            </div>
+                            <div class="row g-2 align-items-center mb-2">
+                                <div class="col-6">Facilities</div>
+                                <div class="col-6 text-end" data-rating-group="facilities">
+                                    <i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i>
+                                </div>
+                            </div>
+                            <div class="row g-2 align-items-center mb-2">
+                                <div class="col-6">Food & Dining</div>
+                                <div class="col-6 text-end" data-rating-group="food">
+                                    <i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i>
+                                </div>
+                            </div>
+                            <div class="row g-2 align-items-center">
+                                <div class="col-6">Value for Money</div>
+                                <div class="col-6 text-end" data-rating-group="value">
+                                    <i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-3">
+                        <h6 class="mb-3">Additional Comments</h6>
+                        <label class="form-label">Tell us more about your experience</label>
+                        <textarea class="form-control mb-1" id="feedbackText" rows="3" placeholder="What did you enjoy most? How can we improve?" readonly></textarea>
+                        <small class="text-muted d-block mb-3">Max 500 characters</small>
+                        <label class="form-label">Share Photos (optional)</label>
+                        <div class="border rounded-3 p-4 text-center mb-2" style="border-style:dashed !important;">
+                            <div class="mb-2"><i class="fas fa-camera text-muted" style="font-size: 1.5rem;"></i></div>
+                            <div class="text-muted">Upload photos from your stay</div>
+                            <small class="text-muted d-block">PNG, JPG up to 10MB each</small>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const openCard = document.getElementById('openFeedbackModal');
+            if (openCard) {
+                openCard.addEventListener('click', function(){
+                    const modalEl = document.getElementById('viewFeedbackModal');
+                    const modal = new bootstrap.Modal(modalEl);
+                    // Prefill default sample ratings and text on open
+                    const sample = { overall: 4, clean: 5, staff: 5, facilities: 4, food: 4, value: 5, text: 'Exceptional service and beautiful rooms!' };
+                    const setStars = (groupKey, count) => {
+                        const group = modalEl.querySelector(`[data-rating-group="${groupKey}"]`);
+                        if (!group) return;
+                        const stars = Array.from(group.querySelectorAll('i'));
+                        stars.forEach((s, i) => {
+                            s.classList.toggle('fas', i < count);
+                            s.classList.toggle('far', i >= count);
+                        });
+                    };
+                    setStars('overall', sample.overall);
+                    setStars('clean', sample.clean);
+                    setStars('staff', sample.staff);
+                    setStars('facilities', sample.facilities);
+                    setStars('food', sample.food);
+                    setStars('value', sample.value);
+                    const txt = modalEl.querySelector('#feedbackText');
+                    if (txt) txt.value = sample.text;
+                    modal.show();
+                });
+            }
+            const samples = [
+                {
+                    overall: 4, clean: 5, staff: 5, facilities: 4, food: 4, value: 5,
+                    text: 'Exceptional service and beautiful rooms!'
+                },
+                {
+                    overall: 4, clean: 4, staff: 5, facilities: 4, food: 4, value: 4,
+                    text: 'Great location and friendly staff!'
+                },
+                {
+                    overall: 4, clean: 4, staff: 4, facilities: 4, food: 4, value: 4,
+                    text: 'Perfect for business trips!'
+                }
+            ];
+            document.querySelectorAll('.btn-view').forEach((btn, idx) => {
+                btn.addEventListener('click', function () {
+                    const modalEl = document.getElementById('viewFeedbackModal');
+                    const sample = samples[idx] || samples[0];
+                    const setStars = (groupKey, count) => {
+                        const group = modalEl.querySelector(`[data-rating-group="${groupKey}"]`);
+                        if (!group) return;
+                        const stars = Array.from(group.querySelectorAll('i'));
+                        stars.forEach((s, i) => {
+                            s.classList.toggle('fas', i < count);
+                            s.classList.toggle('far', i >= count);
+                        });
+                    };
+                    setStars('overall', sample.overall);
+                    setStars('clean', sample.clean);
+                    setStars('staff', sample.staff);
+                    setStars('facilities', sample.facilities);
+                    setStars('food', sample.food);
+                    setStars('value', sample.value);
+                    const txt = modalEl.querySelector('#feedbackText');
+                    if (txt) txt.value = sample.text;
+                    const modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                });
+            });
+            // Remove editability: no click handlers attached to stars
+        });
+    </script>
+    <script>
+        // Animate progress bars on load
+        window.addEventListener('load', function() {
+            const progressBars = document.querySelectorAll('.breakdown-fill, .trend-fill');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H+Hotel - Payment Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+     <link href="../css/styles.css" rel="stylesheet">
+    <script>
+        (function() {
+            try {
+                if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                    document.documentElement.classList.add('precollapsed');
+                }
+            } catch (e) {}
+        })();
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="sidebar-header clickable" id="sidebarToggle">
+                    <span class="logo-text">logo</span>
+                    <h4 class="hotel-name">H+Hotel</h4>
+                    <i class="fas fa-bars toggle-icon" aria-label="Collapse sidebar"></i>
+                </div>
+                
+                <ul class="nav flex-column main-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html" data-tooltip="Dashboard">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reservations.html" data-tooltip="Reservations">
+                            <i class="fas fa-calendar"></i>
+                            <span>Reservations</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="payment.html" data-tooltip="Payments">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Payments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="usermanagement.html" data-tooltip="User Management">
+                            <i class="fas fa-users"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="roommanagement.html" data-tooltip="Room Management">
+                            <i class="fas fa-bed"></i>
+                            <span>Room Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reports.html" data-tooltip="Reports">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="nav flex-column secondary-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html" data-tooltip="Settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html" data-tooltip="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="profile-section">
+                    <div class="profile-info" data-tooltip="Prince Gallardo - Admin">
+                        <i class="fas fa-user-circle profile-icon"></i>
+                        <div>
+                            <div class="profile-name">Prince Gallardo</div>
+                            <div class="profile-role">Admin</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="top-bar-header d-flex justify-content-between align-items-center">
+                    <div class="left-section">
+                        <span class="admin-label">Admin</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="search-container me-4">
+                            <input type="text" class="form-control search-input" placeholder="Search reservations...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                        <div class="notification-icon me-3">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="user-dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reservation-header d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="reservation-title">Payment Table</h1>
+                    <button class="btn new-reservation-btn" id="addPromoBtn">
+                        <i class="fas fa-plus me-2"></i>Add Promo
+                    </button>
+                </div>
+
+                <div class="payment-content-wrapper reservations-content-wrapper">
+                    <div class="payment-table-container reservations-table-container">
+                        <table class="table table-hover reservations-table payment-table">
+                            <thead>
+                                <tr>
+                                    <th>Reservation ID</th>
+                                    <th>Guest Name</th>
+                                    <th>Method</th>
+                                    <th>Amount Paid</th>
+                                    <th>Balance</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-room="Basic Studio Room" data-nights="1" data-guests="4" data-roomrate="₱922/night" data-taxes="₱99" data-fees="₱0" data-subtotal="₱823" data-total="₱922">
+                                    <td><span class="reservation-id">815368</span></td>
+                                    <td><span class="guest-name">Lance Prima</span></td>
+                                    <td><span class="payment-method method-gcash">GCASH</span></td>
+                                    <td class="amount">₱461</td>
+                                    <td class="amount">₱461</td>
+                                    <td id="lancePaymentDate"></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-action" title="View" aria-label="View Payment">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr data-room="Standard Room" data-nights="1" data-guests="1" data-roomrate="₱2,599/night" data-taxes="₱279" data-fees="₱0" data-subtotal="₱2,320" data-total="₱2,599">
+                                    <td><span class="reservation-id">680085</span></td>
+                                    <td><span class="guest-name">Edward Ricafranca</span></td>
+                                    <td><span class="payment-method method-paypal">PAYPAL</span></td>
+                                    <td class="amount">₱1,300</td>
+                                    <td class="amount">₱1,299</td>
+                                    <td id="edwardPaymentDate"></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-action" title="View" aria-label="View Payment">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr data-room="Standard Room" data-nights="1" data-guests="1" data-roomrate="₱2,599/night" data-taxes="₱279" data-fees="₱0" data-subtotal="₱2,320" data-total="₱2,599">
+                                    <td><span class="reservation-id">639621</span></td>
+                                    <td><span class="guest-name">Franz Siochi</span></td>
+                                    <td><span class="payment-method method-cash">CASH</span></td>
+                                    <td class="amount">₱1,300</td>
+                                    <td class="amount">₱1,299</td>
+                                    <td id="franzPaymentDate"></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-action" title="View" aria-label="View Payment">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../script.js"></script>
+    
+    <style>
+        /* Font Family Declarations */
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Headers and Titles */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .reservation-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .hotel-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .admin-label {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        /* Navigation */
+        .nav-link {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .nav-link span {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        /* Profile Section */
+        .profile-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .profile-role {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Table Headers */
+        .payment-table thead th {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        /* Guest and Payment Info */
+        .guest-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .reservation-id {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .payment-method {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .amount {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        /* Search and Input Elements */
+        .search-input {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Buttons */
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .new-reservation-btn {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        /* Modal Elements */
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .form-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .form-control, .form-select {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Align with reservations table action button spacing */
+        .payment-table .action-buttons .btn-action { padding: 0.375rem 0.5rem; }
+        /* Remove Bootstrap hover highlight on table rows */
+        .payment-table.table-hover tbody tr:hover { background-color: transparent !important; }
+        .payment-table.table-hover tbody tr:hover > * { background-color: transparent !important; }
+        .payment-table.table-hover tbody tr:hover,
+        .payment-table.table-hover tbody tr:hover > * {
+            --bs-table-accent-bg: transparent !important;
+            --bs-table-hover-bg: transparent !important;
+            --bs-table-hover-color: inherit !important;
+        }
+        .payment-table tbody tr.selected { outline: 2px solid #0d6efd; outline-offset: -2px; }
+    </style>
+    <style>
+        /* Make Add Promo button completely static (no hover/focus/active visual changes) */
+        #addPromoBtn,
+        #addPromoBtn:hover,
+        #addPromoBtn:focus,
+        #addPromoBtn:active,
+        #addPromoBtn:focus-visible {
+            box-shadow: none !important;
+            outline: none !important;
+            text-decoration: none !important;
+            transform: none !important;
+            transition: none !important;
+        }
+    </style>
+
+    <!-- Payment View Modal -->
+    <div class="modal fade" id="viewPaymentModal" tabindex="-1" aria-labelledby="viewPaymentLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewPaymentLabel">Payment Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Reservation ID</label>
+                            <input type="text" class="form-control" id="viewPayReservationId" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Guest Name</label>
+                            <input type="text" class="form-control" id="viewPayGuestName" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Method</label>
+                            <input type="text" class="form-control" id="viewPayMethod" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Amount Paid</label>
+                            <input type="text" class="form-control" id="viewPayAmountPaid" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Balance</label>
+                            <input type="text" class="form-control" id="viewPayBalance" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Date</label>
+                            <input type="text" class="form-control" id="viewPayDate" readonly>
+                        </div>
+                    </div>
+
+                    <h6 class="mt-3">Reservation Details</h6>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Room</label>
+                            <input type="text" class="form-control" id="viewResRoom" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Nights</label>
+                            <input type="text" class="form-control" id="viewResNights" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Guests</label>
+                            <input type="text" class="form-control" id="viewResGuests" readonly>
+                        </div>
+                    </div>
+
+                    <h6 class="mt-3">Billing Statement</h6>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Room Rate</label>
+                            <input type="text" class="form-control" id="viewBillRoomRate" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Taxes</label>
+                            <input type="text" class="form-control" id="viewBillTaxes" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fees</label>
+                            <input type="text" class="form-control" id="viewBillFees" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Subtotal</label>
+                            <input type="text" class="form-control" id="viewBillSubtotal" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Total</label>
+                            <input type="text" class="form-control" id="viewBillTotal" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Promo Modal -->
+    <div class="modal fade" id="addPromoModal" tabindex="-1" aria-labelledby="addPromoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPromoLabel">Add Promo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addPromoForm">
+                        <div class="mb-3">
+                            <label class="form-label">Reservation ID</label>
+                            <input type="text" class="form-control" id="promoReservationId">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Discount (%)</label>
+                            <input type="number" class="form-control" id="promoDiscount" min="0" max="100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Calculated Discount Amount</label>
+                            <input type="text" class="form-control" id="promoDiscountAmount" readonly>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Valid From</label>
+                                <input type="date" class="form-control" id="promoFrom" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Valid To</label>
+                                <input type="date" class="form-control" id="promoTo" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="savePromo">Save Promo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Set real-time dates for payments
+            function setRealTimePaymentDates() {
+                const today = new Date();
+                const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+                const dayBeforeYesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 2);
+                
+                // Format dates as DD/MM/YYYY
+                const formatDate = (date) => {
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}/${month}/${year}`;
+                };
+                
+                // Lance Prima - Payment made today
+                const lancePaymentDate = document.getElementById('lancePaymentDate');
+                if (lancePaymentDate) lancePaymentDate.textContent = formatDate(today);
+                
+                // Edward Ricafranca - Payment made yesterday
+                const edwardPaymentDate = document.getElementById('edwardPaymentDate');
+                if (edwardPaymentDate) edwardPaymentDate.textContent = formatDate(yesterday);
+                
+                // Franz Siochi - Payment made day before yesterday
+                const franzPaymentDate = document.getElementById('franzPaymentDate');
+                if (franzPaymentDate) franzPaymentDate.textContent = formatDate(dayBeforeYesterday);
+            }
+            
+            // Initialize payment dates
+            setRealTimePaymentDates();
+            
+            const table = document.querySelector('.payment-table');
+            if (!table) return;
+            const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+            // --- Top bar search for payments ---
+            const topSearchInput = document.querySelector('.top-bar-header .search-input');
+            const topSearchIcon = document.querySelector('.top-bar-header .search-icon');
+
+            function performTopBarSearch(query) {
+                const q = (query || '').trim().toLowerCase();
+                if (!q) {
+                    rows.forEach(r => { r.style.display = ''; });
+                    return;
+                }
+                rows.forEach(row => {
+                    const match = (row.innerText || '').toLowerCase().includes(q);
+                    row.style.display = match ? '' : 'none';
+                });
+            }
+
+            if (topSearchInput) {
+                topSearchInput.addEventListener('input', function(){ performTopBarSearch(this.value); });
+                topSearchInput.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); performTopBarSearch(this.value); } });
+            }
+            if (topSearchIcon) {
+                topSearchIcon.addEventListener('click', function(){
+                    const input = this.closest('.search-container')?.querySelector('.search-input');
+                    if (input) performTopBarSearch(input.value);
+                });
+            }
+            table.addEventListener('click', function (e) {
+                const tr = e.target.closest('tbody tr');
+                if (tr) {
+                    rows.forEach(r => r.classList.remove('selected'));
+                    tr.classList.add('selected');
+                    window._paySelectedRow = tr;
+                }
+            });
+
+            table.addEventListener('click', function (e) {
+                const viewBtn = e.target.closest('button[title="View"]');
+                if (!viewBtn) return;
+                const row = e.target.closest('tr');
+                if (!row) return;
+                const getText = (selector) => (row.querySelector(selector)?.innerText || '').trim();
+                const reservationId = getText('.reservation-id') || row.children[0]?.innerText.trim();
+                const guestName = getText('.guest-name') || row.children[1]?.innerText.trim();
+                const method = getText('.payment-method') || row.children[2]?.innerText.trim();
+                const amountPaid = row.children[3]?.innerText.trim();
+                const balance = row.children[4]?.innerText.trim();
+                const date = row.children[5]?.innerText.trim();
+                // Override Reservation ID per guest as requested
+                (function(){
+                    const name = (guestName || '').toLowerCase();
+                    let fixedId = reservationId;
+                    if (name.includes('lance prima')) fixedId = '815368';
+                    else if (name.includes('edward ricafranca')) fixedId = '680085';
+                    else if (name.includes('franz siochi') || name.includes('siochi')) fixedId = '639621';
+                    document.getElementById('viewPayReservationId').value = fixedId;
+                })();
+                document.getElementById('viewPayGuestName').value = guestName;
+                document.getElementById('viewPayMethod').value = method;
+                document.getElementById('viewPayAmountPaid').value = amountPaid;
+                document.getElementById('viewPayBalance').value = balance;
+                document.getElementById('viewPayDate').value = date;
+                // Reservation details from row data attributes
+                document.getElementById('viewResRoom').value = row.getAttribute('data-room') || '';
+                document.getElementById('viewResNights').value = row.getAttribute('data-nights') || '';
+                document.getElementById('viewResGuests').value = row.getAttribute('data-guests') || '';
+                // Billing statement
+                document.getElementById('viewBillRoomRate').value = row.getAttribute('data-roomrate') || '';
+                document.getElementById('viewBillTaxes').value = row.getAttribute('data-taxes') || '';
+                document.getElementById('viewBillFees').value = row.getAttribute('data-fees') || '';
+                document.getElementById('viewBillSubtotal').value = row.getAttribute('data-subtotal') || '';
+                document.getElementById('viewBillTotal').value = row.getAttribute('data-total') || '';
+                const modal = new bootstrap.Modal(document.getElementById('viewPaymentModal'));
+                modal.show();
+            });
+
+            const addPromoBtn = document.getElementById('addPromoBtn');
+            const promoReservationId = document.getElementById('promoReservationId');
+            const promoDiscount = document.getElementById('promoDiscount');
+            const promoDiscountAmount = document.getElementById('promoDiscountAmount');
+            const savePromo = document.getElementById('savePromo');
+
+            function parseCurrency(text){
+                const n = String(text || '').replace(/[^0-9.]/g,'');
+                return n ? Number(n) : 0;
+            }
+            function formatCurrency(n){ return `₱${Number(n).toLocaleString('en-PH')}`; }
+            function getSelectedRow(){ return window._paySelectedRow || rows[0] || null; }
+            function getFixedReservationId(row){
+                const name = (row.querySelector('.guest-name')?.innerText || '').toLowerCase();
+                if (name.includes('lance prima')) return '815368';
+                if (name.includes('edward ricafranca')) return '680085';
+                if (name.includes('franz siochi') || name.includes('siochi')) return '639621';
+                return (row.querySelector('.reservation-id')?.innerText || row.children[0]?.innerText || '').trim();
+            }
+            function findRowByReservationId(id){
+                const clean = String(id || '').trim();
+                if (!clean) return null;
+                for (const r of rows){
+                    const rid = (r.querySelector('.reservation-id')?.innerText || r.children[0]?.innerText || '').trim();
+                    if (rid === clean) return r;
+                }
+                return null;
+            }
+
+            function updateCalculatedDiscount(){
+                const row = getSelectedRow();
+                if (!row) { promoDiscountAmount.value = ''; return; }
+                const totalStr = row.getAttribute('data-total') || '';
+                const total = parseCurrency(totalStr);
+                const pct = Math.min(100, Math.max(0, Number(promoDiscount.value || 0)));
+                const disc = (pct/100) * total;
+                promoDiscountAmount.value = total ? formatCurrency(disc) : '';
+            }
+
+            if (addPromoBtn) {
+                addPromoBtn.addEventListener('click', function () {
+                    // Leave Reservation ID empty for manual input
+                    promoReservationId.value = '';
+                    updateCalculatedDiscount();
+                    const modal = new bootstrap.Modal(document.getElementById('addPromoModal'));
+                    modal.show();
+                });
+            }
+
+            if (promoDiscount) {
+                promoDiscount.addEventListener('input', updateCalculatedDiscount);
+                promoDiscount.addEventListener('change', updateCalculatedDiscount);
+            }
+
+            if (savePromo) {
+                savePromo.addEventListener('click', function () {
+                    const targetId = promoReservationId.value;
+                    const row = findRowByReservationId(targetId);
+                    if (!row) return;
+                    const total = parseCurrency(row.getAttribute('data-total') || '');
+                    const paid = parseCurrency(row.children[3]?.innerText || '');
+                    const balCell = row.children[4];
+                    const pct = Math.min(100, Math.max(0, Number(promoDiscount.value || 0)));
+                    const discAmt = (pct/100) * total;
+                    const newBal = Math.max(0, total - paid - discAmt);
+                    if (balCell) balCell.innerText = formatCurrency(newBal);
+                    const modalEl = document.getElementById('addPromoModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    modal?.hide();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
+

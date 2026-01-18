@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H+Hotel - Reservations</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+     <link href="../css/styles.css" rel="stylesheet">
+    <script>
+        (function() {
+            try {
+                if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                    document.documentElement.classList.add('precollapsed');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <style>
+        /* Filter Button Specific Styles */
+        .btn-filter {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            color: #6c757d;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 12px;
+            cursor: pointer;
+            flex-shrink: 0;
+            white-space: nowrap;
+            min-width: 90px;
+            text-align: center;
+        }
+        
+        .btn-filter:hover {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+            color: #495057;
+        }
+        
+        .btn-filter.active {
+            background-color: #dc3545 !important;
+            border-color: #dc3545 !important;
+            color: white !important;
+            font-weight: 700 !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+            transform: none !important;
+            z-index: 1 !important;
+            position: relative !important;
+            border-width: 1px !important;
+            outline: none !important;
+            outline-offset: 0 !important;
+        }
+        
+        .btn-filter.active:hover {
+            background-color: #c82333 !important;
+            border-color: #c82333 !important;
+            color: white !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+            transform: none !important;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 6px;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        
+        /* Responsive adjustments for filter buttons */
+        @media (max-width: 768px) {
+            .filter-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="sidebar-header clickable" id="sidebarToggle">
+                    <span class="logo-text">logo</span>
+                    <h4 class="hotel-name">H+Hotel</h4>
+                    <i class="fas fa-bars toggle-icon" aria-label="Collapse sidebar"></i>
+                </div>
+                
+                <ul class="nav flex-column main-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html" data-tooltip="Dashboard">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="reservations.html" data-tooltip="Reservations">
+                            <i class="fas fa-calendar"></i>
+                            <span>Reservations</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="payment.html" data-tooltip="Payments">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Payments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="usermanagement.html" data-tooltip="User Management">
+                            <i class="fas fa-users"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="roommanagement.html" data-tooltip="Room Management">
+                            <i class="fas fa-bed"></i>
+                            <span>Room Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reports.html" data-tooltip="Reports">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="nav flex-column secondary-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html" data-tooltip="Settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html" data-tooltip="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="profile-section">
+                    <div class="profile-info" data-tooltip="Prince Gallardo - Admin">
+                        <i class="fas fa-user-circle profile-icon"></i>
+                        <div>
+                            <div class="profile-name">Prince Gallardo</div>
+                            <div class="profile-role">Admin</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="top-bar-header d-flex justify-content-between align-items-center">
+                    <div class="left-section">
+                        <span class="admin-label">Admin</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="search-container me-4" style="margin-left: -1rem;">
+                            <input type="text" class="form-control search-input" placeholder="Search...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                        <div class="notification-icon me-3">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="user-dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reservation-header d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="reservation-title">Reservation Management</h1>
+                    <button class="btn btn-primary new-reservation-btn" id="addReservationBtn">
+                        <i class="fas fa-plus me-2"></i>New Reservation
+                    </button>
+                </div>
+
+                <div class="reservations-content-wrapper">
+                    <div class="search-filter-section mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="search-container">
+                                    <input type="text" class="form-control search-input" placeholder="Search by guest name or reservation ID...">
+                                    <i class="fas fa-search search-icon"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="filter-buttons">
+                                    <button class="btn btn-filter active">All Reservations</button>
+                                    <button class="btn btn-filter">Today's Check-ins</button>
+                                    <button class="btn btn-filter">Current Guests</button>
+                                    <button class="btn btn-filter">Checked Out</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reservations-table-container">
+                        <div class="table-responsive">
+                            <table class="table table-hover reservations-table">
+                                <thead>
+                                    <tr>
+                                        <th>Reservation ID</th>
+                                        <th>Guest Name</th>
+                                        <th>Room</th>
+                                        <th>Check-in</th>
+                                        <th>Check-out</th>
+                                        <th>Status</th>
+                                        <th>Amount</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>815368</td>
+                                        <td>
+                                            <div class="guest-info">
+                                                <i class="fas fa-user me-2"></i>
+                                                <span class="guest-name">Lance Prima</span>
+                                                <small class="guest-count d-block text-muted">4 guests</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="room-info">
+                                                <i class="fas fa-bed me-2"></i>
+                                                <span>Basic Studio Room</span>
+                                                <small class="room-number">Room 101</small>
+                                            </div>
+                                        </td>
+                                        <td id="lanceCheckIn"></td>
+                                        <td id="lanceCheckOut"></td>
+                                        <td>
+                                            <span class="status-badge status-booked">Pending</span>
+                                        </td>
+                                        <td>₱922</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button type="button" class="btn btn-sm btn-action" title="View">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-action" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-action" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>680085</td>
+                                        <td>
+                                            <div class="guest-info">
+                                                <i class="fas fa-user me-2"></i>
+                                                <span class="guest-name">Edward Ricafranca</span>
+                                                <small class="guest-count">1 guest</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="room-info">
+                                                <i class="fas fa-bed me-2"></i>
+                                                <span>Standard Room</span>
+                                                <small class="room-number">Room 102</small>
+                                            </div>
+                                        </td>
+                                        <td id="edwardCheckIn"></td>
+                                        <td id="edwardCheckOut"></td>
+                                        <td><span class="status-badge status-checkedin">Checked In</span></td>
+                                        <td>₱2,599</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button type="button" class="btn btn-sm btn-action" title="View">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-action" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-action" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>639621</td>
+                                        <td>
+                                            <div class="guest-info">
+                                                <i class="fas fa-user me-2"></i>
+                                                <span class="guest-name">Franz Siochi</span>
+                                                <small class="guest-count">1 guest</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="room-info">
+                                                <i class="fas fa-bed me-2"></i>
+                                                <span>Standard Room</span>
+                                                <small class="room-number">Room 103</small>
+                                            </div>
+                                        </td>
+                                        <td id="franzCheckIn"></td>
+                                        <td id="franzCheckOut"></td>
+                                        <td><span class="status-badge status-checkedout">Checked Out</span></td>
+                                        <td>₱2,599</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button type="button" class="btn btn-sm btn-action" title="View">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-action" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-action" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../script.js"></script>
+    <style>
+        /* Remove grey hover when choosing users/rows */
+        .reservations-table.table-hover tbody tr:hover { background-color: transparent !important; }
+        .reservations-table.table-hover tbody tr:hover > * { background-color: transparent !important; }
+        .reservations-table tbody tr:hover,
+        .reservations-table tbody tr:hover td,
+        .reservations-table tbody tr:hover th { background-color: transparent !important; }
+        .reservations-table.table-hover tbody tr:hover,
+        .reservations-table.table-hover tbody tr:hover > * {
+            --bs-table-accent-bg: transparent !important;
+            --bs-table-hover-bg: transparent !important;
+            --bs-table-hover-color: inherit !important;
+        }
+        
+        /* Status badge styles to match receptionist */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        /* Match dashboard colors */
+        .status-badge.status-booked { /* Pending */
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-badge.status-checkedin {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.status-checkedout {
+            background-color: #cfe2ff;
+            color: #084298;
+        }
+
+        .status-badge.status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+    
+    <!-- View Modal -->
+    <div class="modal fade" id="viewReservationModal" tabindex="-1" aria-labelledby="viewReservationLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewReservationLabel">Reservation Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Reservation ID</label>
+                            <input type="text" class="form-control" id="viewReservationId" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Guest Name</label>
+                            <input type="text" class="form-control" id="viewGuestName" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Room</label>
+                            <input type="text" class="form-control" id="viewRoom" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Status</label>
+                            <input type="text" class="form-control" id="viewStatus" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Amount</label>
+                            <input type="text" class="form-control" id="viewAmount" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Check-in</label>
+                            <input type="text" class="form-control" id="viewCheckIn" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Check-out</label>
+                            <input type="text" class="form-control" id="viewCheckOut" readonly>
+                        </div>
+                    </div>
+
+                    <h6 class="mt-3">Reservation Details</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nights</label>
+                            <input type="text" class="form-control" id="viewNights" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Guests</label>
+                            <input type="number" class="form-control" id="viewGuestCount" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editReservationModal" tabindex="-1" aria-labelledby="editReservationLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editReservationLabel">Edit Reservation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editReservationForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Reservation ID</label>
+                                <input type="text" class="form-control" id="editReservationId" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Guest Name</label>
+                                <input type="text" class="form-control" id="editGuestName">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Room</label>
+                                <input type="text" class="form-control" id="editRoom">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" id="editStatus">
+                                    <option value="Booked">Booked</option>
+                                    <option value="Checked In">Checked In</option>
+                                    <option value="Checked Out">Checked Out</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Number of Guests</label>
+                                <input type="number" class="form-control" id="editGuestCount" min="1">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Check-in</label>
+                                <input type="date" class="form-control" id="editCheckIn">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Check-out</label>
+                                <input type="date" class="form-control" id="editCheckOut">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Notes</label>
+                                <textarea class="form-control" id="editNotes" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveReservationChanges">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Reservation Modal -->
+    <div class="modal fade" id="addReservationModal" tabindex="-1" aria-labelledby="addReservationLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addReservationLabel">New Reservation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addReservationForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Guest Name</label>
+                                <input type="text" class="form-control" id="addGuestName" placeholder="Guest full name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Room</label>
+                                <input type="text" class="form-control" id="addRoom" placeholder="e.g., Basic Studio Room" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Check-in</label>
+                                <input type="date" class="form-control" id="addCheckIn" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Check-out</label>
+                                <input type="date" class="form-control" id="addCheckOut" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Number of Guests</label>
+                                <input type="number" class="form-control" id="addGuestCount" min="1" value="1" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" id="addStatus" required>
+                                    <option value="Booked" selected>Booked</option>
+                                    <option value="Checked In">Checked In</option>
+                                    <option value="Checked Out">Checked Out</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveNewReservation">Save Reservation</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window._resPageWired) return; // prevent double-binding that can cause stuck backdrops
+            window._resPageWired = true;
+            
+            // Set real-time dates for reservations
+            function setRealTimeDates() {
+                const today = new Date();
+                const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+                const dayAfter = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2);
+                
+                // Format dates as DD/MM/YYYY
+                const formatDate = (date) => {
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}/${month}/${year}`;
+                };
+                
+                // Lance Prima - Check-in today, check-out tomorrow
+                const lanceCheckIn = document.getElementById('lanceCheckIn');
+                const lanceCheckOut = document.getElementById('lanceCheckOut');
+                if (lanceCheckIn) lanceCheckIn.textContent = formatDate(today);
+                if (lanceCheckOut) lanceCheckOut.textContent = formatDate(tomorrow);
+                
+                // Edward Ricafranca - Check-in today, check-out day after tomorrow
+                const edwardCheckIn = document.getElementById('edwardCheckIn');
+                const edwardCheckOut = document.getElementById('edwardCheckOut');
+                if (edwardCheckIn) edwardCheckIn.textContent = formatDate(today);
+                if (edwardCheckOut) edwardCheckOut.textContent = formatDate(dayAfter);
+                
+                // Franz Siochi - Check-in yesterday, check-out today
+                const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+                const franzCheckIn = document.getElementById('franzCheckIn');
+                const franzCheckOut = document.getElementById('franzCheckOut');
+                if (franzCheckIn) franzCheckIn.textContent = formatDate(yesterday);
+                if (franzCheckOut) franzCheckOut.textContent = formatDate(today);
+            }
+            
+            // Initialize dates
+            setRealTimeDates();
+            const table = document.querySelector('.reservations-table');
+            if (!table) return;
+            
+            table.addEventListener('click', function (e) {
+                const viewBtn = e.target.closest('button[title="View"]');
+                const editBtn = e.target.closest('button[title="Edit"]');
+                if (!viewBtn && !editBtn) return;
+                
+                const row = e.target.closest('tr');
+                if (!row) return;
+                
+                const getText = (selector) => (row.querySelector(selector)?.innerText || '').trim();
+                const reservationId = getText('.reservation-id') || row.children[0]?.innerText.trim();
+                const guestName = getText('.guest-info .guest-name') || getText('td:nth-child(2) .guest-info span');
+                const room = getText('.room-info span') || row.children[2]?.innerText.trim();
+                const guestCountText = getText('.guest-count');
+                const guestCount = parseInt((guestCountText.match(/\d+/) || [''])[0]) || '';
+                const checkIn = row.children[3]?.innerText.trim();
+                const checkOut = row.children[4]?.innerText.trim();
+                const status = row.children[5]?.innerText.trim();
+                const amount = row.children[6]?.innerText.trim();
+                
+                if (viewBtn) {
+                    // Defer to document-level handler to avoid double-opening modal/backdrop
+                    return;
+                }
+                
+                if (editBtn) {
+                    // Map fixed IDs by guest
+                    let fixedId = '';
+                    const nLower = (guestName || '').toLowerCase();
+                    if (nLower.includes('lance prima')) fixedId = '815368';
+                    else if (nLower.includes('edward')) fixedId = '680085';
+                    else if (nLower.includes('siochi')) fixedId = '639621';
+                    else fixedId = String(Math.floor(100000 + Math.random() * 900000));
+                    document.getElementById('editReservationId').value = fixedId;
+                    document.getElementById('editGuestName').value = guestName;
+                    document.getElementById('editRoom').value = room;
+                    const normalized = (status || '').toLowerCase();
+                    const mapped = normalized.includes('checked in') ? 'Checked In' : normalized.includes('checked out') ? 'Checked Out' : 'Booked';
+                    document.getElementById('editStatus').value = mapped;
+                    const editGuestCountEl = document.getElementById('editGuestCount');
+                    if (editGuestCountEl) editGuestCountEl.value = guestCount;
+                    // Prefill date inputs using table dates (DD/MM/YYYY -> YYYY-MM-DD)
+                    const ci = (checkIn || '').trim();
+                    const co = (checkOut || '').trim();
+                    try {
+                        const ciDate = (function(d){ const m = d.match(/(\d{2})\/(\d{2})\/(\d{4})/); if(!m) return ''; return `${m[3]}-${m[2]}-${m[1]}`; })(ci);
+                        const coDate = (function(d){ const m = d.match(/(\d{2})\/(\d{2})\/(\d{4})/); if(!m) return ''; return `${m[3]}-${m[2]}-${m[1]}`; })(co);
+                        if (ciDate) document.getElementById('editCheckIn').value = ciDate;
+                        if (coDate) document.getElementById('editCheckOut').value = coDate;
+                    } catch(e) {
+                        document.getElementById('editCheckIn').value = '';
+                        document.getElementById('editCheckOut').value = '';
+                    }
+                    document.getElementById('editNotes').value = '';
+                    const modal = new bootstrap.Modal(document.getElementById('editReservationModal'));
+                    modal.show();
+                }
+            });
+            
+            const saveBtn = document.getElementById('saveReservationChanges');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', function () {
+                    const modalEl = document.getElementById('editReservationModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    // Find the last clicked Edit row by tracking a data attribute
+                    const lastRow = document.querySelector('tr[data-editing="true"]');
+                    if (lastRow) {
+                        // Read values from the edit form
+                        const newGuestName = document.getElementById('editGuestName')?.value || '';
+                        const newRoom = document.getElementById('editRoom')?.value || '';
+                        const newStatus = document.getElementById('editStatus')?.value || 'Booked';
+                        const newGuestCount = document.getElementById('editGuestCount')?.value || '';
+                        const newCheckIn = document.getElementById('editCheckIn')?.value || '';
+                        const newCheckOut = document.getElementById('editCheckOut')?.value || '';
+                        const newNotes = document.getElementById('editNotes')?.value || '';
+
+                        // Update cells: 0:ResID, 1:Guest, 2:Room, 3:CI, 4:CO, 5:Status, 6:Amount, 7:Actions
+                        const guestCell = lastRow.children[1];
+                        if (guestCell) {
+                            const nameSpan = guestCell.querySelector('.guest-info span');
+                            if (nameSpan) nameSpan.textContent = newGuestName;
+                            const countEl = guestCell.querySelector('.guest-count');
+                            if (countEl) countEl.textContent = newGuestCount ? `${newGuestCount} guests` : '';
+                        }
+                        const roomCell = lastRow.children[2];
+                        if (roomCell) {
+                            const roomSpan = roomCell.querySelector('.room-info span');
+                            if (roomSpan) roomSpan.textContent = newRoom;
+                        }
+                        if (lastRow.children[3]) lastRow.children[3].textContent = newCheckIn ? new Date(newCheckIn).toLocaleDateString('en-GB') : lastRow.children[3].textContent;
+                        if (lastRow.children[4]) lastRow.children[4].textContent = newCheckOut ? new Date(newCheckOut).toLocaleDateString('en-GB') : lastRow.children[4].textContent;
+
+                        const statusCell = lastRow.children[5];
+                        if (statusCell) {
+                            let badge = statusCell.querySelector('.status-badge');
+                            if (!badge) {
+                                badge = document.createElement('span');
+                                statusCell.innerHTML = '';
+                                statusCell.appendChild(badge);
+                            }
+                            badge.className = 'status-badge';
+                            // Map to badge classes used in receptionist dashboard
+                            if (newStatus === 'Checked In') badge.classList.add('status-checkedin');
+                            else if (newStatus === 'Checked Out') badge.classList.add('status-checkedout');
+                            else badge.classList.add('status-booked');
+                            badge.textContent = newStatus;
+                        }
+                        // Clear editing flag
+                        lastRow.removeAttribute('data-editing');
+                    }
+                    modal?.hide();
+                    try {
+                        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                        document.body.classList.remove('modal-open');
+                        document.body.style.removeProperty('paddingRight');
+                    } catch(e) {}
+                });
+            }
+            // Mark the row being edited when Edit is clicked
+            table.addEventListener('click', function (e) {
+                const editBtn = e.target.closest('button[title="Edit"]');
+                if (!editBtn) return;
+                const row = e.target.closest('tr');
+                if (!row) return;
+                // Clear previous flag
+                const prev = document.querySelector('tr[data-editing="true"]');
+                if (prev) prev.removeAttribute('data-editing');
+                row.setAttribute('data-editing', 'true');
+            });
+            // Global modal cleanup to avoid stuck backdrops
+            document.addEventListener('hidden.bs.modal', function(){
+                try {
+                    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                    document.body.classList.remove('modal-open');
+                    document.body.style.removeProperty('paddingRight');
+                } catch(e) {}
+            });
+
+            // Wire Add Reservation button
+            const addBtn = document.getElementById('addReservationBtn');
+            if (addBtn) {
+                addBtn.addEventListener('click', function(){
+                    const modalEl = document.getElementById('addReservationModal');
+                    let modal = bootstrap.Modal.getInstance(modalEl);
+                    if (!modal) modal = new bootstrap.Modal(modalEl, { backdrop: true, keyboard: true });
+                    modal.show();
+                });
+            }
+            const saveNew = document.getElementById('saveNewReservation');
+            if (saveNew) {
+                saveNew.addEventListener('click', function(){
+                    const modalEl = document.getElementById('addReservationModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    const modal2 = bootstrap.Modal.getInstance(modalEl);
+                    modal2?.hide();
+                    // Final safeguard to remove any lingering backdrop
+                    setTimeout(function(){
+                        try {
+                            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                            document.body.classList.remove('modal-open');
+                            document.body.style.removeProperty('paddingRight');
+                        } catch(e) {}
+                    }, 0);
+                });
+            }
+
+            // --- Search and Filters ---
+            const rows = Array.from(table.querySelectorAll('tbody tr'));
+            const filterContainer = document.querySelector('.filter-buttons');
+            const topSearchInput = document.querySelector('.top-bar-header .search-input');
+            const reservationSearchInput = document.querySelector('.search-filter-section .search-input');
+            const topSearchIcon = document.querySelector('.top-bar-header .search-icon');
+            const reservationSearchIcon = document.querySelector('.search-filter-section .search-icon');
+
+            function parseDMY(dateStr) {
+                const m = (dateStr || '').match(/(\d{2})\/(\d{2})\/(\d{4})/);
+                if (!m) return null;
+                const d = Number(m[1]), mo = Number(m[2]) - 1, y = Number(m[3]);
+                const dt = new Date(y, mo, d);
+                return isNaN(dt.getTime()) ? null : dt;
+            }
+
+            function formatYMD(d) {
+                return d ? `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}` : '';
+            }
+
+            function getRowStatus(row) {
+                const badge = row.querySelector('td:nth-child(6) .status-badge') || row.querySelector('td:nth-child(6) span');
+                return (badge?.innerText || '').trim();
+            }
+
+            // Initialize dataset helpers
+            rows.forEach(row => {
+                const checkInText = (row.querySelector('td:nth-child(4)')?.innerText || '').trim();
+                const checkInDate = parseDMY(checkInText);
+                row.dataset.checkin = formatYMD(checkInDate);
+                row.dataset.status = getRowStatus(row).toLowerCase();
+            });
+
+            let currentFilterKind = 'all';
+            let currentQuery = '';
+
+            function matchesQuery(row, q) {
+                if (!q) return true;
+                const text = (row.innerText || '').toLowerCase();
+                return text.includes(q.toLowerCase());
+            }
+
+            function isToday(date) {
+                if (!date) return false;
+                const now = new Date();
+                return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth() && date.getDate() === now.getDate();
+            }
+
+            function applyFilter(kind) {
+                rows.forEach(row => {
+                    const status = (row.dataset.status || '').toLowerCase();
+                    const checkIn = parseDMY((row.querySelector('td:nth-child(4)')?.innerText || '').trim());
+                    let show = true;
+                    if (kind === 'today') show = isToday(checkIn);
+                    else if (kind === 'current') show = status.includes('checked in');
+                    else if (kind === 'checkedout') show = status.includes('checked out');
+                    if (show) show = matchesQuery(row, currentQuery);
+                    row.style.display = show ? '' : 'none';
+                });
+            }
+
+            if (filterContainer) {
+                filterContainer.addEventListener('click', function (e) {
+                    const btn = e.target.closest('.btn-filter');
+                    if (!btn) return;
+                    filterContainer.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const text = (btn.innerText || '').toLowerCase();
+                    if (text.includes("today's check-ins") || text.includes('today')) currentFilterKind = 'today';
+                    else if (text.includes('current guests')) currentFilterKind = 'current';
+                    else if (text.includes('checked out')) currentFilterKind = 'checkedout';
+                    else currentFilterKind = 'all';
+                    applyFilter(currentFilterKind);
+                });
+            }
+
+            // Top bar search - independent
+            function performTopBarSearch(query) {
+                if (!query) {
+                    rows.forEach(row => { row.style.display = ''; });
+                    return;
+                }
+                const q = query.toLowerCase();
+                rows.forEach(row => {
+                    const match = (row.innerText || '').toLowerCase().includes(q);
+                    row.style.display = match ? '' : 'none';
+                });
+            }
+
+            if (topSearchInput) {
+                topSearchInput.addEventListener('input', function(){ performTopBarSearch(this.value.trim()); });
+                topSearchInput.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); performTopBarSearch(this.value.trim()); } });
+            }
+            if (topSearchIcon) {
+                topSearchIcon.addEventListener('click', function(){
+                    const input = this.closest('.search-container')?.querySelector('.search-input');
+                    if (input) performTopBarSearch(input.value.trim());
+                });
+            }
+
+            // Reservation section search - independent
+            function triggerReservationSearch(fromEl){
+                currentQuery = (fromEl.value || '').trim();
+                applyFilter(currentFilterKind);
+            }
+            if (reservationSearchInput) {
+                reservationSearchInput.addEventListener('input', function(){ triggerReservationSearch(this); });
+                reservationSearchInput.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); triggerReservationSearch(this); } });
+            }
+            if (reservationSearchIcon) {
+                reservationSearchIcon.addEventListener('click', function(){
+                    const input = this.closest('.search-container')?.querySelector('.search-input');
+                    if (input) triggerReservationSearch(input);
+                });
+            }
+
+            // View handler: single source to avoid duplicate modals/backdrops
+            document.addEventListener('click', function (e) {
+                const viewBtn = e.target.closest('button[title="View"]');
+                if (!viewBtn) return;
+                const row = viewBtn.closest('tr');
+                const tableScope = viewBtn.closest('.reservations-table');
+                if (!row || !tableScope) return;
+                // Extract row values
+                const getText = (selector, fallbackIdx) => (row.querySelector(selector)?.innerText || (fallbackIdx !== undefined ? row.children[fallbackIdx]?.innerText : '') || '').trim();
+                const reservationId = getText('.reservation-id') || row.children[0]?.innerText.trim();
+                const guestName = getText('.guest-info .guest-name') || getText('td:nth-child(2) .guest-info span');
+                const room = getText('.room-info span') || row.children[2]?.innerText.trim();
+                const guestCountText = getText('.guest-count');
+                const guestCount = parseInt((guestCountText.match(/\d+/) || [''])[0]) || '';
+                const checkIn = row.children[3]?.innerText.trim();
+                const checkOut = row.children[4]?.innerText.trim();
+                const status = row.children[5]?.innerText.trim();
+                const amount = row.children[6]?.innerText.trim();
+
+                // Fixed IDs per guest
+                let fixedId = '';
+                const nLower = (guestName || '').toLowerCase();
+                if (nLower.includes('lance prima')) fixedId = '815368';
+                else if (nLower.includes('edward')) fixedId = '680085';
+                else if (nLower.includes('siochi')) fixedId = '639621';
+                else fixedId = String(Math.floor(100000 + Math.random() * 900000));
+
+                // Compute nights from dates; default per guest when missing
+                const toDate = (d) => { const m = (d||'').match(/(\d{2})\/(\d{2})\/(\d{4})/); if(!m) return null; return new Date(Number(m[3]), Number(m[2])-1, Number(m[1])); };
+                const ci = toDate(checkIn);
+                const co = toDate(checkOut);
+                let nightsVal = '';
+                if (ci && co) nightsVal = Math.max(0, Math.round((co-ci)/(1000*60*60*24))).toString();
+                if (!nightsVal) {
+                    if (nLower.includes('lance prima')) nightsVal = '2';
+                    else if (nLower.includes('edward')) nightsVal = '3';
+                    else if (nLower.includes('siochi')) nightsVal = '2';
+                }
+
+                // Populate modal
+                const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+                setVal('viewReservationId', fixedId);
+                setVal('viewGuestName', guestName);
+                setVal('viewRoom', room);
+                setVal('viewStatus', status);
+                setVal('viewAmount', amount);
+                setVal('viewGuestCount', guestCount ? String(guestCount) : '');
+                setVal('viewCheckIn', checkIn);
+                setVal('viewCheckOut', checkOut);
+                setVal('viewNights', nightsVal);
+
+                new bootstrap.Modal(document.getElementById('viewReservationModal')).show();
+            });
+        });
+    </script>
+    <script>
+        // Resilient Add Reservation wiring in case earlier handlers didn't bind
+        document.addEventListener('DOMContentLoaded', function(){
+            const addBtn = document.getElementById('addReservationBtn');
+            if (addBtn && !addBtn.dataset.wired) {
+                addBtn.dataset.wired = 'true';
+                addBtn.addEventListener('click', function(){
+                    const today = new Date();
+                    const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1);
+                    const toYMD = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).toString().padStart(2,'0')}`;
+                    const addCheckIn = document.getElementById('addCheckIn');
+                    const addCheckOut = document.getElementById('addCheckOut');
+                    if (addCheckIn && !addCheckIn.value) addCheckIn.value = toYMD(today);
+                    if (addCheckOut && !addCheckOut.value) addCheckOut.value = toYMD(tomorrow);
+                    new bootstrap.Modal(document.getElementById('addReservationModal')).show();
+                });
+            }
+            const saveBtn = document.getElementById('saveNewReservation');
+            if (saveBtn && !saveBtn.dataset.wired) {
+                saveBtn.dataset.wired = 'true';
+                saveBtn.addEventListener('click', function(){
+                    const name = (document.getElementById('addGuestName')?.value || '').trim();
+                    const room = (document.getElementById('addRoom')?.value || '').trim();
+                    const ciYMD = (document.getElementById('addCheckIn')?.value || '').trim();
+                    const coYMD = (document.getElementById('addCheckOut')?.value || '').trim();
+                    const guests = (document.getElementById('addGuestCount')?.value || '').trim();
+                    const statusVal = (document.getElementById('addStatus')?.value || 'Booked').trim();
+                    if (!name || !room) { try { alert('Please enter Guest Name and Room.'); } catch(e) {} return; }
+                    const tbody = document.querySelector('.reservations-table tbody');
+                    if (!tbody) return;
+                    const toDMY = (ymd) => { const m = (ymd||'').match(/(\d{4})-(\d{2})-(\d{2})/); if(!m) return ''; return `${m[3]}/${m[2]}/${m[1]}`; };
+                    const ciDMY = toDMY(ciYMD);
+                    const coDMY = toDMY(coYMD);
+                    const statusClass = statusVal === 'Checked In' ? 'status-checkedin' : statusVal === 'Checked Out' ? 'status-checkedout' : 'status-booked';
+                    const newId = String(Math.floor(100000 + Math.random() * 900000));
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${newId}</td>
+                        <td>
+                            <div class="guest-info">
+                                <i class="fas fa-user me-2"></i>
+                                <span class="guest-name">${name}</span>
+                                <small class="guest-count">${guests ? `${guests} ${Number(guests) === 1 ? 'guest' : 'guests'}` : ''}</small>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="room-info">
+                                <i class="fas fa-bed me-2"></i>
+                                <span>${room}</span>
+                                <small class="room-number"></small>
+                            </div>
+                        </td>
+                        <td>${ciDMY}</td>
+                        <td>${coDMY}</td>
+                        <td><span class="status-badge ${statusClass}">${statusVal}</span></td>
+                        <td>₱0</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button type="button" class="btn btn-sm btn-action" title="View"><i class="fas fa-eye"></i></button>
+                                <button type="button" class="btn btn-sm btn-action" title="Edit"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-sm btn-action" title="Delete"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>`;
+                    tbody.appendChild(tr);
+                    try { tr.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch(e) {}
+                    const modalEl = document.getElementById('addReservationModal');
+                    try { bootstrap.Modal.getInstance(modalEl)?.hide(); } catch(e) {}
+                });
+            }
+        });
+    </script>
+    <style>
+        /* Force + New Reservation button to be completely static (no hover/focus changes) */
+        .new-reservation-btn,
+        .new-reservation-btn:hover,
+        .new-reservation-btn:focus,
+        .new-reservation-btn:active,
+        .new-reservation-btn:focus-visible {
+            background-color: var(--bs-primary) !important;
+            border-color: var(--bs-primary) !important;
+            color: #ffffff !important;
+            box-shadow: none !important;
+            text-decoration: none !important;
+            transition: none !important;
+        }
+    </style>
+    <style>
+        /* Extra guard: freeze ALL interactive states to stop any hover "jump" */
+        .new-reservation-btn,
+        .new-reservation-btn:hover,
+        .new-reservation-btn:focus,
+        .new-reservation-btn:active,
+        .new-reservation-btn:focus-visible {
+            background-color: var(--bs-primary) !important;
+            border-color: var(--bs-primary) !important;
+            color: #ffffff !important;
+            box-shadow: none !important;
+            outline: none !important;
+            text-decoration: none !important;
+            transform: none !important;
+            filter: none !important;
+            transition: none !important;
+        }
+        /* Keep Bootstrap's default sizing; no explicit shrink/lock */
+    </style>
+</body>
+</html>

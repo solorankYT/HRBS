@@ -1,3 +1,67 @@
+
+async function login(email, password){
+    try{ 
+        const res = await fetch('/api/login',{
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({email, password})    
+        });
+          if (!res.ok) {
+      throw new Error('Request failed')
+    }
+const data = await res.json();
+
+return data;
+
+    }catch(err){
+        alert('Login failed: ' + err.message);
+    }
+    
+}
+
+
+
+
+
+
+
+async function getUser(id) {
+  try {
+    const res = await fetch(`/api/admin/user/${id}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      },
+      credentials: 'include'
+    })
+
+    if (!res.ok) {
+      throw new Error('Request failed')
+    }
+
+    const user = await res.json()
+    console.log('User data:', user)
+
+    document.getElementById('name').textContent = user.name
+    document.getElementById('email').textContent = user.email
+    document.getElementById('role').textContent = user.role
+
+  } catch (err) {
+    console.error(err)
+    alert('Error loading user')
+  }
+}
+
+
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM Content Loaded - Initializing dashboard...');
     

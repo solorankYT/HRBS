@@ -8,14 +8,13 @@ use Illuminate\Http\JsonResponse;
 
 class AdminController extends Controller
 {
-   
+
 public function show(string $id): JsonResponse
 {
-    return response()->json(
-        User::findOrFail($id)
-    );
-}
+      $user = User::findOrFail($id);
 
+    return response()->json($user);
+}
 
 
 }

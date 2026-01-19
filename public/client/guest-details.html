@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Miniver&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <title>Guest Details - Victoria Mansions</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <style>
+    /* Cart and UI styles remain same */
+    .cart-item { display: flex; align-items: center; gap: 0.75rem; background: #fafafa; border: 1px solid #e5e5e5; border-radius: 0.5rem; padding: 0.75rem; }
+    .cart-item img { width: 70px; height: 70px; object-fit: cover; border-radius: 0.5rem; }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem; }
+    .cart-item-specs { font-size: 0.8rem; color: #666; }
+    .cart-item-price { font-weight: 600; font-size: 0.9rem; color: #d32f2f; }
+
+    .btn-proceed { display: block; width: 100%; padding: 0.85rem 1.5rem; background: #d32f2f; color: #fff; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: background 0.3s, transform 0.1s; }
+    .btn-proceed:hover { background: #b71c1c; transform: translateY(-2px); }
+
+    @media (max-width: 992px) {
+      .select-room-layout { grid-template-columns: 1fr; }
+      .cart-section { position: static; }
+    }
+
+    .total-highlight{
+      background-color:  #e9f8ef;
+      border: 1px solid #a6d9b7;
+      border-radius: 5px;
+      padding: 1rem 1.25rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 6px rgb(195, 236, 195);
+    }
+    .total-highlight .total-label {
+      color: #2e7d32; 
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+
+    .total-highlight .total-amount {
+      color: #1b5e20; 
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+    .cart-section { max-width: 400px; background-color: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 100px; height: fit-content; font-family: 'Poppins', sans-serif; }
+    .cart-header { margin-bottom: 1.5rem; }
+    .cart-title { font-size: 1.25rem; font-weight: 400; color: #8B5A3C; margin-bottom: 0.5rem; }
+    .cart-total { font-size: 1.75rem; font-weight: 700; color: #000; margin-bottom: 0.25rem; }
+    .cart-subtitle { font-size: 0.875rem; color: #666; }
+
+    .room-item { border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; }
+    .room-label { font-size: 0.875rem; font-weight: 600; color: #666; margin-bottom: 0.75rem; }
+    .room-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+    .room-name, .room-price { font-weight: 600; font-size: 1rem; }
+    .room-type, .room-nights { font-size: 0.875rem; color: #8B0000; margin-bottom: 0.5rem; }
+    .taxes-row { display: flex; justify-content: space-between; font-size: 0.875rem; color: #666; padding-bottom: 0.75rem; border-bottom: 1px solid #eee; margin-bottom: 0.75rem; }
+    .total-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #ddd;
+      flex-wrap: wrap;
+    }   
+    .total-label { font-size: 1.125rem; font-weight: 600; color: #2e7d32; }
+    .total-amount { font-size: 1.125rem; font-weight: 700; color: #1b5e20; }
+    .total-subtitle { font-size: 0.75rem; color: #666;flex-basis: 100%; }
+
+    .btn-add-room { width: 100%; padding: 0.875rem; background-color: #fff; border: 1px solid #8B0000; border-radius: 4px; color: #8B0000; font-size: 0.875rem; font-weight: 600; cursor: pointer; margin-bottom: 0.75rem; transition: all 0.2s; }
+    .btn-add-room:hover { background-color: #fff5f5; }
+    .btn-continue:hover{
+      color: #fff !important;
+    }
+
+
+    /* Payment Section */
+.payment-section {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.payment-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--luxury-navy);
+  margin: 1.5rem 0 0.75rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.payment-title i {
+  color: var(--luxury-red);
+  font-size: 1.2rem;
+}
+
+
+.payment-note {
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 1rem;
+  font-family: poppins, sans-serif;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--luxury-stone);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: poppins, sans-serif;
+}
+
+.payment-option:hover {
+  border-color: var(--luxury-red);
+  background: #fff5f5;
+}
+
+.payment-option input[type="radio"] {
+  accent-color: var(--luxury-red);
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.payment-option img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+.payment-option.selected {
+  border-color: var(--luxury-red);
+  background: #fff5f5;
+}
+
+.upload-proof {
+  margin-top: 1rem;
+}
+
+.upload-proof label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  display: block;
+  font-family: poppins, sans-serif;
+}
+
+.upload-proof input[type="file"] {
+  padding: 0.5rem;
+  border: 1px solid var(--luxury-stone);
+  border-radius: 0.375rem;
+  width: 100%;
+  background: #fff;
+  cursor: pointer;
+  font-family: poppins, sans-serif;
+  transition: border-color 0.2s;
+}
+
+.upload-proof input[type="file"]:hover {
+  border-color: var(--luxury-red);
+}
+#roomsAccordion {
+  font-family: 'Poppins', sans-serif;
+}
+#guest{
+  margin-top: 1.5rem;
+}
+.accordion-item {
+  margin-bottom: 1rem; /* adds space between each accordion */
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid rgba(201, 201, 201, 0.918) !important;
+}
+.accordion-button {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Optional: small shadow when open */
+.accordion-item .accordion-collapse.show {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.accordion-button:focus {
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+.accordion-button:not(.collapsed) {
+  color: inherit; /* keep normal text color */
+  background-color: #fff !important; /* remove the default blue background */
+  box-shadow: none !important;
+}
+.unified-section .section-block {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.unified-section .section-block:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+.acknowledgment, .policies-list{
+  font-family: 'poppins',sans-serif;
+  font-size: 0.80rem;
+}
+.acknowledgmentTerms{
+  text-decoration: underline;
+}
+
+
+
+  </style>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <div class="header-content">
+          <a href="index.html" class="logo">
+            <!-- <img src="vm-logo.jpg" alt="Victoria Mansions Logo" class="logo-img"> -->
+            <span class="logo-text">Logo</span>
+          </a>
+        <nav class="nav">
+          <a href="#" class="nav-link">Rooms</a>
+          <a href="#" class="nav-link">About</a>
+          <a href="#" class="nav-link">Amenities</a>
+          <a href="#" class="nav-link">Contact</a>
+          <a href="manage-booking.html" class="nav-link">My Bookings</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Stepper -->
+  <section class="stepper-section">
+    <div class="container">
+      <div class="stepper">
+        <div class="step completed">
+          <div class="step-indicator">
+            <div class="step-icon">✓</div>
+          </div>
+          <div class="step-content">
+            <div class="step-title">Select Dates</div>
+            <div class="step-subtitle">Completed</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step completed">
+          <div class="step-indicator">
+            <div class="step-icon">✓</div>
+          </div>
+          <div class="step-content">
+            <div class="step-title">Select Room</div>
+            <div class="step-subtitle">Completed</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step active">
+          <div class="step-indicator">
+            <div class="step-number">3</div>
+          </div>
+          <div class="step-content">
+            <div class="step-title">Guest Details & Payment</div>
+            <div class="step-subtitle">Current Step</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-indicator">
+            <div class="step-number">4</div>
+          </div>
+          <div class="step-content">
+            <div class="step-title">Confirmation</div>
+            <div class="step-subtitle">Final Step</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Select Room Header -->
+  <section class="select-room-header">
+    <div class="container">
+      <div class="select-room-nav">
+        <button class="back-btn" onclick="goBack()"><span>←</span> Back</button>
+        <div class="page-title-container">
+          <h1 class="page-title">Guest Details & Payment</h1>
+        </div>
+        <div class="spacer"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guest Details & Cart -->
+  <section class="container mb-5" id="guest">
+    <div class="row gy-4">
+      <!-- Guest Form -->
+<div class="col-lg-7">
+  <div class="bg-white p-4 rounded shadow-sm unified-section">
+    <!-- Guest Details -->
+    <div class="section-block">
+      <h5 class="mb-3" style="color: #8B5A3C;">Guest Details</h5>
+      <div class="accordion" id="roomsAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+              Room 1 — Deluxe Room
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#roomsAccordion">
+            <div class="accordion-body">
+              <!-- Guest Info -->
+              <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-control" placeholder="Enter full name">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-control" placeholder="Enter email address">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" placeholder="Enter phone number">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Special Requests</label>
+                <textarea class="form-control" rows="3" placeholder="Any special requests (optional)"></textarea>
+              </div>
+
+              <!-- Payment Section INSIDE accordion -->
+              <div class="mt-4">
+                <h6 class="mb-3" style="font-size: 1.1rem; color: #8B5A3C;">
+                  <i class="fa-solid fa-lock me-2"></i>Payment 
+                </h6>
+                <div class="card card-body">
+                  <p class="text-muted small mb-3">
+                    We use secure transmission and encrypted storage to protect your information.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+     <!-- Policies -->
+    <div class="bg-white p-4 rounded shadow-sm unified-section mt-3">
+      <h5 style="color: #8B5A3C;">Policies</h5>
+      <ul class="policies-list mb-0">
+        <li>Check-in time is from 2:00 PM and check-out is by 12:00 PM.</li>
+        <li>Remaining balance must be completed upon arrival.</li>
+        <li>Cancellations within 24 hours of check-in may incur a fee.</li>
+        <li>Pets are not allowed inside the rooms.</li>
+      </ul>
+    </div>
+
+  <!-- Acknowledgment -->
+    <div class="bg-white p-4 rounded shadow-sm unified-section mt-3">
+        <h5 style="color: #8B5A3C;">Acknowledgment</h5>
+        <div class="acknowledgment">
+          <div class="form-check mb-0">
+            <input class="form-check-input" type="checkbox" id="privacyTerms">
+            <label class="form-check-label" for="privacyTerms">
+              I agree with the <span class="acknowledgmentTerms">Privacy Terms.</span>
+            </label>
+          </div>
+          <div class="form-form-check">
+            <input class="form-check-input" type="checkbox" id="bookingConditions">
+            <label class="form-check-label" for="bookingConditions">
+              I agree with the <span class="acknowledgmentTerms"> Booking Conditions.</span>
+            </label>
+          </div>
+        </div>
+      </div>
+  </div>
+
+   
+
+      <!-- Cart -->
+      <aside class="cart-section">
+        <div class="booking-summary-container">
+          <div class="cart-header">
+            <h2 class="cart-title">Your Cart: <span id="itemCount">0</span></h2>
+            <div class="cart-total">Total <span id="totalAmount">₱0.00</span></div>
+            <div class="cart-subtitle">Including taxes and fees</div>
+          </div>
+          <div id="roomsContainer"></div>
+
+          <div class="total-section total-highlight">
+            <div class="total-label">Total</div>
+            <div class="total-amount" id="finalTotal">₱0.00</div>
+            <div class="total-subtitle">Including taxes and fees</div>
+          </div>
+
+          <button class="btn-add-room" onclick="addRoom()">ADD A ROOM</button>
+          <button class="btn btn-continue btn-sm ms-auto">CONFIRM BOOKING</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+
+
+
+  <!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Logo -->
+    <div class="footer-logo">
+      <img src="vm-logo-nobg.png" alt="Logo">
+    </div>
+
+    <!-- <p class="footer-tagline">Stay simple. Stay comfortable.</p> -->
+
+    <!-- Links Row 1 -->
+    <div class="footer-links">
+      <a href="#">About Us</a>
+      <span class="divider">|</span>
+      <a href="#">Privacy Policy</a>
+      <span class="divider">|</span>
+      <a href="#">Terms & Conditions</a>
+      <span class="divider">|</span>
+      <a href="#">Contact Us</a>
+      <span class="divider">|</span>
+      <a href="feedback.html">Feedback</a>
+    </div>
+
+    <!-- Links Row 2 -->
+    <div class="footer-links">
+      <a href="manage-booking.html">Manage Booking</a>
+      <span class="divider">|</span>
+      <a href="#">Facebook</a>
+      <span class="divider">|</span>
+      <a href="#">Instagram</a>
+    </div>
+
+    <!-- Copyright -->
+    <div class="footer-divider-line"></div>
+    <p class="footer-copy">© 2025. All rights reserved.</p>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="guest-details.js"></script>
+</body>
+</html>

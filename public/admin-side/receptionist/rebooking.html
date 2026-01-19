@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H+Hotel - Rebooking</title>
+    <script>
+        (function() {
+            try {
+                if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                    document.documentElement.classList.add('precollapsed');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="../styles.css" rel="stylesheet">
+    <link href="receptionist.css" rel="stylesheet">
+    <style>
+        /* Font Family Declarations */
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Headers and Titles */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .welcome-banner h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .hotel-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .admin-label {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        /* Navigation */
+        .nav-link {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .nav-link span {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        /* Profile Section */
+        .profile-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .profile-role {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Search and Input Elements */
+        .search-input {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Buttons */
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-right: 8px;
+        }
+        
+        .hotel-logo {
+            display: none;
+        }
+        
+        /* Form Elements */
+        .form-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Modal Elements */
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        /* Card Elements */
+        .cancel-header {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .room-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .room-price {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .room-desc {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        .status {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .profile-section { border-top: 0 !important; }
+        .profile-section::before { content: none !important; }
+        .sidebar-divider { height: 1px; background-color: #e9ecef; margin: 0.5rem 0; width: 100%; }
+        .sidebar { transition: all 0.3s ease; }
+        .sidebar.collapsed { width: 60px; }
+        .sidebar.collapsed .hotel-name,
+        .sidebar.collapsed .logo-text,
+        .sidebar.collapsed .nav-link span,
+        .sidebar.collapsed .profile-name,
+        .sidebar.collapsed .profile-role { opacity: 0; display: none; }
+        .sidebar.collapsed .sidebar-header { padding: 0.75rem 0.5rem; text-align: center; border-bottom: 1px solid #e9ecef; display: flex; align-items: center; justify-content: center; min-height: 60px; }
+        .sidebar.collapsed .nav-link { text-align: center; padding: 0.75rem 0.5rem; justify-content: center; position: relative; min-height: 50px; display: flex; align-items: center; }
+        .sidebar.collapsed .nav-link i { margin: 0; font-size: 1rem; width: auto; }
+        .sidebar.collapsed .profile-info { justify-content: center; padding: 0.75rem 0.5rem; min-height: 60px; display: flex; align-items: center; }
+        .sidebar.collapsed .profile-icon { font-size: 1.5rem; margin: 0; }
+        .sidebar.collapsed .toggle-icon { display: block; }
+        .sidebar.collapsed .profile-info > div { display: none; }
+        main { transition: margin-left 0.3s ease; }
+        main.sidebar-collapsed { margin-left: 60px; }
+        @media (max-width: 767px) {
+            .sidebar.collapsed { width: 0; overflow: hidden; }
+            main.sidebar-collapsed { margin-left: 0; }
+        }
+        /* Match header style used on reservation management page */
+        .top-bar-header { background: #ffffff !important; border-bottom: 1px solid #f0f0f0 !important; width: 100% !important; }
+        .top-bar-header .search-container { margin-left: 0 !important; }
+        /* Cancellation page styles - Professional Modern Design */
+        .cancel-surface { 
+            background: #f8fafc; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 12px; 
+            padding: 24px; 
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .cancel-header { 
+            color: #1e293b; 
+            font-weight: 600; 
+            font-size: 1.25rem;
+            margin-bottom: 0;
+        }
+        
+        .search-inline { display: none; }
+        
+        .cancel-card { 
+            border: 1px solid #e2e8f0; 
+            border-radius: 12px; 
+            padding: 12px; 
+            background: #ffffff; 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .cancel-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .cancel-card .room-title { 
+            color: #1e293b; 
+            font-weight: 600; 
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        
+        .cancel-card .room-price { 
+            color: #1e293b; 
+            font-weight: 600; 
+            font-size: 0.9rem;
+        }
+        
+        .cancel-card .room-desc { 
+            font-size: 12px; 
+            color: #64748b; 
+            max-width: 100%; 
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        
+        .cancel-card .status { 
+            color: #dc2626; 
+            font-weight: 600; 
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .cancel-card .status span {
+            width: 8px;
+            height: 8px;
+            background: #dc2626;
+            border-radius: 50%;
+        }
+        
+        .cards-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+        }
+        
+        .btn-outline-primary {
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
+            background: transparent;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .btn-outline-primary:hover {
+            background: #3b82f6;
+            color: white;
+        }
+        .btn-approve { background:#8b0000; color:#fff; border:1px solid #7a0000; }
+        .btn-approve:hover { background:#6e0000; color:#fff; border-color:#5f0000; }
+        /* Non-editable fields should appear white */
+        .modal .form-control:disabled,
+        .modal .form-select:disabled,
+        .modal textarea.form-control:disabled {
+            background-color:#ffffff !important;
+            color:#495057 !important;
+            opacity:1;
+        }
+        .modal .form-control:focus,
+        .modal .form-select:focus,
+        .modal textarea.form-control:focus {
+            box-shadow:none;
+        }
+    </style>
+    </head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="sidebar-header clickable" id="sidebarToggle">
+                    <span class="logo-text">logo</span>
+                    <h4 class="hotel-name">H+Hotel</h4>
+                    <i class="fas fa-bars toggle-icon" aria-label="Collapse sidebar"></i>
+                </div>
+                
+                <ul class="nav flex-column main-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="receptionistdashboard.html" data-tooltip="Dashboard">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reservationreceptionist.html" data-tooltip="Reservations">
+                            <i class="fas fa-calendar"></i>
+                            <span>Reservations</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="checkinout.html" data-tooltip="Check-in/out">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Check-in/out</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="receptionistpayment.html" data-tooltip="Payments">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Payments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cancellation.html" data-tooltip="Cancellation">
+                            <i class="fas fa-ban"></i>
+                            <span>Cancellation</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="rebooking.html" data-tooltip="Rebooking">
+                            <i class="fas fa-redo"></i>
+                            <span>Rebooking</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="nav flex-column secondary-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="receptionistsettings.html" data-tooltip="Settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../admin/login.html" data-tooltip="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="sidebar-divider"></div>
+                
+                <div class="profile-section">
+                    <div class="profile-info" data-tooltip="Prince Gallardo - Receptionist">
+                        <i class="fas fa-user-circle profile-icon"></i>
+                        <div>
+                            <div class="profile-name">Prince Gallardo</div>
+                            <div class="profile-role">Receptionist</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="top-bar-header d-flex justify-content-between align-items-center">
+                    <div class="left-section">
+                        <span class="admin-label">Receptionist</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="search-container me-4">
+                            <input type="text" class="form-control search-input" placeholder="Search...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                        <div class="notification-icon me-3">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="user-dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reservation-header d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="reservation-title">Rebooking</h1>
+                </div>
+
+                <div class="cancel-surface">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="cancel-header">Reservation Rescheduling</div>
+                        <div class="search-inline">
+                            <div class="position-relative">
+                                <input type="text" class="form-control" placeholder="Search reservation...">
+                                <i class="fas fa-search position-absolute" style="right:10px; top:10px; color:#6c8a6c;"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cards-container">
+                        <div class="cancel-card" id="rbCard">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div class="room-title" id="rbRoomTitle">Basic Studio Room</div>
+                                <div class="room-price" id="rbRoomPrice">PHP 922.00</div>
+                            </div>
+                            <div class="room-desc mb-3" id="rbRoomDesc">
+                                Conflict in schedule. I have a sudden meeting.
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="status" id="rbStatus"><span class="me-2">•</span>Requesting Rebooking</div>
+                                <button class="btn btn-sm btn-outline-primary" id="btnViewRebookDetails">View details</button>
+                            </div>
+                        </div>
+
+                        <div class="cancel-card" id="rbCard2">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div class="room-title" id="rbRoomTitle2">Standard Room</div>
+                                <div class="room-price" id="rbRoomPrice2">PHP 2,599.00</div>
+                            </div>
+                            <div class="room-desc mb-3" id="rbRoomDesc2">
+                                Need to extend stay due to business conference.
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="status" id="rbStatus2"><span class="me-2">•</span>Requesting Rebooking</div>
+                                <button class="btn btn-sm btn-outline-primary" id="btnViewRebookDetails2">View details</button>
+                            </div>
+                        </div>
+
+                        <div class="cancel-card" id="rbCard3">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div class="room-title" id="rbRoomTitle3">Family Room</div>
+                                <div class="room-price" id="rbRoomPrice3">PHP 3,599.00</div>
+                            </div>
+                            <div class="room-desc mb-3" id="rbRoomDesc3">
+                                Family emergency requires earlier check-in.
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="status" id="rbStatus3"><span class="me-2">•</span>Requesting Rebooking</div>
+                                <button class="btn btn-sm btn-outline-primary" id="btnViewRebookDetails3">View details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="receptionist.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.sidebar');
+            const main = document.querySelector('main');
+            if (sidebarToggle && sidebar && main) {
+                sidebarToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    sidebar.classList.toggle('collapsed');
+                    main.classList.toggle('sidebar-collapsed');
+                    const icon = this.querySelector('.toggle-icon');
+                    if (sidebar.classList.contains('collapsed')) {
+                        icon.className = 'fas fa-chevron-right toggle-icon';
+                        document.documentElement.classList.add('precollapsed');
+                    } else {
+                        icon.className = 'fas fa-bars toggle-icon';
+                        document.documentElement.classList.remove('precollapsed');
+                    }
+                    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+                });
+                const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+                if (isCollapsed) {
+                    sidebar.classList.add('collapsed');
+                    main.classList.add('sidebar-collapsed');
+                    const icon = sidebarToggle.querySelector('.toggle-icon');
+                    if (icon) { icon.className = 'fas fa-chevron-right toggle-icon'; }
+                    document.documentElement.classList.add('precollapsed');
+                } else {
+                    document.documentElement.classList.remove('precollapsed');
+                }
+            }
+        });
+    </script>
+
+    <!-- Rebooking Details Modal -->
+    <div class="modal fade" id="rebookDetailsModal" tabindex="-1" aria-labelledby="rebookDetailsLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rebookDetailsLabel">Guest Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Guest ID</label>
+                                <input type="text" class="form-control" id="rbGuestId" value="20490" disabled>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Reservation ID</label>
+                                <input type="text" class="form-control" id="rbReservationId" value="12345" disabled>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Status</label>
+                                <input type="text" class="form-control" id="rbStatusInput" value="Pending" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="rbFirstName" value="John" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="rbLastName" value="Doe" disabled>
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                        <h6 class="mb-3">New Schedule</h6>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Check-in</label>
+                                <input type="date" class="form-control" id="rbCheckIn" value="2024-12-15">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Check-out</label>
+                                <input type="date" class="form-control" id="rbCheckOut" value="2024-12-17">
+                            </div>
+                        </div>
+                        <h6 class="mb-3">New Room Type</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Room Type</label>
+                                <select class="form-select" id="rbRoomType">
+                                    <option>Basic Studio Room</option>
+                                    <option>Standard Room</option>
+                                    <option>Family Room</option>
+                                    <option>Premium Room</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Reason for Rebooking</label>
+                                <textarea class="form-control" id="rbReason" rows="3" disabled>Conflict in schedule. I have a sudden meeting.</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-approve" id="rbApprove">Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Wire up View details and write back to the card (Rebooking)
+        document.addEventListener('DOMContentLoaded', function(){
+            const btnView = document.getElementById('btnViewRebookDetails');
+            const btnView2 = document.getElementById('btnViewRebookDetails2');
+            const btnView3 = document.getElementById('btnViewRebookDetails3');
+            const modal = new bootstrap.Modal(document.getElementById('rebookDetailsModal'));
+            const approve = document.getElementById('rbApprove');
+
+            // Store current card being edited
+            let currentCardId = '';
+
+            function toYMD(d){
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth()+1).padStart(2,'0');
+                const dd = String(d.getDate()).padStart(2,'0');
+                return `${yyyy}-${mm}-${dd}`;
+            }
+            function setRealtimeDates(){
+                const today = new Date();
+                const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1);
+                const ci = document.getElementById('rbCheckIn');
+                const co = document.getElementById('rbCheckOut');
+                if (ci) ci.value = toYMD(today);
+                if (co) co.value = toYMD(tomorrow);
+            }
+            // Initialize on load
+            setRealtimeDates();
+
+            btnView?.addEventListener('click', function(){
+                currentCardId = 'rbCard';
+                setRealtimeDates();
+                modal.show();
+            });
+
+            btnView2?.addEventListener('click', function(){
+                currentCardId = 'rbCard2';
+                setRealtimeDates();
+                modal.show();
+            });
+
+            btnView3?.addEventListener('click', function(){
+                currentCardId = 'rbCard3';
+                setRealtimeDates();
+                modal.show();
+            });
+
+            approve?.addEventListener('click', function(){
+                const resId = (document.getElementById('rbReservationId')?.value || '').trim();
+                const reason = (document.getElementById('rbReason')?.value || '').trim();
+                
+                if (currentCardId) {
+                    const titleEl = document.getElementById(currentCardId.replace('Card', 'RoomTitle'));
+                    const priceEl = document.getElementById(currentCardId.replace('Card', 'RoomPrice'));
+                    const descEl = document.getElementById(currentCardId.replace('Card', 'RoomDesc'));
+                    const statusEl = document.getElementById(currentCardId.replace('Card', 'Status'));
+
+                    if (titleEl && resId) {
+                        const originalTitle = titleEl.textContent.split(' — ')[0];
+                        titleEl.textContent = `${originalTitle} — #${resId}`;
+                    }
+                    if (descEl && reason) descEl.textContent = reason;
+                    if (statusEl) statusEl.innerHTML = '<span class="me-2">•</span>Rebooked';
+                }
+
+                modal.hide();
+            });
+        });
+    </script>
+</body>
+</html>
+
+

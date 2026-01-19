@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H+Hotel - Reservation Details</title>
+    <script>
+        (function() {
+            try {
+                if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                    document.documentElement.classList.add('precollapsed');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="../styles.css" rel="stylesheet">
+    <link href="receptionist.css" rel="stylesheet">
+    <style>
+        /* Font Family Declarations */
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Headers and Titles */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .welcome-banner h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .hotel-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .admin-label {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        /* Navigation */
+        .nav-link {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .nav-link span {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        /* Profile Section */
+        .profile-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .profile-role {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Search and Input Elements */
+        .search-input {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Buttons */
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-right: 8px;
+        }
+        
+        .hotel-logo {
+            display: none;
+        }
+        
+        /* Form Elements */
+        .form-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .profile-section { border-top: 0 !important; }
+        .profile-section::before { content: none !important; }
+        .sidebar-divider { height: 1px; background-color: #e9ecef; margin: 0.5rem 0; width: 100%; }
+        .sidebar { transition: all 0.3s ease; }
+        .sidebar.collapsed { width: 60px; }
+        .sidebar.collapsed .hotel-name,
+        .sidebar.collapsed .logo-text,
+        .sidebar.collapsed .nav-link span,
+        .sidebar.collapsed .profile-name,
+        .sidebar.collapsed .profile-role { opacity: 0; display: none; }
+        .sidebar.collapsed .sidebar-header { padding: 0.75rem 0.5rem; text-align: center; border-bottom: 1px solid #e9ecef; display: flex; align-items: center; justify-content: center; min-height: 60px; }
+        .sidebar.collapsed .nav-link { text-align: center; padding: 0.75rem 0.5rem; justify-content: center; position: relative; min-height: 50px; display: flex; align-items: center; }
+        .sidebar.collapsed .nav-link i { margin: 0; font-size: 1rem; width: auto; }
+        .sidebar.collapsed .profile-info { justify-content: center; padding: 0.75rem 0.5rem; min-height: 60px; display: flex; align-items: center; }
+        .sidebar.collapsed .profile-icon { font-size: 1.5rem; margin: 0; }
+        .sidebar.collapsed .toggle-icon { display: block; }
+        .sidebar.collapsed .profile-info > div { display: none; }
+        main { transition: margin-left 0.3s ease; }
+        main.sidebar-collapsed { margin-left: 60px; }
+        @media (max-width: 767px) {
+            .sidebar.collapsed { width: 0; overflow: hidden; }
+            main.sidebar-collapsed { margin-left: 0; }
+        }
+        .top-bar-header { background: #ffffff !important; border-bottom: 1px solid #f0f0f0 !important; width: 100% !important; }
+        .top-bar-header .search-container { margin-left: 0 !important; }
+        .checkin-btn { background: #8b0000; color: #fff; border: 1px solid #7a0000; }
+        .checkin-btn:hover { background: #6e0000; color: #fff; border-color: #5f0000; }
+        .cancel-btn { background: #8b0000; color: #fff; border: 1px solid #7a0000; }
+        .cancel-btn:hover { background: #6e0000; color: #fff; border-color: #5f0000; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="sidebar-header clickable" id="sidebarToggle">
+                    <span class="logo-text">logo</span>
+                    <h4 class="hotel-name">H+Hotel</h4>
+                    <i class="fas fa-bars toggle-icon" aria-label="Collapse sidebar"></i>
+                </div>
+                
+                <ul class="nav flex-column main-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="receptionistdashboard.html" data-tooltip="Dashboard">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reservationreceptionist.html" data-tooltip="Reservations">
+                            <i class="fas fa-calendar"></i>
+                            <span>Reservations</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="checkinout.html" data-tooltip="Check-in/out">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Check-in/out</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="receptionistpayment.html" data-tooltip="Payments">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Payments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cancellation.html" data-tooltip="Cancellation">
+                            <i class="fas fa-ban"></i>
+                            <span>Cancellation</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="rebooking.html" data-tooltip="Rebooking">
+                            <i class="fas fa-redo"></i>
+                            <span>Rebooking</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="nav flex-column secondary-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="receptionistsettings.html" data-tooltip="Settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../admin/login.html" data-tooltip="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="sidebar-divider"></div>
+                
+                <div class="profile-section">
+                    <div class="profile-info" data-tooltip="Prince Gallardo - Receptionist">
+                        <i class="fas fa-user-circle profile-icon"></i>
+                        <div>
+                            <div class="profile-name">Prince Gallardo</div>
+                            <div class="profile-role">Receptionist</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="top-bar-header d-flex justify-content-between align-items-center">
+                    <div class="left-section">
+                        <span class="admin-label">Receptionist</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="search-container me-4">
+                            <input type="text" class="form-control search-input" placeholder="Search...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                        <div class="notification-icon me-3">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="user-dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reservation-header d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="reservation-title">Reservation Details</h1>
+                </div>
+
+                <div class="container py-1">
+        <div class="card">
+            <div class="card-body p-3">
+                <div class="row g-1 mb-2">
+                    <div class="col-md-6">
+                        <label class="form-label small mb-1">Reservation ID</label>
+                        <input type="text" class="form-control form-control-sm" value="12345">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small mb-1">Status</label>
+                        <select class="form-select form-select-sm">
+                            <option selected>Approved Reservation</option>
+                            <option>Pending</option>
+                            <option>Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small mb-1">Room Type</label>
+                        <input type="text" class="form-control form-control-sm" value="Premium Room">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small mb-1">Proof of Payment</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" value="Image2349230..." readonly>
+                            <button id="btnViewImage" class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#paymentImageModal">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h6 class="mb-1">Schedule</h6>
+                <div class="row g-1 mb-2">
+                    <div class="col-md-4">
+                        <label class="form-label small mb-1">Check-in</label>
+                        <input type="date" class="form-control form-control-sm" value="2024-12-15">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small mb-1">Check-out</label>
+                        <input type="date" class="form-control form-control-sm" value="2024-12-17">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small mb-1">Date Booked</label>
+                        <input type="date" class="form-control form-control-sm" value="2024-09-03">
+                    </div>
+                </div>
+
+                <h6 class="mb-1">Guest Information</h6>
+                <div class="row g-1 mb-2">
+                    <div class="col-md-3">
+                        <label class="form-label small mb-1">First Name</label>
+                        <input type="text" class="form-control form-control-sm" value="John">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small mb-1">Last Name</label>
+                        <input type="text" class="form-control form-control-sm" value="Doe">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small mb-1">Contact Number</label>
+                        <input type="text" class="form-control form-control-sm" value="0092345678">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small mb-1">E-mail Address</label>
+                        <input type="email" class="form-control form-control-sm" value="johndoe@gmail.com">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label small mb-1">Address</label>
+                        <input type="text" class="form-control form-control-sm" value="123 Elms Street., Fourth Century, Makati, Philippines">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small mb-1">Adults</label>
+                        <input type="number" class="form-control form-control-sm" value="4" min="0">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small mb-1">Kids</label>
+                        <input type="number" class="form-control form-control-sm" value="2" min="0">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label small mb-1">Special Request/s</label>
+                        <textarea class="form-control form-control-sm" rows="1">We would like to enter the room with the Air Conditioner already turned on for our comfort.</textarea>
+                    </div>
+                </div>
+
+                <div id="actionMessage" class="mb-1"></div>
+                <div class="d-flex gap-1">
+                    <button id="btnCheckIn" class="btn checkin-btn btn-sm"><i class="fas fa-check me-1"></i>Check-in Guest</button>
+                    <a href="checkinout.html" class="btn btn-secondary btn-sm">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Proof of Payment Image Modal -->
+    <div class="modal fade" id="paymentImageModal" tabindex="-1" aria-labelledby="paymentImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentImageModalLabel">Proof of Payment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalRoomImage" src="https://i.pinimg.com/736x/c3/b3/ef/c3b3ef3d94cddaf939d67ae0f9126927.jpg" class="img-fluid rounded" alt="Room image preview" referrerpolicy="no-referrer">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="receptionist.js"></script>
+
+
+    <script>
+        // Ensure the proof-of-payment "View image" button previews the room image in the modal
+        document.addEventListener('DOMContentLoaded', function () {
+            const btnView = document.getElementById('btnViewImage');
+            const roomImage = document.getElementById('roomImage');
+            const modalImg = document.getElementById('modalRoomImage');
+            if (btnView && roomImage && modalImg) {
+                btnView.addEventListener('click', function () {
+                    modalImg.src = roomImage.src;
+                });
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const messageBox = document.getElementById('actionMessage');
+            const btnCheckIn = document.getElementById('btnCheckIn');
+            const btnCancel = document.getElementById('btnCancelReservation');
+            // Real-time dates and lock fields (only Status editable)
+            (function initRealtimeAndLock(){
+                function toYMD(d){
+                    const yyyy = d.getFullYear();
+                    const mm = String(d.getMonth()+1).padStart(2,'0');
+                    const dd = String(d.getDate()).padStart(2,'0');
+                    return `${yyyy}-${mm}-${dd}`;
+                }
+                const today = new Date();
+                const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1);
+                const dateInputs = Array.from(document.querySelectorAll('input[type="date"]'));
+                if (dateInputs.length >= 3) {
+                    // Order assumed: Check-in, Check-out, Date Booked
+                    dateInputs[0].value = toYMD(today);
+                    dateInputs[1].value = toYMD(tomorrow);
+                    dateInputs[2].value = toYMD(today);
+                }
+                const statusSelect = document.querySelector('select.form-select.form-select-sm');
+                const controls = Array.from(document.querySelectorAll('input, textarea, select'));
+                controls.forEach(el => {
+                    if (el === statusSelect) return; // keep status editable
+                    // Keep proof of payment View button clickable
+                    if (el.tagName === 'BUTTON') return;
+                    // Disable editable fields
+                    if (el.tagName === 'SELECT') el.disabled = true;
+                    if (el.tagName === 'TEXTAREA') el.readOnly = true;
+                    if (el.tagName === 'INPUT') {
+                        const t = (el.getAttribute('type')||'').toLowerCase();
+                        if (['text','email','number','date'].includes(t)) el.readOnly = true;
+                        if (['checkbox','radio'].includes(t)) el.disabled = true;
+                    }
+                });
+            })();
+
+            function showMessage(type, text) {
+                const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+                messageBox.innerHTML = `
+                    <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                        ${text}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+                messageBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            if (btnCheckIn) {
+                btnCheckIn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    showMessage('success', 'Guest successfully checked in.');
+                });
+            }
+
+            if (btnCancel) {
+                btnCancel.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    showMessage('danger', 'Reservation has been cancelled.');
+                });
+            }
+
+            // Removed View Details feature
+        });
+    </script>
+    <script>
+        // Sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.sidebar');
+            const main = document.querySelector('main');
+            
+            if (sidebarToggle && sidebar && main) {
+                sidebarToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    sidebar.classList.toggle('collapsed');
+                    main.classList.toggle('sidebar-collapsed');
+                    
+                    const icon = this.querySelector('.toggle-icon');
+                    if (sidebar.classList.contains('collapsed')) {
+                        icon.className = 'fas fa-chevron-right toggle-icon';
+                        document.documentElement.classList.add('precollapsed');
+                    } else {
+                        icon.className = 'fas fa-bars toggle-icon';
+                        document.documentElement.classList.remove('precollapsed');
+                    }
+                    
+                    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+                });
+                
+                const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+                if (isCollapsed) {
+                    sidebar.classList.add('collapsed');
+                    main.classList.add('sidebar-collapsed');
+                    const icon = sidebarToggle.querySelector('.toggle-icon');
+                    if (icon) { icon.className = 'fas fa-chevron-right toggle-icon'; }
+                    document.documentElement.classList.add('precollapsed');
+                } else {
+                    document.documentElement.classList.remove('precollapsed');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

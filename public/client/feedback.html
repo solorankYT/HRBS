@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hotel Feedback</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="feedback.css">
+  <style>
+.footer {
+  background-color: #1b2431; /* same navy tone */
+  color: #ddd;
+  text-align: center;
+  padding: 20px 20px 30px;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  margin-top: 10rem;
+
+}
+.footer-container {
+  position: relative;
+  top: -15px; /* ⬅ lifts all inner content upward */
+}
+
+
+.footer-logo img {
+  width: 140px;     /* adjust to your logo size */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  position: relative;
+  top: 0; 
+}
+
+.footer-tagline {
+  font-size: 0.95rem;
+  color: #ccc;
+  margin-bottom: 25px;
+}
+
+.footer-links {
+  margin: 10px 0;
+  font-size: 0.7rem;
+}
+
+.footer-links a {
+  color: #bfbfbf;
+  text-decoration: none;
+  margin: 0 8px;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+/* the vertical bars */
+.footer-links .divider {
+  color: #666;
+  margin: 0 5px;
+  font-weight: 300;
+}
+
+.footer-divider-line {
+  width: 70%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 35px auto 20px;
+}
+
+.footer-copy {
+  font-size: 0.70rem;
+  color: #fff;
+  letter-spacing: 1px;
+  font-size: 'poppins',sans-serif;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-container">
+      <div class="header-content">
+        <a href="index.html" class="logo">
+          <!-- <img src="vm-logo.jpg" alt="Victoria Mansions Logo" class="logo-img"> -->
+          <span class="logo-text">Logo</span>
+        </a>
+        <nav class="nav">
+          <a href="#" class="nav-link">Rooms</a>
+          <a href="#" class="nav-link">About</a>
+          <a href="#" class="nav-link">Amenities</a>
+          <a href="#" class="nav-link">Contact</a>
+          <a href="manage-booking.html" class="nav-link">My Bookings</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN FORM -->
+  <div class="container py-5 form-wrapper">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold">Share Your Experience</h2>
+      <p class="text-muted mb-0">Your feedback helps us improve our service and hospitality</p>
+    </div>
+
+    <!-- Booking Lookup -->
+    <div id="booking-section" class="feedback-card">
+      <h5 class="fw-semibold mb-3">Find Your Stay</h5>
+      <div class="mb-3">
+        <label class="form-label">Booking Reference</label>
+        <input type="text" id="bookingRef" class="form-control" placeholder="RES-001" oninput="toggleButton()">
+      </div>
+      <button id="findBtn" class="btn btn-primary w-100 mb-2" onclick="findBooking()" disabled>
+        Find Booking
+      </button>
+      <div class="text-center">
+        <a href="#" class="text-decoration-none custom-red" onclick="leaveAnonymous()">Leave anonymous feedback</a>
+      </div>
+      <div id="error-msg" class="text-danger text-center mt-2" style="display:none;">
+        Invalid booking reference. Please try again.
+      </div>
+    </div>
+
+    <!-- Feedback Form -->
+    <form id="feedback-form" style="display:none;">
+      <div class="feedback-card">
+        <h5 class="fw-semibold mb-3">Rate Your Experience</h5>
+
+        <div class="mb-3 rating-row">
+          <label class="form-label mb-0">Overall Experience</label>
+          <div class="star-rating" data-category="overall"></div>
+        </div>
+
+        <div class="mb-3 rating-row">
+          <label class="form-label mb-0">Cleanliness</label>
+          <div class="star-rating" data-category="cleanliness"></div>
+        </div>
+
+        <div class="mb-3 rating-row">
+          <label class="form-label mb-0">Staff Service</label>
+          <div class="star-rating" data-category="staff"></div>
+        </div>
+
+        <div class="mb-3 rating-row">
+          <label class="form-label mb-0">Facilities</label>
+          <div class="star-rating" data-category="facilities"></div>
+        </div>
+
+        <div class="mb-3 rating-row">
+          <label class="form-label mb-0">Food & Dining</label>
+          <div class="star-rating" data-category="food"></div>
+        </div>
+
+        <div class="mb-3 rating-row">
+          <label class="form-label mb-0">Value for Money</label>
+          <div class="star-rating" data-category="value"></div>
+        </div>
+      </div>
+
+      <!-- Comments -->
+      <div class="feedback-card">
+        <h5 class="fw-semibold mb-3">Additional Comments</h5>
+        <div class="mb-3">
+          <label class="form-label">Tell us more about your experience</label>
+          <textarea class="form-control" rows="3" maxlength="500" placeholder="What did you enjoy most? How can we improve?"></textarea>
+          <small class="text-muted">Max 500 characters</small>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Share Photos (optional)</label>
+          <div class="upload-box">
+            <i class="fa-solid fa-camera mb-2"></i>
+            <p class="text-muted mb-1">Upload photos from your stay</p>
+            <small class="text-muted">PNG, JPG up to 10MB each</small>
+          </div>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="anonymous">
+          <label class="form-check-label" for="anonymous">Submit feedback anonymously</label>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="feedback-card d-flex justify-content-between align-items-center">
+        <div>
+          <h6 class="fw-semibold">Ready to submit?</h6>
+          <small class="text-muted">Thank you for taking the time to share your feedback</small>
+        </div>
+        <button type="submit" class="btn btn-success">
+          <i class="fa-solid fa-paper-plane me-2"></i> Submit
+        </button>
+      </div>
+    </form>
+
+    <!-- Thank You Page -->
+    <div id="thank-you" class="text-center py-5" style="display:none;">
+      <div class="feedback-card text-center py-5">
+        <div class="w-16 h-16 bg-success-subtle border-4 border-success rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+          <i class="fa-solid fa-message text-success" style="font-size: 2rem;"></i>
+        </div>
+        <h1 class="h4 fw-bold text-dark mb-2">Thank You for Your Feedback!</h1>
+        <p class="text-muted mb-4">
+          Your review has been submitted successfully. We appreciate you taking the time to share your experience with us.
+        </p>
+        <div class="bg-light border rounded p-3 mx-auto" style="max-width: 500px;">
+          <p class="text-sm text-custom mb-0">
+            <strong>What happens next?</strong><br/>
+            Our team will review your feedback and may reach out if we need any clarification. Thank you for helping us improve our service!
+          </p>
+        </div>
+        <div class="mt-4">
+          <a href="index.html" class="btn btn-outline-dark">Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+  <div class="footer-container">
+    <!-- Logo -->
+    <div class="footer-logo">
+      <img src="#" alt=" Logo">
+      <!-- <img src="vm-logo-nobg.png" alt="Victoria Mansions Logo"> -->
+    </div>
+
+    <!-- <p class="footer-tagline">Stay simple. Stay comfortable.</p> -->
+
+    <!-- Links Row 1 -->
+    <div class="footer-links">
+      <a href="#">About Us</a>
+      <span class="divider">|</span>
+      <a href="#">Privacy Policy</a>
+      <span class="divider">|</span>
+      <a href="#">Terms & Conditions</a>
+      <span class="divider">|</span>
+      <a href="#">Contact Us</a>
+      <span class="divider">|</span>
+      <a href="feedback.html">Feedback</a>
+    </div>
+
+    <!-- Links Row 2 -->
+    <div class="footer-links">
+      <a href="manage-booking.html">Manage Booking</a>
+      <span class="divider">|</span>
+      <a href="#">Facebook</a>
+      <span class="divider">|</span>
+      <a href="#">Instagram</a>
+    </div>
+
+    <!-- Copyright -->
+    <div class="footer-divider-line"></div>
+    <p class="footer-copy">© 2025. All rights reserved.</p>
+  </div>
+</footer>
+
+
+  <script src="feedback.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById("feedback-form").addEventListener("submit", function(e){
+      e.preventDefault();
+      document.getElementById("feedback-form").style.display = "none";
+      document.getElementById("thank-you").style.display = "block";
+    });
+  </script>
+</body>
+</html>

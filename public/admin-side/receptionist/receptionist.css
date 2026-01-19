@@ -1,0 +1,172 @@
+/* Receptionist shared styles (cards, icons, sections) */
+
+.guest-services-wrapper {
+    width: 100%;
+}
+
+.service-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    padding: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 14px;
+    height: 220px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.service-card:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.service-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-icon i {
+    font-size: 28px;
+    color: #0d1b2a;
+}
+
+.service-icon.green { background: #e9f7ef; }
+.service-icon.blue  { background: #e7f1ff; }
+.service-icon.purple{ background: #f3e9ff; }
+
+.service-content h3 {
+    font-size: 1.25rem;
+    margin: 0;
+    color: #2c3e50;
+}
+
+/* Table-like container used to provide boxed background */
+.reservations-table-container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    padding: 16px;
+}
+
+/* Sidebar tweaks for receptionist pages */
+.profile-section { border-top: 0; }
+.profile-section::before { content: none; }
+
+/* Guest Cards Layout */
+.guest-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0;
+}
+
+.guest-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: box-shadow 0.3s ease;
+    min-height: 80px;
+    width: 100%;
+}
+
+.guest-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.guest-info {
+    flex: 1;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.guest-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 4px;
+    text-align: left;
+    width: 100%;
+}
+
+.guest-details {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-weight: 400;
+    text-align: left;
+    width: 100%;
+}
+
+.status-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-badge i {
+    font-size: 0.8rem;
+}
+
+.status-badge.confirmed {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.checked-out {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.overdue {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Responsive adjustments for guest cards */
+@media (max-width: 768px) {
+    .guest-cards-container {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .guest-card {
+        padding: 16px;
+        min-height: 70px;
+    }
+    
+    .guest-name {
+        font-size: 0.9rem;
+    }
+    
+    .guest-details {
+        font-size: 0.8rem;
+    }
+    
+    .status-badge {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+    }
+}
+

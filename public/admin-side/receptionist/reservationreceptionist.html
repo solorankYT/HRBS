@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H+Hotel - Reservation Management</title>
+    <script>
+        (function() {
+            try {
+                if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                    document.documentElement.classList.add('precollapsed');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="../styles.css" rel="stylesheet">
+    <link href="receptionist.css" rel="stylesheet">
+    <style>
+        /* Font Family Declarations */
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Headers and Titles */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .welcome-banner h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .hotel-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .admin-label {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        /* Navigation */
+        .nav-link {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .nav-link span {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        /* Profile Section */
+        .profile-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .profile-role {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* KPI Cards */
+        .kpi-number {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .kpi-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .kpi-trend {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        /* Info Cards */
+        .info-card .card-header h5 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .info-card .card-header p {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Guest Cards */
+        .guest-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .guest-details {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        .status-badge {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        /* Search and Input Elements */
+        .search-input {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Buttons */
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-right: 8px;
+        }
+        
+        .hotel-logo {
+            display: none;
+        }
+
+        /* Match receptionist sidebar line behavior */
+        .profile-section { border-top: 0 !important; }
+        .profile-section::before { content: none !important; }
+        
+        /* Style the separator line */
+        .sidebar-divider {
+            height: 1px;
+            background-color: #e9ecef;
+            margin: 0.5rem 0;
+            width: 100%;
+        }
+        
+        /* Sidebar collapse functionality */
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar.collapsed {
+            width: 60px;
+        }
+        
+        .sidebar.collapsed .hotel-name,
+        .sidebar.collapsed .logo-text,
+        .sidebar.collapsed .nav-link span,
+        .sidebar.collapsed .profile-name,
+        .sidebar.collapsed .profile-role {
+            opacity: 0;
+            display: none;
+        }
+        
+        .sidebar.collapsed .sidebar-header {
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 60px;
+        }
+        
+        .sidebar.collapsed .hotel-name {
+            display: none;
+        }
+        
+        .sidebar.collapsed .nav-link {
+            text-align: center;
+            padding: 0.75rem 0.5rem;
+            justify-content: center;
+            position: relative;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar.collapsed .nav-link i {
+            margin: 0;
+            font-size: 1rem;
+            width: auto;
+        }
+        
+        .sidebar.collapsed .profile-info {
+            justify-content: center;
+            padding: 0.75rem 0.5rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar.collapsed .profile-icon {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .sidebar.collapsed .toggle-icon {
+            display: block;
+        }
+        
+        .sidebar.collapsed .profile-info > div {
+            display: none;
+        }
+        
+        main {
+            transition: margin-left 0.3s ease;
+        }
+        
+        main.sidebar-collapsed {
+            margin-left: 60px;
+        }
+
+        /* Page header: white background to match design */
+        .top-bar-header { background: #ffffff !important; border-bottom: 1px solid #f0f0f0 !important; width: 100% !important; }
+        .top-bar-header .search-container { margin-left: 0 !important; }
+
+        /* Pending status action icons under the badge */
+        .status-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 4px;
+            justify-content: flex-start;
+            margin-left: 16px;
+        }
+        .status-actions .accept { 
+            color: #198754; 
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.2s ease;
+        }
+        .status-actions .accept:hover {
+            transform: scale(1.1);
+        }
+        .status-actions .reject { 
+            color: #dc3545; 
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.2s ease;
+        }
+        .status-actions .reject:hover {
+            transform: scale(1.1);
+        }
+
+        /* Status badge styles */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        /* Match dashboard colors */
+        .status-badge.status-booked { /* Pending */
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-badge.status-checkedin {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.status-checkedout {
+            background-color: #cfe2ff;
+            color: #084298;
+        }
+
+        .status-badge.status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        @media (max-width: 767px) {
+            .sidebar.collapsed {
+                width: 0;
+                overflow: hidden;
+            }
+            
+            main.sidebar-collapsed {
+                margin-left: 0;
+            }
+        }
+        /* Filter Button Specific Styles */
+        .btn-filter {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            color: #6c757d;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 12px;
+            cursor: pointer;
+            flex-shrink: 0;
+            white-space: nowrap;
+            min-width: 90px;
+            text-align: center;
+        }
+        
+        .btn-filter:hover {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+            color: #495057;
+        }
+        
+        .btn-filter.active {
+            background-color: #dc3545 !important;
+            border-color: #dc3545 !important;
+            color: white !important;
+            font-weight: 700 !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+            transform: none !important;
+            z-index: 1 !important;
+            position: relative !important;
+            border-width: 1px !important;
+            outline: none !important;
+            outline-offset: 0 !important;
+        }
+        
+        .btn-filter.active:hover {
+            background-color: #c82333 !important;
+            border-color: #c82333 !important;
+            color: white !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+            transform: none !important;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 6px;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        
+        /* Responsive adjustments for filter buttons */
+        @media (max-width: 768px) {
+            .filter-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* Align reservations table styling with receptionist payments table */
+        .reservations-table .action-buttons .btn-action { padding: 0.375rem 0.5rem; }
+        /* Remove Bootstrap hover highlight; keep rows white on hover */
+        .reservations-table.table-hover tbody tr:hover { background-color: #ffffff !important; }
+        .reservations-table.table-hover tbody tr:hover > * { background-color: #ffffff !important; }
+        .reservations-table.table-hover tbody tr:hover,
+        .reservations-table.table-hover tbody tr:hover > * {
+            --bs-table-accent-bg: #ffffff !important;
+            --bs-table-hover-bg: #ffffff !important;
+            --bs-table-hover-color: inherit !important;
+        }
+        /* Remove blue focus ring/hover tint on buttons */
+        .btn:focus, .btn:active, .btn:focus-visible { box-shadow: none !important; outline: none !important; }
+        .btn-action:hover, .btn-action:focus { background-color: transparent !important; color: inherit !important; }
+        /* Table container spacing; header colors inherit from global styles for consistency */
+        .payment-table-container { background: #f8fafc; border-radius: .5rem; box-shadow: 0 2px 12px rgba(0,0,0,.04); }
+        .payment-table-container .table { margin-bottom: 0; }
+        .payment-table thead th { background: #f8f9fa; color: #333; font-weight: 600; border-bottom: 2px solid #e9ecef; }
+        .payment-table thead tr th:first-child { border-top-left-radius: .5rem; }
+        .payment-table thead tr th:last-child { border-top-right-radius: .5rem; }
+        .payment-table thead tr th { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="sidebar-header clickable" id="sidebarToggle">
+                    <span class="logo-text">logo</span>
+                    <h4 class="hotel-name">H+Hotel</h4>
+                    <i class="fas fa-bars toggle-icon" aria-label="Collapse sidebar"></i>
+                </div>
+                
+                <ul class="nav flex-column main-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="receptionistdashboard.html" data-tooltip="Dashboard">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="reservationreceptionist.html" data-tooltip="Reservations">
+                            <i class="fas fa-calendar"></i>
+                            <span>Reservations</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="checkinout.html" data-tooltip="Check-in/out">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Check-in/out</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="receptionistpayment.html" data-tooltip="Payments">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Payments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cancellation.html" data-tooltip="Cancellation">
+                            <i class="fas fa-ban"></i>
+                            <span>Cancellation</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="rebooking.html" data-tooltip="Rebooking">
+                            <i class="fas fa-redo"></i>
+                            <span>Rebooking</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="nav flex-column secondary-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="receptionistsettings.html" data-tooltip="Settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../admin/login.html" data-tooltip="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Visual separator line -->
+                <div class="sidebar-divider"></div>
+                
+                <div class="profile-section">
+                    <div class="profile-info" data-tooltip="Prince Gallardo - Receptionist">
+                        <i class="fas fa-user-circle profile-icon"></i>
+                        <div>
+                            <div class="profile-name">Prince Gallardo</div>
+                            <div class="profile-role">Receptionist</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="top-bar-header d-flex justify-content-between align-items-center">
+                    <div class="left-section">
+                        <span class="admin-label">Receptionist</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="search-container me-4">
+                            <input type="text" class="form-control search-input" placeholder="Search reservations...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                        <div class="notification-icon me-3">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="user-dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reservation-header d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="reservation-title">Reservation Management</h1>
+                </div>
+
+                <div class="reservations-content-wrapper">
+                    <div class="search-filter-section mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="search-container">
+                                    <input type="text" class="form-control search-input" placeholder="Search by guest name or reservation ID...">
+                                    <i class="fas fa-search search-icon"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="filter-buttons">
+                                    <button class="btn btn-filter active">All Reservations</button>
+                                    <button class="btn btn-filter">Today's Check-ins</button>
+                                    <button class="btn btn-filter">Current Guests</button>
+                                    <button class="btn btn-filter">Checked Out</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-table-container reservations-table-container">
+                            <table class="table table-hover reservations-table payment-table">
+                                <thead>
+                                    <tr>
+                                        <th>Reservation ID</th>
+                                        <th>Guest Name</th>
+                                        <th>Room</th>
+                                        <th>Check-in</th>
+                                        <th>Check-out</th>
+                                        <th>Status</th>
+                                        <th>Amount</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>815368</td>
+                                        <td>
+                                            <div class="guest-info">
+                                                <i class="fas fa-user me-2"></i>
+                                                <span class="guest-name">Lance Prima</span>
+                                                <small class="guest-count">4 guests</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="room-info">
+                                                <i class="fas fa-bed me-2"></i>
+                                                <span>Basic Studio Room</span>
+                                                <small class="room-number">Room 101</small>
+                                            </div>
+                                        </td>
+                                        <td id="lanceCheckIn"></td>
+                                        <td id="lanceCheckOut"></td>
+                                        <td>
+                                            <span class="status-badge status-booked">Pending</span>
+                                            <div class="status-actions">
+                                                <i class="fas fa-check-circle accept"></i>
+                                                <i class="fas fa-times-circle reject"></i>
+                                            </div>
+                                        </td>
+                                        <td>₱922</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-sm btn-action" title="View">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-action" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>680085</td>
+                                        <td>
+                                            <div class="guest-info">
+                                                <i class="fas fa-user me-2"></i>
+                                                <span class="guest-name">Edward Ricafranca</span>
+                                                <small class="guest-count">1 guest</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="room-info">
+                                                <i class="fas fa-bed me-2"></i>
+                                                <span>Standard Room</span>
+                                                <small class="room-number">Room 102</small>
+                                            </div>
+                                        </td>
+                                        <td id="edwardCheckIn"></td>
+                                        <td id="edwardCheckOut"></td>
+                                        <td><span class="status-badge status-checkedin">Checked In</span></td>
+                                        <td>₱2,599</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-sm btn-action" title="View">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-action" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>639621</td>
+                                        <td>
+                                            <div class="guest-info">
+                                                <i class="fas fa-user me-2"></i>
+                                                <span class="guest-name">Franz Siochi</span>
+                                                <small class="guest-count">1 guest</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="room-info">
+                                                <i class="fas fa-bed me-2"></i>
+                                                <span>Standard Room</span>
+                                                <small class="room-number">Room 103</small>
+                                            </div>
+                                        </td>
+                                        <td id="franzCheckIn"></td>
+                                        <td id="franzCheckOut"></td>
+                                        <td><span class="status-badge status-checkedout">Checked Out</span></td>
+                                        <td>₱2,599</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-sm btn-action" title="View">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-action" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="receptionist.js"></script>
+
+    <!-- Receptionist: View Reservation Modal (enhanced) -->
+    <div class="modal fade" id="rxViewReservationModal" tabindex="-1" aria-labelledby="rxViewReservationLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rxViewReservationLabel">Reservation Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Reservation ID</label>
+                            <input type="text" class="form-control" id="rxViewReservationId" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Guest Name</label>
+                            <input type="text" class="form-control" id="rxViewGuestName" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Status</label>
+                            <input type="text" class="form-control" id="rxViewStatus" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Amount</label>
+                            <input type="text" class="form-control" id="rxViewAmount" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Room</label>
+                            <input type="text" class="form-control" id="rxViewRoom" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Check-in</label>
+                            <input type="text" class="form-control" id="rxViewCheckIn" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Check-out</label>
+                            <input type="text" class="form-control" id="rxViewCheckOut" readonly>
+                        </div>
+                    </div>
+
+                    <h6 class="mt-3">Reservation Details</h6>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Nights</label>
+                            <input type="text" class="form-control" id="rxViewNights" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Guests</label>
+                            <input type="text" class="form-control" id="rxViewGuests" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal (same structure as admin reservations) -->
+    <div class="modal fade" id="editReservationModal" tabindex="-1" aria-labelledby="editReservationLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editReservationLabel">Edit Reservation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editReservationForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Reservation ID</label>
+                                <input type="text" class="form-control" id="editReservationId" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Guest Name</label>
+                                <input type="text" class="form-control" id="editGuestName">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Room</label>
+                                <input type="text" class="form-control" id="editRoom">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" id="editStatus">
+                                    <option value="Booked">Booked</option>
+                                    <option value="Checked In">Checked In</option>
+                                    <option value="Checked Out">Checked Out</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Number of Guests</label>
+                                <input type="number" class="form-control" id="editGuestCount" min="1">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Check-in</label>
+                                <input type="date" class="form-control" id="editCheckIn">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Check-out</label>
+                                <input type="date" class="form-control" id="editCheckOut">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Notes</label>
+                                <textarea class="form-control" id="editNotes" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveReservationChanges">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Wire up View/Edit actions like admin reservations
+        document.addEventListener('DOMContentLoaded', function () {
+            // Set real-time dates maintaining the same relative pattern as the image
+            function setRealTimeDates() {
+                const today = new Date();
+                
+                // Format dates as DD/MM/YYYY
+                const formatDate = (date) => {
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}/${month}/${year}`;
+                };
+                
+                // Calculate dates maintaining the same pattern:
+                // Lance Prima: Check-in today, Check-out tomorrow (1 night stay)
+                const lanceCheckIn = document.getElementById('lanceCheckIn');
+                const lanceCheckOut = document.getElementById('lanceCheckOut');
+                if (lanceCheckIn) lanceCheckIn.textContent = formatDate(today);
+                if (lanceCheckOut) lanceCheckOut.textContent = formatDate(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1));
+                
+                // Edward Ricafranca: Check-in today, Check-out day after tomorrow (2 night stay)
+                const edwardCheckIn = document.getElementById('edwardCheckIn');
+                const edwardCheckOut = document.getElementById('edwardCheckOut');
+                if (edwardCheckIn) edwardCheckIn.textContent = formatDate(today);
+                if (edwardCheckOut) edwardCheckOut.textContent = formatDate(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2));
+                
+                // Franz Siochi: Check-in yesterday, Check-out today (1 night stay, already checked out)
+                const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+                const franzCheckIn = document.getElementById('franzCheckIn');
+                const franzCheckOut = document.getElementById('franzCheckOut');
+                if (franzCheckIn) franzCheckIn.textContent = formatDate(yesterday);
+                if (franzCheckOut) franzCheckOut.textContent = formatDate(today);
+            }
+            
+            // Initialize dates
+            setRealTimeDates();
+            
+            const table = document.querySelector('.reservations-table');
+            if (!table) return;
+            table.addEventListener('click', function (e) {
+                const viewBtn = e.target.closest('button[title="View"]');
+                const editBtn = e.target.closest('button[title="Edit"]');
+                if (!viewBtn && !editBtn) return;
+                const row = e.target.closest('tr');
+                if (!row) return;
+                const getText = (sel) => (row.querySelector(sel)?.innerText || '').trim();
+                const reservationId = getText('td:nth-child(1)') || getText('.reservation-id');
+                const guestName = getText('.guest-info span') || getText('td:nth-child(2)');
+                const room = getText('.room-info span') || getText('td:nth-child(3)');
+                const guestCountText = getText('.guest-count');
+                const guestCount = parseInt((guestCountText.match(/\d+/) || [''])[0]) || '';
+                const checkIn = getText('td:nth-child(4)');
+                const checkOut = getText('td:nth-child(5)');
+                const status = getText('td:nth-child(6)');
+
+                if (viewBtn) {
+                    document.getElementById('viewReservationId').value = reservationId;
+                    document.getElementById('viewGuestName').value = guestName;
+                    document.getElementById('viewRoom').value = room;
+                    document.getElementById('viewStatus').value = status;
+                    document.getElementById('viewGuestCount').value = guestCount;
+                    document.getElementById('viewCheckIn').value = checkIn;
+                    document.getElementById('viewCheckOut').value = checkOut;
+                    document.getElementById('viewNotes').value = '';
+                    new bootstrap.Modal(document.getElementById('viewReservationModal')).show();
+                }
+
+                if (editBtn) {
+                    document.getElementById('editReservationId').value = reservationId;
+                    document.getElementById('editGuestName').value = guestName;
+                    document.getElementById('editRoom').value = room;
+                    const normalized = (status || '').toLowerCase();
+                    const mapped = normalized.includes('checked in') ? 'Checked In' : normalized.includes('checked out') ? 'Checked Out' : 'Booked';
+                    document.getElementById('editStatus').value = mapped;
+                    document.getElementById('editGuestCount').value = guestCount;
+                    document.getElementById('editCheckIn').value = '';
+                    document.getElementById('editCheckOut').value = '';
+                    document.getElementById('editNotes').value = '';
+                    new bootstrap.Modal(document.getElementById('editReservationModal')).show();
+                }
+            });
+
+            const saveBtn = document.getElementById('saveReservationChanges');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', function () {
+                    const modalEl = document.getElementById('editReservationModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    modal?.hide();
+                });
+            }
+        });
+    </script>
+    <script>
+    // Enhanced View handler for receptionist reservations
+    document.addEventListener('DOMContentLoaded', function(){
+        const table = document.querySelector('.reservations-table');
+        if (!table) return;
+        table.addEventListener('click', function(e){
+            const viewBtn = e.target.closest('button[title="View"]');
+            if (!viewBtn) return;
+            const row = e.target.closest('tr');
+            if (!row) return;
+            const getText = (sel, idx) => (row.querySelector(sel)?.innerText || (idx !== undefined ? row.children[idx]?.innerText : '') || '').trim();
+            const resIdFromTable = getText('.reservation-id', 0) || getText('td:nth-child(1)');
+            const guestName = getText('.guest-info span', 1) || getText('td:nth-child(2)');
+            const room = getText('.room-info span', 2) || getText('td:nth-child(3)');
+            const checkIn = getText('td:nth-child(4)');
+            const checkOut = getText('td:nth-child(5)');
+            const status = getText('td:nth-child(6)');
+            const amount = getText('td:nth-child(7)');
+
+            // Defaults, can be overridden by mapping or data-attributes
+            let nights = row.getAttribute('data-nights') || '';
+            let guests = row.getAttribute('data-guests') || '';
+
+            // Map fixed Reservation IDs and default nights/guests per guest
+            const nameLower = (guestName || '').toLowerCase();
+            let fixedId = resIdFromTable;
+            if (nameLower.includes('lance prima')) { fixedId = '815368'; if (!nights) nights = '2'; if (!guests) guests = '2'; }
+            else if (nameLower.includes('edward')) { fixedId = '680085'; if (!nights) nights = '3'; if (!guests) guests = '1'; }
+            else if (nameLower.includes('siochi')) { fixedId = '639621'; if (!nights) nights = '2'; if (!guests) guests = '1'; }
+
+            document.getElementById('rxViewReservationId').value = fixedId;
+            document.getElementById('rxViewGuestName').value = guestName;
+            document.getElementById('rxViewStatus').value = status;
+            const amtEl = document.getElementById('rxViewAmount');
+            if (amtEl) amtEl.value = amount || '';
+            document.getElementById('rxViewRoom').value = room;
+            document.getElementById('rxViewCheckIn').value = checkIn;
+            document.getElementById('rxViewCheckOut').value = checkOut;
+            document.getElementById('rxViewNights').value = nights || '—';
+            document.getElementById('rxViewGuests').value = guests || '—';
+
+            new bootstrap.Modal(document.getElementById('rxViewReservationModal')).show();
+        });
+    });
+    </script>
+    <script>
+        // Status change (accept/reject) and filtering
+        document.addEventListener('DOMContentLoaded', function () {
+            const table = document.querySelector('.reservations-table');
+            const rows = Array.from(table?.querySelectorAll('tbody tr') || []);
+            const filterContainer = document.querySelector('.filter-buttons');
+
+            // Helpers for date math
+            function addDays(date, days) {
+                return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
+            }
+
+            // Set real-time dates maintaining the same relative pattern as the image
+            (function applyRealtimeDates(){
+                const today = new Date();
+                
+                // Format dates as DD/MM/YYYY
+                const formatDate = (date) => {
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}/${month}/${year}`;
+                };
+                
+                // Calculate dates maintaining the same pattern:
+                // Lance Prima: Check-in today, Check-out tomorrow (1 night stay)
+                const lanceCheckIn = document.getElementById('lanceCheckIn');
+                const lanceCheckOut = document.getElementById('lanceCheckOut');
+                if (lanceCheckIn) lanceCheckIn.textContent = formatDate(today);
+                if (lanceCheckOut) lanceCheckOut.textContent = formatDate(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1));
+                
+                // Edward Ricafranca: Check-in today, Check-out day after tomorrow (2 night stay)
+                const edwardCheckIn = document.getElementById('edwardCheckIn');
+                const edwardCheckOut = document.getElementById('edwardCheckOut');
+                if (edwardCheckIn) edwardCheckIn.textContent = formatDate(today);
+                if (edwardCheckOut) edwardCheckOut.textContent = formatDate(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2));
+                
+                // Franz Siochi: Check-in yesterday, Check-out today (1 night stay, already checked out)
+                const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+                const franzCheckIn = document.getElementById('franzCheckIn');
+                const franzCheckOut = document.getElementById('franzCheckOut');
+                if (franzCheckIn) franzCheckIn.textContent = formatDate(yesterday);
+                if (franzCheckOut) franzCheckOut.textContent = formatDate(today);
+            })();
+
+            function parseDMY(dateStr) {
+                // expects DD/MM/YYYY
+                const m = (dateStr || '').match(/(\d{2})\/(\d{2})\/(\d{4})/);
+                if (!m) return null;
+                const d = Number(m[1]), mo = Number(m[2]) - 1, y = Number(m[3]);
+                const dt = new Date(y, mo, d);
+                return isNaN(dt.getTime()) ? null : dt;
+            }
+
+            function formatYMD(d) {
+                return d ? `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}` : '';
+            }
+
+            function formatDMY(d) {
+                if (!d) return '';
+                const dd = d.getDate().toString().padStart(2, '0');
+                const mm = (d.getMonth() + 1).toString().padStart(2, '0');
+                const yyyy = d.getFullYear();
+                return `${dd}/${mm}/${yyyy}`;
+            }
+
+            function getRowStatus(row) {
+                const badge = row.querySelector('td:nth-child(6) .status-badge') || row.querySelector('td:nth-child(6) span');
+                return (badge?.innerText || '').trim();
+            }
+
+            function setRowStatus(row, nextStatus) {
+                const cell = row.querySelector('td:nth-child(6)');
+                if (!cell) return;
+                // Update badge
+                let badge = cell.querySelector('.status-badge');
+                if (!badge) {
+                    badge = document.createElement('span');
+                    cell.prepend(badge);
+                }
+                badge.className = 'status-badge';
+                if (nextStatus === 'Checked In') badge.classList.add('status-checkedin');
+                else if (nextStatus === 'Checked Out') badge.classList.add('status-checkedout');
+                else if (nextStatus === 'Cancelled') badge.classList.add('status-cancelled');
+                else badge.classList.add('status-booked');
+                badge.textContent = nextStatus;
+                // Remove action icons when resolved
+                const actions = cell.querySelector('.status-actions');
+                if (actions) actions.remove();
+                // Persist to dataset for filtering
+                row.dataset.status = nextStatus.toLowerCase();
+
+                // Adjust dates to avoid same-day CI/CO and reflect status
+                const today = new Date();
+                const ciCell = row.querySelector('td:nth-child(4)');
+                const coCell = row.querySelector('td:nth-child(5)');
+                if (nextStatus === 'Checked In') {
+                    // CI today, CO tomorrow
+                    if (ciCell) ciCell.textContent = formatDMY(today);
+                    if (coCell) coCell.textContent = formatDMY(addDays(today, 1));
+                    row.dataset.checkin = formatYMD(today);
+                } else if (nextStatus === 'Checked Out') {
+                    // CO today; ensure CI is at least yesterday
+                    const co = today;
+                    let ci = addDays(co, -1);
+                    if (ciCell) {
+                        // If table had a future/ today CI, move to yesterday
+                        ciCell.textContent = formatDMY(ci);
+                    }
+                    if (coCell) coCell.textContent = formatDMY(co);
+                    row.dataset.checkin = formatYMD(ci);
+                }
+            }
+
+            // Initialize dataset fields
+            rows.forEach(row => {
+                const checkInText = (row.querySelector('td:nth-child(4)')?.innerText || '').trim();
+                const checkInDate = parseDMY(checkInText);
+                row.dataset.checkin = formatYMD(checkInDate);
+                row.dataset.status = getRowStatus(row).toLowerCase();
+            });
+
+            // Combined filter state
+            let currentFilterKind = 'all';
+            let currentQuery = '';
+
+            function matchesQuery(row, q) {
+                if (!q) return true;
+                const text = (row.innerText || '').toLowerCase();
+                return text.includes(q.toLowerCase());
+            }
+
+            // Handle accept/reject clicks
+            if (table) {
+                table.addEventListener('click', function (e) {
+                    const accept = e.target.closest('.status-actions .accept');
+                    const reject = e.target.closest('.status-actions .reject');
+                    if (!accept && !reject) return;
+                    const row = e.target.closest('tr');
+                    if (!row) return;
+                    
+                    if (accept) {
+                        setRowStatus(row, 'Checked In');
+                        // Re-apply current filter so it appears under Today's Check-ins when selected
+                        applyFilter(currentFilterKind);
+                    }
+                    if (reject) {
+                        setRowStatus(row, 'Cancelled');
+                        applyFilter(currentFilterKind);
+                    }
+                });
+            }
+
+            // Function to show status messages
+            function showStatusMessage(message, type) {
+                // Create a temporary alert element
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+                alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+                alertDiv.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                `;
+                
+                document.body.appendChild(alertDiv);
+                
+                // Auto-remove after 3 seconds
+                setTimeout(() => {
+                    if (alertDiv.parentNode) {
+                        alertDiv.parentNode.removeChild(alertDiv);
+                    }
+                }, 3000);
+            }
+
+            function isToday(date) {
+                if (!date) return false;
+                const now = new Date();
+                return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth() && date.getDate() === now.getDate();
+            }
+
+            function applyFilter(kind) {
+                rows.forEach(row => {
+                    const status = (row.dataset.status || '').toLowerCase();
+                    const checkIn = parseDMY((row.querySelector('td:nth-child(4)')?.innerText || '').trim());
+                    let show = true;
+                    if (kind === 'today') show = isToday(checkIn) && status.includes('checked in');
+                    else if (kind === 'current') show = status.includes('checked in');
+                    else if (kind === 'checkedout') show = status.includes('checked out');
+                    // Apply text query on top of kind filter
+                    if (show) show = matchesQuery(row, currentQuery);
+                    row.style.display = show ? '' : 'none';
+                });
+            }
+
+            if (filterContainer) {
+                filterContainer.addEventListener('click', function (e) {
+                    const btn = e.target.closest('.btn-filter');
+                    if (!btn) return;
+                    // Active state
+                    filterContainer.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const text = (btn.innerText || '').toLowerCase();
+                    if (text.includes("today's check-ins") || text.includes('today')) currentFilterKind = 'today';
+                    else if (text.includes('current guests')) currentFilterKind = 'current';
+                    else if (text.includes('checked out')) currentFilterKind = 'checkedout';
+                    else currentFilterKind = 'all';
+                    applyFilter(currentFilterKind);
+                });
+            }
+
+            // Separate search functionality for top bar and reservation section
+            const topSearchInput = document.querySelector('.top-bar-header .search-input');
+            const reservationSearchInput = document.querySelector('.search-filter-section .search-input');
+            const topSearchIcon = document.querySelector('.top-bar-header .search-icon');
+            const reservationSearchIcon = document.querySelector('.search-filter-section .search-icon');
+
+            // Top bar search functionality (independent)
+            function performTopBarSearch(query) {
+                if (!query) {
+                    // If no query, show all rows
+                    rows.forEach(row => {
+                        row.style.display = '';
+                    });
+                    return;
+                }
+                
+                const searchQuery = query.toLowerCase();
+                rows.forEach(row => {
+                    const rowText = (row.innerText || '').toLowerCase();
+                    const matches = rowText.includes(searchQuery);
+                    row.style.display = matches ? '' : 'none';
+                });
+            }
+
+            if (topSearchInput) {
+                topSearchInput.addEventListener('input', function () {
+                    const query = this.value.trim();
+                    performTopBarSearch(query);
+                });
+                
+                topSearchInput.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const query = this.value.trim();
+                        performTopBarSearch(query);
+                    }
+                });
+            }
+
+            if (topSearchIcon) {
+                topSearchIcon.addEventListener('click', function () {
+                    const input = this.closest('.search-container')?.querySelector('.search-input');
+                    if (input) {
+                        const query = input.value.trim();
+                        performTopBarSearch(query);
+                    }
+                });
+            }
+
+            // Reservation section search functionality (independent)
+            function triggerReservationSearch(fromEl) {
+                const q = (fromEl.value || '').trim();
+                currentQuery = q;
+                applyFilter(currentFilterKind);
+            }
+
+            if (reservationSearchInput) {
+                reservationSearchInput.addEventListener('input', function () { 
+                    triggerReservationSearch(this); 
+                });
+                
+                reservationSearchInput.addEventListener('keydown', function (e) { 
+                    if (e.key === 'Enter') { 
+                        e.preventDefault(); 
+                        triggerReservationSearch(this); 
+                    } 
+                });
+            }
+
+            if (reservationSearchIcon) {
+                reservationSearchIcon.addEventListener('click', function () {
+                    const input = this.closest('.search-container')?.querySelector('.search-input');
+                    if (input) triggerReservationSearch(input);
+                });
+            }
+        });
+    </script>
+    <script>
+        // Sidebar toggle functionality aligned to index.html behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.sidebar');
+            const main = document.querySelector('main');
+            
+            if (sidebarToggle && sidebar && main) {
+                sidebarToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    sidebar.classList.toggle('collapsed');
+                    main.classList.toggle('sidebar-collapsed');
+                    
+                    const icon = this.querySelector('.toggle-icon');
+                    if (sidebar.classList.contains('collapsed')) {
+                        icon.className = 'fas fa-chevron-right toggle-icon';
+                        document.documentElement.classList.add('precollapsed');
+                    } else {
+                        icon.className = 'fas fa-bars toggle-icon';
+                        document.documentElement.classList.remove('precollapsed');
+                    }
+                    
+                    // Store state in localStorage
+                    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+                });
+                
+                // Restore sidebar state from localStorage
+                const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+                if (isCollapsed) {
+                    sidebar.classList.add('collapsed');
+                    main.classList.add('sidebar-collapsed');
+                    const icon = sidebarToggle.querySelector('.toggle-icon');
+                    if (icon) { icon.className = 'fas fa-chevron-right toggle-icon'; }
+                    document.documentElement.classList.add('precollapsed');
+                } else {
+                    document.documentElement.classList.remove('precollapsed');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

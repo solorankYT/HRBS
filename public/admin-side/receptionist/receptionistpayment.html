@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H+Hotel - Receptionist Payments</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="../styles.css" rel="stylesheet">
+    <script>
+        (function() {
+            try {
+                if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                    document.documentElement.classList.add('precollapsed');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <style>
+        /* Font Family Declarations */
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Headers and Titles */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .welcome-banner h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .hotel-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .admin-label {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        /* Navigation */
+        .nav-link {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .nav-link span {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        /* Profile Section */
+        .profile-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .profile-role {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Search and Input Elements */
+        .search-input {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Buttons */
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        /* Form Elements */
+        .form-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Table Elements */
+        .table th {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .table td {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        /* Make date column content normal weight */
+        .table td:nth-child(6) {
+            font-weight: 400;
+        }
+        
+        /* Modal Elements */
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        /* Guest Names */
+        .guest-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        /* Payment Methods */
+        .payment-method {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+        
+        .logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-right: 8px;
+        }
+        
+        .hotel-logo {
+            display: none;
+        }
+
+        /* Match receptionist sidebar visuals */
+        .profile-section { border-top: 0 !important; }
+        .profile-section::before { content: none !important; }
+        .sidebar-divider { height: 1px; background-color: #e9ecef; margin: 0.5rem 0; width: 100%; }
+        /* Sidebar collapse functionality (copied from dashboard behavior) */
+        .sidebar { transition: all 0.3s ease; }
+        .sidebar.collapsed { width: 60px; }
+        .sidebar.collapsed .hotel-name,
+        .sidebar.collapsed .logo-text,
+        .sidebar.collapsed .nav-link span,
+        .sidebar.collapsed .profile-name,
+        .sidebar.collapsed .profile-role { opacity: 0; display: none; }
+        .sidebar.collapsed .sidebar-header { padding: 0.75rem 0.5rem; text-align: center; border-bottom: 1px solid #e9ecef; display: flex; align-items: center; justify-content: center; min-height: 60px; }
+        .sidebar.collapsed .nav-link { text-align: center; padding: 0.75rem 0.5rem; justify-content: center; position: relative; min-height: 50px; display: flex; align-items: center; }
+        .sidebar.collapsed .nav-link i { margin: 0; font-size: 1rem; width: auto; }
+        .sidebar.collapsed .profile-info { justify-content: center; padding: 0.75rem 0.5rem; min-height: 60px; display: flex; align-items: center; }
+        .sidebar.collapsed .profile-icon { font-size: 1.5rem; margin: 0; }
+        .sidebar.collapsed .toggle-icon { display: block; }
+        .sidebar.collapsed .profile-info > div { display: none; }
+        main { transition: margin-left 0.3s ease; }
+        main.sidebar-collapsed { margin-left: 60px; }
+        @media (max-width: 767px) {
+            .sidebar.collapsed { width: 0; overflow: hidden; }
+            main.sidebar-collapsed { margin-left: 0; }
+        }
+        /* Make rows show no hover tint (fully transparent) */
+        .payment-table .action-buttons .btn-action { padding: 0.375rem 0.5rem; }
+        .payment-table.table-hover tbody tr:hover { background-color: transparent !important; }
+        .payment-table.table-hover tbody tr:hover > * { background-color: transparent !important; }
+        .payment-table.table-hover tbody tr:hover,
+        .payment-table.table-hover tbody tr:hover > * {
+            --bs-table-accent-bg: transparent !important;
+            --bs-table-hover-bg: transparent !important;
+            --bs-table-hover-color: inherit !important;
+        }
+        /* Absolute override against any descendant hover background */
+        .payment-table *,
+        .payment-table *:hover,
+        .payment-table *:focus { background-image: none !important; background-color: transparent !important; }
+        .payment-table.table-hover tbody tr:hover,
+        .payment-table.table-hover tbody tr:hover > * {
+            --bs-table-accent-bg: #ffffff !important;
+            --bs-table-hover-bg: #ffffff !important;
+            --bs-table-hover-color: inherit !important;
+        }
+        /* Remove blue focus ring/hover tint on buttons */
+        .btn:focus, .btn:active, .btn:focus-visible { box-shadow: none !important; outline: none !important; }
+        .btn-action:hover, .btn-action:focus { background-color: transparent !important; color: inherit !important; }
+        .action-buttons i, .action-buttons i:hover { color: inherit !important; }
+        .payment-table a, .payment-table a:hover { color: inherit !important; text-decoration: none !important; }
+        /* Kill any residual Bootstrap hover color variables within this table scope */
+        .payment-table { --bs-link-hover-color: inherit !important; --bs-table-hover-color: inherit !important; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="sidebar-header clickable" id="sidebarToggle">
+                    <span class="logo-text">logo</span>
+                    <h4 class="hotel-name">H+Hotel</h4>
+                    <i class="fas fa-bars toggle-icon" aria-label="Collapse sidebar"></i>
+                </div>
+                
+                <ul class="nav flex-column main-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="receptionistdashboard.html" data-tooltip="Dashboard">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reservationreceptionist.html" data-tooltip="Reservations">
+                            <i class="fas fa-calendar"></i>
+                            <span>Reservations</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="checkinout.html" data-tooltip="Check-in/out">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Check-in/out</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="receptionistpayment.html" data-tooltip="Payments">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Payments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cancellation.html" data-tooltip="Cancellation">
+                            <i class="fas fa-ban"></i>
+                            <span>Cancellation</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="rebooking.html" data-tooltip="Rebooking">
+                            <i class="fas fa-redo"></i>
+                            <span>Rebooking</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="nav flex-column secondary-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="receptionistsettings.html" data-tooltip="Settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../admin/login.html" data-tooltip="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="sidebar-divider"></div>
+                
+                <div class="profile-section">
+                    <div class="profile-info" data-tooltip="Prince Gallardo - Receptionist">
+                        <i class="fas fa-user-circle profile-icon"></i>
+                        <div>
+                            <div class="profile-name">Prince Gallardo</div>
+                            <div class="profile-role">Receptionist</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="top-bar-header d-flex justify-content-between align-items-center">
+                    <div class="left-section">
+                        <span class="admin-label">Receptionist</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="search-container me-4">
+                            <input type="text" class="form-control search-input" placeholder="Search reservations...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                        <div class="notification-icon me-3">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="user-dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reservation-header d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="reservation-title">Payment Table</h1>
+                </div>
+
+                <div class="payment-content-wrapper reservations-content-wrapper">
+                    <div class="payment-table-container reservations-table-container">
+                        <table class="table table-hover reservations-table payment-table">
+                            <thead>
+                                <tr>
+                                    <th>Reservation ID</th>
+                                    <th>Guest Name</th>
+                                    <th>Method</th>
+                                    <th>Amount Paid</th>
+                                    <th>Balance</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-room="Basic Studio Room" data-nights="1" data-guests="4" data-roomrate="₱922/night" data-taxes="₱99" data-fees="₱0" data-subtotal="₱823" data-total="₱922">
+                                    <td><span class="reservation-id">815368</span></td>
+                                    <td><span class="guest-name">Lance Prima</span></td>
+                                    <td><span class="payment-method method-gcash">GCASH</span></td>
+                                    <td class="amount">₱461</td>
+                                    <td class="amount">₱461</td>
+                                    <td id="lancePaymentDate"></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-action" title="View" aria-label="View Payment">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr data-room="Standard Room" data-nights="1" data-guests="1" data-roomrate="₱2,599/night" data-taxes="₱279" data-fees="₱0" data-subtotal="₱2,320" data-total="₱2,599">
+                                    <td><span class="reservation-id">680085</span></td>
+                                    <td><span class="guest-name">Edward Ricafranca</span></td>
+                                    <td><span class="payment-method method-paypal">PAYPAL</span></td>
+                                    <td class="amount">₱1,300</td>
+                                    <td class="amount">₱1,299</td>
+                                    <td id="edwardPaymentDate"></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-action" title="View" aria-label="View Payment">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr data-room="Standard Room" data-nights="1" data-guests="1" data-roomrate="₱2,599/night" data-taxes="₱279" data-fees="₱0" data-subtotal="₱2,320" data-total="₱2,599">
+                                    <td><span class="reservation-id">639621</span></td>
+                                    <td><span class="guest-name">Franz Siochi</span></td>
+                                    <td><span class="payment-method method-cash">CASH</span></td>
+                                    <td class="amount">₱1,300</td>
+                                    <td class="amount">₱1,299</td>
+                                    <td id="franzPaymentDate"></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-action" title="View" aria-label="View Payment">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="receptionist.js"></script>
+    
+    <style>
+        /* Align with reservations table action button spacing */
+        .payment-table .action-buttons .btn-action { padding: 0.375rem 0.5rem; }
+        /* Remove Bootstrap hover highlight on table rows */
+        .payment-table.table-hover tbody tr:hover { background-color: transparent !important; }
+        .payment-table.table-hover tbody tr:hover > * { background-color: transparent !important; }
+        .payment-table.table-hover tbody tr:hover,
+        .payment-table.table-hover tbody tr:hover > * {
+            --bs-table-accent-bg: transparent !important;
+            --bs-table-hover-bg: transparent !important;
+            --bs-table-hover-color: inherit !important;
+        }
+        /* Match blue-toned header and container visuals used across receptionist tables */
+        .payment-table-container { background: #f8fafc; border-radius: .5rem; box-shadow: 0 2px 12px rgba(0,0,0,.04); }
+        .payment-table-container .table { margin-bottom: 0; }
+        .payment-table thead th { background: #f8f9fa; color: #333; font-weight: 600; border-bottom: 2px solid #e9ecef; }
+        .payment-table thead tr th:first-child { border-top-left-radius: .5rem; }
+        .payment-table thead tr th:last-child { border-top-right-radius: .5rem; }
+        .payment-table thead tr th { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+        .payment-table tbody tr { background-color: #ffffff !important; }
+        .payment-table tbody tr:nth-child(even) { background-color: #ffffff !important; }
+        .payment-table tbody tr:nth-child(odd) { background-color: #ffffff !important; }
+    </style>
+
+    <!-- Payment View Modal -->
+    <div class="modal fade" id="viewPaymentModal" tabindex="-1" aria-labelledby="viewPaymentLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewPaymentLabel">Payment Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Reservation ID</label>
+                            <input type="text" class="form-control" id="viewPayReservationId" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Guest Name</label>
+                            <input type="text" class="form-control" id="viewPayGuestName" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Method</label>
+                            <input type="text" class="form-control" id="viewPayMethod" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Amount Paid</label>
+                            <input type="text" class="form-control" id="viewPayAmountPaid" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Balance</label>
+                            <input type="text" class="form-control" id="viewPayBalance" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Date</label>
+                            <input type="text" class="form-control" id="viewPayDate" readonly>
+                        </div>
+                    </div>
+
+                    <h6 class="mt-2">Reservation Details</h6>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Room</label>
+                            <input type="text" class="form-control" id="viewResRoom" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Nights</label>
+                            <input type="text" class="form-control" id="viewResNights" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Guests</label>
+                            <input type="text" class="form-control" id="viewResGuests" readonly>
+                        </div>
+                    </div>
+
+                    <h6>Billing Statement</h6>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Room Rate</label>
+                            <input type="text" class="form-control" id="viewBillRoomRate" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Taxes</label>
+                            <input type="text" class="form-control" id="viewBillTaxes" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fees</label>
+                            <input type="text" class="form-control" id="viewBillFees" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Subtotal</label>
+                            <input type="text" class="form-control" id="viewBillSubtotal" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Total</label>
+                            <input type="text" class="form-control" id="viewBillTotal" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Set real-time dates for payments
+            function setRealTimePaymentDates() {
+                const today = new Date();
+                const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+                const dayBeforeYesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 2);
+                
+                // Format dates as DD/MM/YYYY
+                const formatDate = (date) => {
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}/${month}/${year}`;
+                };
+                
+                // Lance Prima - Payment made today
+                const lancePaymentDate = document.getElementById('lancePaymentDate');
+                if (lancePaymentDate) lancePaymentDate.textContent = formatDate(today);
+                
+                // Edward Ricafranca - Payment made yesterday
+                const edwardPaymentDate = document.getElementById('edwardPaymentDate');
+                if (edwardPaymentDate) edwardPaymentDate.textContent = formatDate(yesterday);
+                
+                // Franz Siochi - Payment made day before yesterday
+                const franzPaymentDate = document.getElementById('franzPaymentDate');
+                if (franzPaymentDate) franzPaymentDate.textContent = formatDate(dayBeforeYesterday);
+            }
+            
+            // Initialize payment dates
+            setRealTimePaymentDates();
+            
+            const table = document.querySelector('.payment-table');
+            if (!table) return;
+            table.addEventListener('click', function (e) {
+                const viewBtn = e.target.closest('button[title="View"]');
+                if (!viewBtn) return;
+                const row = e.target.closest('tr');
+                if (!row) return;
+                const getText = (selector) => (row.querySelector(selector)?.innerText || '').trim();
+                const reservationId = getText('.reservation-id') || row.children[0]?.innerText.trim();
+                const guestName = getText('.guest-name') || row.children[1]?.innerText.trim();
+                const method = getText('.payment-method') || row.children[2]?.innerText.trim();
+                const amountPaid = row.children[3]?.innerText.trim();
+                const balance = row.children[4]?.innerText.trim();
+                const date = row.children[5]?.innerText.trim();
+                // Fixed IDs per guest as requested
+                (function(){
+                    const name = (guestName || '').toLowerCase();
+                    let fixedId = reservationId;
+                    if (name.includes('lance prima')) fixedId = '815368';
+                    else if (name.includes('edward ricafranca')) fixedId = '680085';
+                    else if (name.includes('franz siochi') || name.includes('siochi')) fixedId = '639621';
+                    document.getElementById('viewPayReservationId').value = fixedId;
+                })();
+                document.getElementById('viewPayGuestName').value = guestName;
+                document.getElementById('viewPayMethod').value = method;
+                document.getElementById('viewPayAmountPaid').value = amountPaid;
+                document.getElementById('viewPayBalance').value = balance;
+                document.getElementById('viewPayDate').value = date;
+                // Reservation details from data-* attributes
+                document.getElementById('viewResRoom').value = row.dataset.room || '';
+                document.getElementById('viewResNights').value = row.dataset.nights || '';
+                document.getElementById('viewResGuests').value = row.dataset.guests || '';
+                // Billing statement from data-* attributes
+                document.getElementById('viewBillRoomRate').value = row.dataset.roomrate || '';
+                document.getElementById('viewBillTaxes').value = row.dataset.taxes || '';
+                document.getElementById('viewBillFees').value = row.dataset.fees || '';
+                document.getElementById('viewBillSubtotal').value = row.dataset.subtotal || '';
+                document.getElementById('viewBillTotal').value = row.dataset.total || '';
+                const modal = new bootstrap.Modal(document.getElementById('viewPaymentModal'));
+                modal.show();
+            });
+
+            // receptionist payments: no Add Promo for receptionist role
+        });
+    </script>
+    <script>
+        // Sidebar toggle functionality aligned to dashboard behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.sidebar');
+            const main = document.querySelector('main');
+            if (sidebarToggle && sidebar && main) {
+                sidebarToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    sidebar.classList.toggle('collapsed');
+                    main.classList.toggle('sidebar-collapsed');
+                    const icon = this.querySelector('.toggle-icon');
+                    if (sidebar.classList.contains('collapsed')) {
+                        if (icon) icon.className = 'fas fa-chevron-right toggle-icon';
+                        document.documentElement.classList.add('precollapsed');
+                    } else {
+                        if (icon) icon.className = 'fas fa-bars toggle-icon';
+                        document.documentElement.classList.remove('precollapsed');
+                    }
+                    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+                });
+                const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+                if (isCollapsed) {
+                    sidebar.classList.add('collapsed');
+                    main.classList.add('sidebar-collapsed');
+                    const icon = sidebarToggle.querySelector('.toggle-icon');
+                    if (icon) { icon.className = 'fas fa-chevron-right toggle-icon'; }
+                    document.documentElement.classList.add('precollapsed');
+                } else {
+                    document.documentElement.classList.remove('precollapsed');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+

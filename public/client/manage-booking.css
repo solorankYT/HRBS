@@ -1,0 +1,410 @@
+:root {
+    /* Colors */
+    --luxury-navy: #1a2332;
+    --luxury-navy-light: #2a3441;
+    --luxury-red: #8B0000;
+    --luxury-red-hover: #660000;
+    --luxury-cream: #f7f5f3;
+    --luxury-stone: #ede8e2;
+    --background: #fafafa;
+    --card: #ffffff;
+    --foreground: #2c3e50;
+    --muted-foreground: #718096;
+    --border: #ede8e2;
+      --vm-red: #8B0000;   /* theme red */
+      --vm-accent: #1a2332; /* accent used earlier */
+      --muted: #666;
+      --border: #ccc;
+      --light-gray: #f4f4f4;
+    
+    /* Shadows */
+    --shadow-luxury: 0 20px 40px -10px rgba(26, 35, 50, 0.15);
+    --shadow-elegant: 0 8px 30px -8px rgba(26, 35, 50, 0.1);
+    --shadow-soft: 0 4px 20px -4px rgba(26, 35, 50, 0.08);
+    
+    /* Gradients */
+    --gradient-luxury: linear-gradient(135deg, #1a2332, #2a3441);
+    --gradient-red: linear-gradient(135deg, #8B0000, #660000);
+    --gradient-subtle: linear-gradient(180deg, #f7f5f3, #ede8e2);
+    
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.2s ease;
+}
+  /* Header Styles */
+.header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--luxury-stone);
+    transition: var(--transition-smooth);
+    
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+}
+
+.logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.4rem;
+      letter-spacing: 0.1rem;
+      color: var(--luxury-red);
+      text-decoration: none;
+      gap: 0.6rem;
+}
+.logo:hover {
+      color: var(--luxury-red-hover);
+ }
+.logo-img {
+      width: 40px;
+      height: auto;
+}
+.logo-text {
+      font-family: "Playfair Display", serif;
+      color: var(--luxury-red);
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: var(--luxury-navy);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: var(--transition-fast);
+    position: relative;
+    padding: 0.5rem 0;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--luxury-red);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--luxury-red);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+body { 
+  background-color: #f8f9fa; 
+}
+.card-hover { 
+  transition: box-shadow 0.2s; 
+}
+.card-hover:hover { 
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15); 
+}
+.text-teal { 
+  color: #0d9488; 
+}
+.btn-teal { 
+  background-color: var(--luxury-red); 
+  color: #fff; 
+}
+.btn-teal:hover { 
+  background-color:var(--luxury-red-hover); 
+  color: #fff; 
+}
+.font-mono { 
+  font-family: monospace; 
+}
+.badge-teal { 
+  background-color: #0d9488; color: #fff; 
+}
+.container-wide { 
+  max-width: 900px; 
+}
+.compact-form { 
+  max-width: 480px; margin: 0 auto; 
+}
+.compact-form .form-label { 
+  font-size: 0.85rem; 
+}
+.compact-form input { 
+  font-size: 0.9rem; padding: 0.4rem 0.5rem; 
+}
+.compact-form button { 
+  font-size: 0.9rem; padding: 0.45rem 0.5rem; 
+  }
+.see-details-btn {
+  background: none !important;
+  border: 1px solid var(--luxury-red);
+  color: var(--luxury-red);
+  font-size: 0.95rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 4rem;
+  box-shadow: none;
+  transition: none;
+}
+.see-details-btn:hover,
+.see-details-btn:focus,
+.see-details-btn:active {
+  background: none !important;
+  color: var(--luxury-red) !important;
+  border: 1px solid var(--luxury-red) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+ /* Invoice box */
+    .confirmation-wrapper{
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid var(--border); /* thin gray border */
+      padding: 36px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.03);
+      margin-bottom: 2rem;
+      margin-top: 2rem;
+      /* NO border-radius per request */
+    }
+
+    /* Top: big title centered, contact under it */
+    .invoice-title{
+      text-align: center;
+      font-size: 34px;
+      font-weight: 600;
+      color: var(--vm-red);
+      margin: 0 0 6px 0;
+      letter-spacing: 0.6px;
+    }
+
+    .invoice-contact{
+      text-align: center;
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .divider{
+      height: 1px;
+      background: var(--border);
+      margin: 12px 0 24px 0;
+    }
+
+    /* Top two-column area */
+    .top-section{
+      display: flex;
+      gap: 20px;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .left-col{
+      flex-basis: 58%;
+      min-width: 260px;
+    }
+
+    .right-col {
+      transform: translateX(-20px); /* moves it 20px to the left */
+    }
+
+    /* Labels / values layout in booking details */
+    .info-row{
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .info-label{
+      width: 120px;               /* fixed width to create spacing */
+      font-weight: 600;
+      color: var(--vm-accent);
+    }
+
+    .info-value{
+      color: #222;
+      font-size: 13px;
+      word-break: break-word;
+    }
+    .info-label, .info-row{
+      font-family: 'poppins', sans-serif;
+      font-size: 0.80rem;
+    }
+
+    /* Title for sections */
+    .section-title{
+      font-weight: 700;
+      color: var(--vm-red);
+      margin-top: 10px;
+      margin-bottom: 8px;
+      font-size: 0.90rem;
+    }
+
+    /* Table styling: visible grid-style borders, header in theme red */
+    .table-invoice{
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+      font-size: 14px;
+    }
+
+    .table-invoice thead th{
+      background: var(--vm-red);
+      color: #fff;
+      border: 1px solid var(--border);
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .table-invoice tbody td{
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      vertical-align: middle;
+    }
+
+    /* Totals block aligned to right */
+    .totals-block{
+      margin-top: 12px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .totals-table{
+      width: 320px;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin-left: 12px;
+    }
+
+    .totals-table td{
+      padding: 8px 10px;
+      border: none;
+    }
+
+    .totals-table .label{
+      text-align: left;
+      color: #444;
+    }
+
+    .totals-table .value{
+      text-align: right;
+      color: #222;
+      font-weight: 600;
+    }
+
+    .totals-table .total-row{
+      background: var(--light-gray);
+      font-weight: 700;
+    }
+
+    /* Payment summary */
+    .payment-summary{
+      margin-top: 18px;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      font-size: 14px;
+    }
+
+    .payment-method{
+      margin-bottom: 8px;
+    }
+
+    .payment-ref{
+      display: block;
+      color: #777;
+      font-size: 12px;
+      margin-top: 4px;
+      margin-left: 6px;
+    }
+
+    .additional-info{
+      margin-top: 18px;
+      font-size: 13px;
+      color: #444;
+    }
+
+    /* Continue button */
+    .btn-continue{
+      display: inline-block; 
+      width: 100px;
+      text-align: center;
+      margin: 28px 0 0 0; 
+      background: var(--vm-red);
+      color: #fff;
+      padding: 10px 16px;
+      text-decoration: none;
+      font-weight: 500;
+      border: none;
+    }
+  
+
+    /* Right-aligned small booking meta like status column in sample */
+    .meta-right{
+      text-align: start;
+      font-size: 0.80rem;
+      color: #222;
+      font-family: 'poppins',sans-serif;
+    }
+
+    /* make sure logo fits */
+    .logo-placeholder{
+      width: 160px;
+      height: auto;
+      object-fit: contain;
+      display: inline-block;
+    }
+
+    @media (max-width: 768px){
+      .left-col, .right-col{ width: 100%; text-align: left; }
+      .right-col{ margin-top: 12px; text-align: left; }
+      .totals-block{ justify-content: flex-start; }
+      .totals-table{ width: 100%; }
+    }
+    /* Action Buttons: Cancel & Rebook */
+.request-cancel-btn {
+  border: 1px solid var(--luxury-red);
+  color: #fff;
+  background: var(--luxury-red);
+  font-size: 0.9rem;
+  padding: 0.45rem 1.2rem;
+  border-radius: 4rem;
+  font-family: "Poppins", sans-serif;
+  transition: var(--transition-fast);
+}
+
+
+/* Rebook button - solid red */
+.request-rebook-btn {
+  background: none;
+  color: var(--luxury-red);
+  border: 1px solid var(--luxury-red);
+  font-size: 0.9rem;
+  padding: 0.45rem 1.2rem;
+  border-radius: 4rem;
+  font-family: "Poppins", sans-serif;
+  transition: var(--transition-fast);
+}
+

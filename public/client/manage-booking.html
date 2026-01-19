@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manage Booking</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="manage-booking.css">
+<style>
+  .footer {
+  background-color: #1b2431; /* same navy tone */
+  color: #ddd;
+  text-align: center;
+  padding: 20px 20px 30px;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  margin-top: 10rem;
+
+}
+.footer-container {
+  position: relative;
+  top: -15px; /* ⬅ lifts all inner content upward */
+}
+
+
+.footer-logo img {
+  width: 140px;     /* adjust to your logo size */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  position: relative;
+  top: 0; 
+}
+
+.footer-tagline {
+  font-size: 0.95rem;
+  color: #ccc;
+  margin-bottom: 25px;
+}
+
+.footer-links {
+  margin: 10px 0;
+  font-size: 0.7rem;
+}
+
+.footer-links a {
+  color: #bfbfbf;
+  text-decoration: none;
+  margin: 0 8px;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+/* the vertical bars */
+.footer-links .divider {
+  color: #666;
+  margin: 0 5px;
+  font-weight: 300;
+}
+
+.footer-divider-line {
+  width: 70%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 35px auto 20px;
+}
+
+.footer-copy {
+  font-size: 0.70rem;
+  color: #fff;
+  letter-spacing: 1px;
+  font-size: 'poppins',sans-serif;
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-container">
+    <div class="header-content">
+      <a href="index.html" class="logo">
+        <!-- <img src="vm-logo.jpg" alt="Victoria Mansions Logo" class="logo-img"> -->
+        <span class="logo-text">Logo</span>
+      </a>
+      <nav class="nav">
+        <a href="#" class="nav-link">Rooms</a>
+        <a href="#" class="nav-link">About</a>
+        <a href="#" class="nav-link">Amenities</a>
+        <a href="#" class="nav-link">Contact</a>
+        <a href="manage-booking.html" class="nav-link">My Bookings</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<div class="container py-5">
+  <div class="text-center mb-4">
+    <h1 class="fw-bold">Manage Your Booking</h1>
+    <p class="text-secondary">View, change, or cancel your reservation
+</p>
+  </div>
+
+  <!-- Retrieve Booking Card -->
+  <div class="card p-3 mb-4 card-hover compact-form" id="retrieveBookingCard">
+    <h6 class="mb-2">My Bookings</h6>
+    <div class="mb-2">
+      <label class="form-label">Booking Reference *</label>
+      <input type="text" class="form-control font-mono" id="bookingRefInput" placeholder="RES-001" required pattern="RES-\d{3}">
+    </div>
+    <label class="form-label mb-1">Verification Method *</label>
+    <div class="d-flex gap-2 mb-2">
+      <button class="btn btn-outline-secondary flex-fill btn-sm" id="emailMethod">Email</button>
+      <button class="btn btn-outline-secondary flex-fill btn-sm" id="phoneMethod">Phone</button>
+    </div>
+    <div class="mb-2">
+      <label class="form-label" id="contactLabel">Email Address *</label>
+      <input type="text" class="form-control form-control-sm" id="contactInput" placeholder="Enter your email address" required>
+    </div>
+    <button class="btn btn-teal w-100 btn-sm" id="retrieveBtn">
+      <i class="fas fa-search me-1"></i>Search
+    </button>
+    <div class="text-center mt-1 text-muted small">Use booking ref: <span class="font-mono">RES-001</span></div>
+  </div>
+
+ <!-- Booking Details -->
+<div class="card p-4 mx-auto card-hover container-wide d-none" id="bookingDetails">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0 fw-bold text-dark" style="font-family: Merriweather;">Reservation</h4>
+    <div>
+      <span class="badge bg-success me-2">Confirmed</span>
+      <button class="btn btn-light btn-sm" id="closeDetailsBtn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="room-section d-flex justify-content-between align-items-start flex-wrap">
+    <div class="room-info flex-grow-1 me-4">
+      <h3 class="room-type mb-2" id="roomDisplay" style="font-family: Merriweather;">Premium Room</h3>
+      <p class="room-desc text-muted mb-3">
+        A spacious room with a queen-size bed, ensuite bathroom, and complimentary Wi-Fi.
+      </p>
+    </div>
+
+    <div class="room-price text-end">
+      <div class="price-label text-muted small">Room Price</div>
+      <div  class="fw-bold fs-3"  style="font-family: 'poppins',sans-serif; color: #8B5A3C;" id="totalAmount">₱8,061</div>
+    </div>
+
+<!-- See Details Button -->
+<button class="btn see-details-btn" data-bs-toggle="modal" data-bs-target="#detailsModal">
+  <i class="fas fa-eye me-2"></i> See Details
+</button>
+
+<!-- Booking Details Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content p-0 border-0 bg-transparent">
+      <div class="confirmation-wrapper">
+        <div style="text-align:center;">
+          <div class="invoice-title">Reservation Confirmed</div>
+          <div class="invoice-contact">
+            <!-- 1234 Mabini St, Malate, Manila &nbsp; • &nbsp; +63 912 345 6789 &nbsp; • &nbsp; info@victoriamansions.com &nbsp; • &nbsp; www.victoriamansions.com -->
+            1234 Tondo, Manila &nbsp; • &nbsp; +63 912 345 6789 &nbsp; • &nbsp; info@hotelreservation@gmail.com &nbsp; • &nbsp; www.hotel_reservation.com
+          </div>
+        </div>
+
+        <div class="divider" role="presentation"></div>
+
+        <div class="top-section">
+          <div class="left-col">
+            <div class="section-title">Booking Details</div>
+
+            <div class="info-row">
+              <div class="info-label">Check in</div>
+              <div class="info-value">Sunday, August 11, 2025</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Check out</div>
+              <div class="info-value">Monday, August 12, 2025</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Guests</div>
+              <div class="info-value">2 Adults, 1 Child</div>
+            </div>
+
+            <div class="section-title" style="margin-top:12px;">Booked By</div>
+            <div class="info-row">
+              <div class="info-label">Name</div>
+              <div class="info-value">Prince Gallardo</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Email</div>
+              <div class="info-value">princegallardo@gmail.com</div>
+            </div>
+          </div>
+
+          <div class="right-col">
+            <img src="#" class="logo-placeholder" alt="Hotel Logo">
+            <!-- <img src="vm-logo.jpg" class="logo-placeholder" alt="Hotel Logo"> -->
+            <div style="height:10px;"></div>
+            <div class="info-row">
+              <div class="info-label">Booking #</div>
+              <div class="info-value">000123</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Booking Date</div>
+              <div class="info-value">26-07-2025</div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">Status</div>
+              <div class="info-value">Confirmed</div>
+            </div>
+          </div>
+        </div>
+
+        <table class="table-invoice" role="table" aria-label="Booking items">
+          <thead style="font-size: 1rem;">
+            <tr>
+              <th scope="col">Description</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Unit Price</th>
+              <th scope="col">Amount</th>
+            </tr>
+          </thead>
+          <tbody style="font-family: 'poppins',sans-serif; font-size: 0.80rem;">
+            <tr>
+              <td>Premium Room</td>
+              <td>2 nights</td>
+              <td>₱3,599</td>
+              <td>₱7,198</td>
+            </tr>
+            <!-- <tr>
+              <td>Family Room</td>
+              <td>3 nights</td>
+              <td>₱3,599</td>
+              <td>₱7,198</td>
+            </tr> -->
+          </tbody>
+        </table>
+
+        <div class="totals-block" aria-hidden="false">
+          <table class="totals-table" role="table">
+            <tbody style="font-family: 'poppins',sans-serif; font-size:0.90rem;">
+              <tr>
+                <td class="label">Total:</td>
+                <td class="value">₱8,061.76</td>
+              </tr>
+               <tr>
+                <td class="label">Total paid:</td>
+                <td class="value">₱4,030.88</td>
+              </tr>
+              <tr>
+                <td class="label">VAT Rate (12%):</td>
+                <td class="value">863.76</td>
+              </tr>
+              <tr class="total-row">
+                <td class="label">Remaining balance:</td>
+                <td class="value">₱4,030.88</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="payment-summary">
+          <div class="section-title" style="margin-top:0; font-size: 1rem;">Payment Summary</div>
+          <div class="payment-method" style="font-size: 0.80rem; font-family: 'poppins',sans-serif;">
+            <strong>Premium Room</strong> — Paid via <strong>Paypal</strong>
+          </div>
+          <!-- <div class="payment-method" style="font-size: 0.80rem; font-family: 'poppins',sans-serif;">
+            <strong>Family Room</strong> — Paid via <strong>Paypal</strong>
+          </div> -->
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-end gap-3 mt-4">
+          <a href="cancel-page.html"><button class="request-rebook-btn">Request Rebook</button></a>
+          <a href="cancel-page.html"><button class="request-cancel-btn">Request Cancel</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+  <!-- Action Buttons -->
+  <!-- <div class="d-flex justify-content-center gap-3 my-3 container-wide mx-auto d-none" id="actionButtons">
+    <button class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#changeDatesModal">
+      <i class="fas fa-calendar me-1"></i>Change Dates
+    </button>
+    <button class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#cancelModal">
+      <i class="fas fa-times me-1"></i>Cancel Booking
+    </button>
+    <button class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#invoiceModal">
+      <i class="fas fa-credit-card me-1"></i>View Invoice
+    </button>
+  </div> -->
+
+</div>
+
+<!-- Change Dates Modal -->
+<div class="modal fade" id="changeDatesModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Change Booking Dates</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">New Check-in Date</label>
+            <input type="date" class="form-control" id="newCheckIn" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">New Check-out Date</label>
+            <input type="date" class="form-control" id="newCheckOut" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">New Room Type</label>
+            <select class="form-control" id="roomType" required>
+              <option value="Select">--Select--</option>
+              <option value="Basic-Room">Basic Studio Room </option>
+              <option value="Standard-Room">Standard Room</option>
+              <option value="Family-Room">Family Room</option>
+              <option value="Premium-Room">Premium Room</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-label mb-3">Reason for Rebooking</label>
+            <textarea class="form-control" id="newCheckOut" rows="4" placeholder="Enter your message here..." required></textarea>
+          </div>
+        </div>
+        <button class="btn btn-teal w-100 mt-3" id="checkAvailabilityBtn">Check Availability & Pricing</button>
+        <div id="priceComparison" class="mt-3 d-none p-3 bg-primary bg-opacity-10 border border-primary rounded">
+          <div class="row" id="originalRow">
+            <div class="col-6">Original booking total</div>
+            <div class="col-6 text-end fw-bold" id="originalTotal">₱15,525</div>
+          </div>
+          <div class="row" id="newRow">
+            <div class="col-6">New booking total</div>
+            <div class="col-6 text-end fw-bold" id="newTotal">₱15,525</div>
+          </div>
+          <div class="row border-top mt-2 pt-2 fw-semibold" id="diffRow">
+            <div class="col-6" id="diffLabel">Additional payment due</div>
+            <div class="col-6 text-end" id="diffAmount">₱0</div>
+          </div>
+          <div class="row mt-2" id="downPaymentRow">
+            <div class="col-6 text-warning fw-semibold" id="paymentLabel">Down payment due now</div>
+            <div class="col-6 text-end text-warning fw-bold" id="paymentAmount">₱0</div>
+          </div>
+          <div class="row mt-2 d-none" id="refundRow">
+            <div class="col-6 text-success fw-semibold">Refund amount</div>
+            <div class="col-6 text-end text-success fw-bold" id="refundAmount">₱0</div>
+          </div>
+          <div class="d-flex gap-2 mt-3">
+            <button class="btn btn-teal flex-fill" id="confirmChangeBtn" data-bs-dismiss="modal">Confirm Changes</button>
+            <button class="btn btn-outline-secondary flex-fill" id="cancelChangeBtn" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cancel Booking Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cancel Booking</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to cancel this booking? <br>Booking reference: <span id="cancelRef">RES-001</span></p>
+        <button class="btn btn-danger w-100" id="confirmCancelBtn" data-bs-dismiss="modal">Yes, Cancel Booking</button>
+        <button class="btn btn-outline-secondary w-100 mt-2" data-bs-dismiss="modal">Keep Booking</button>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Logo -->
+    <div class="footer-logo">
+      <img src="#" alt=" Logo">
+    </div>
+
+    <!-- <p class="footer-tagline">Stay simple. Stay comfortable.</p> -->
+
+    <!-- Links Row 1 -->
+    <div class="footer-links">
+      <a href="#">About Us</a>
+      <span class="divider">|</span>
+      <a href="#">Privacy Policy</a>
+      <span class="divider">|</span>
+      <a href="#">Terms & Conditions</a>
+      <span class="divider">|</span>
+      <a href="#">Contact Us</a>
+      <span class="divider">|</span>
+      <a href="feedback.html">Feedback</a>
+    </div>
+
+    <!-- Links Row 2 -->
+    <div class="footer-links">
+      <a href="manage-booking.html">Manage Booking</a>
+      <span class="divider">|</span>
+      <a href="#">Facebook</a>
+      <span class="divider">|</span>
+      <a href="#">Instagram</a>
+    </div>
+
+    <!-- Copyright -->
+    <div class="footer-divider-line"></div>
+    <p class="footer-copy">© 2025. All rights reserved.</p>
+  </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="manage-booking.js"></script>
+</body>
+</html>

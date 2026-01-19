@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Select Room - Luxury Hotel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Miniver&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css"/>
+    <link rel="stylesheet" href="select.room.css">
+
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="header-container">
+        <div class="header-content">
+          <a href="index.html" class="logo">
+            <!-- <img src="vm-logo.jpg" alt="Victoria Mansions Logo" class="logo-img"> -->
+            <span class="logo-text">Logo</span>
+          </a>
+          <nav class="nav">
+            <a href="#" class="nav-link">Rooms</a>
+            <a href="#" class="nav-link">About</a>
+            <a href="#" class="nav-link">Amenities</a>
+            <a href="#" class="nav-link">Contact</a>
+            <a href="manage-booking.html" class="nav-link">My Bookings</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <!-- Booking Progress Stepper -->
+      <section class="stepper-section">
+        <div class="container">
+          <div class="stepper">
+            <div class="step completed">
+              <div class="step-indicator"><div class="step-icon">✓</div></div>
+              <div class="step-content">
+                <div class="step-title">Select Dates</div>
+                <div class="step-subtitle">Completed</div>
+              </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step active">
+              <div class="step-indicator"><div class="step-number">2</div></div>
+              <div class="step-content">
+                <div class="step-title">Select Room</div>
+                <div class="step-subtitle">Current Step</div>
+              </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+              <div class="step-indicator"><div class="step-number">3</div></div>
+              <div class="step-content">
+                <div class="step-title">Guest Details & Payment</div>
+                <div class="step-subtitle">Next</div>
+              </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+              <div class="step-indicator"><div class="step-number">4</div></div>
+              <div class="step-content">
+                <div class="step-title">Confirmation</div>
+                <div class="step-subtitle">Final Step</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation Header -->
+      <section class="select-room-header">
+        <div class="container">
+          <div class="select-room-nav">
+            <button class="back-btn" onclick="goBack()"><span>←</span> Back</button>
+            <div class="page-title-container">
+              <h1 class="page-title">Select Your Room</h1>
+            </div>
+            <div class="spacer"></div>
+          </div>
+        </div>
+      </section>
+
+  
+<!-- Booking Summary & Filters in One Container -->
+<section class="booking-info-section">
+  <div class="booking-info-card">
+    <!-- Summary Items -->
+    <div class="info-item">
+      <label>Check-in</label>
+      <span id="summaryCheckIn">--</span>
+    </div>
+    <div class="info-item">
+      <label>Check-out</label>
+      <span id="summaryCheckOut">--</span>
+    </div>
+    <div class="info-item">
+      <label>Guests</label>
+      <span id="summaryGuests">--</span>
+    </div>
+    <div class="info-item">
+      <label>Nights</label>
+      <span id="summaryNights">--</span>
+    </div>
+
+    <!-- Filters -->
+    <div class="info-item filters-item">
+      <label>Filter Rooms</label>
+      <div class="room-filters">
+        <button class="room-type-btn active" onclick="filterRooms('all', event)">All</button>
+        <button class="room-type-btn" onclick="filterRooms('basic-studio', event)">Studio</button>
+        <button class="room-type-btn" onclick="filterRooms('standard-room', event)">Standard</button>
+        <button class="room-type-btn" onclick="filterRooms('family-room', event)">Family</button>
+        <button class="room-type-btn" onclick="filterRooms('premium-deluxe', event)">Premium</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+      <!-- Layout with Sidebar -->
+      <section class="select-room-layout">
+        <!-- Left: Rooms -->
+        <div class="rooms-container">
+          <div class="container">
+            <div class="rooms-grid">
+
+              <!-- basic Room -->
+              <div class="room-card" data-room-type="basic-studio">
+                <div class="room-card-grid">
+                  <div class="room-image-container">
+                    <img src="studio.jpg" alt="Basic Studio Room" class="room-image">
+                    <div class="room-image-overlay"></div>
+                  </div>
+                  <div class="room-details">
+                    <div class="room-info">
+                      <div class="room-header">
+                        <h3 class="room-name">Basic Studio Room</h3>
+                        <div class="room-specs">
+                          <div class="room-spec"><span class="spec-icon"></span><span>Queen Bed</span></div>
+                          <div class="room-spec"><span class="spec-icon"></span>•<span>2 Guests</span></div>
+                          <div class="room-spec"><span class="spec-icon"></span>•<span>15 m²</span></div>
+                        </div>
+                      </div>
+                      <p class="room-description">Elegant room featuring a comfortable king-size bed, modern amenities, and city views. Perfect for couples seeking luxury and comfort.</p>
+                      <button class="room-details-link">View room details <span class="external-icon">↗</span></button>
+                    </div>
+                    <div class="room-pricing">
+                      <div class="pricing-info">
+                        <div>
+                          <div class="price-label">From</div>
+                          <div class="price-value">₱922 <span class="price-period">/ night</span></div>
+                        </div>
+                        <div class="notice">
+                          <p style="color:#8B0000; font-size: 25x; margin: 8px 0 12px 0; font-weight: 500;">50% down payment</p>
+                        </div>
+                      </div>
+                      <button class="btn-show-rates" onclick="selectRoom('basic-studio', event)">BOOK NOW</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Standard Room -->
+              <div class="room-card" data-room-type="standard-room">
+                <div class="room-card-grid">
+                  <div class="room-image-container">
+                    <img src="standard.jpg" alt="Standard Room" class="room-image">
+                    <div class="room-image-overlay"></div>
+                  </div>
+                  <div class="room-details">
+                    <div class="room-info">
+                      <div class="room-header">
+                        <h3 class="room-name">Standard Room</h3>
+                        <div class="room-specs">
+                          <div class="room-spec"><span class="spec-icon"></span><span>Queen Bed</span></div>
+                          <div class="room-spec"><span class="spec-icon"></span>•<span>2 Guests</span></div>
+                          <div class="room-spec"><span class="spec-icon"></span>•<span>17 m²</span></div>
+                        </div>
+                      </div>
+                      <p class="room-description">Spacious suite with separate living area, premium furnishings, and panoramic views. Includes complimentary breakfast and executive lounge access.</p>
+                      <button class="room-details-link">View room details <span class="external-icon">↗</span></button>
+                    </div>
+                    <div class="room-pricing">
+                      <div class="pricing-info">
+                        <div>
+                          <div class="price-label">From</div>
+                          <div class="price-value">₱2,599 <span class="price-period">/ night</span></div>
+                        </div>
+                        <div class="notice">
+                          <p style="color:#8B0000; font-size: 25x; margin: 8px 0 12px 0; font-weight: 500;">50% down payment</p>
+                        </div>
+                      </div>
+                      <button class="btn-show-rates" onclick="selectRoom('standard-room', event)">Select Room</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Family Room -->
+              <div class="room-card" data-room-type="family-room">
+                <div class="room-card-grid">
+                  <div class="room-image-container">
+                    <img src="family room.jpg" alt="Family Room" class="room-image">
+                    <div class="room-image-overlay"></div>
+                  </div>
+                  <div class="room-details">
+                    <div class="room-info">
+                      <div class="room-header">
+                        <h3 class="room-name">Family Room</h3>
+                        <div class="room-specs">
+                          <div class="room-spec"><span class="spec-icon"></span><span>Queen Bed</span></div>
+                          <div class="room-spec"><span class="spec-icon"></span>•<span>4 Guests</span></div>
+                          <div class="room-spec"><span class="spec-icon"></span>•<span>25 m²</span></div>
+                        </div>
+                      </div>
+                      <p class="room-description">Ultimate luxury with private terrace, butler service, and exclusive amenities. The pinnacle of hospitality for discerning guests.</p>
+                      <button class="room-details-link">View room details <span class="external-icon">↗</span></button>
+                    </div>
+                    <div class="room-pricing">
+                      <div class="pricing-info">
+                        <div>
+                          <div class="price-label">From</div>
+                          <div class="price-value">₱3,599 <span class="price-period">/ night</span></div>
+                        </div>
+                        <div class="notice">
+                          <p style="color:#8B0000; font-size: 25x; margin: 8px 0 12px 0; font-weight: 500;">50% down payment</p>
+                        </div>
+                      </div>
+                      <button class="btn-show-rates" onclick="selectRoom('family-room', event)">Select Room</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Premium Room -->
+              <div class="room-card" data-room-type="premium-deluxe">
+                <div class="room-card-grid">
+                  <div class="room-image-container">
+                    <img src="premium.jpg" alt="Premium Room" class="room-image">
+                    <div class="room-image-overlay"></div>
+                  </div>
+                  <div class="room-details">
+                    <div class="room-info">
+                      <div class="room-header">
+                        <h3 class="room-name">Premium Room</h3>
+                        <div class="room-specs">
+                          <div class="room-spec"><span class="spec-icon"></span><span>Queen Bed</span></div>
+                          <div class="room-spec"><span class="spec-icon"></span>•<span>2 Guests</span></div>
+                          <div class="room-spec"><span class="spec-icon"></span>•<span>20 m²</span></div>
+                        </div>
+                      </div>
+                      <p class="room-description">Ultimate luxury with private terrace, butler service, and exclusive amenities. The pinnacle of hospitality for discerning guests.</p>
+                      <button class="room-details-link">View room details <span class="external-icon">↗</span></button>
+                    </div>
+                    <div class="room-pricing">
+                      <div class="pricing-info">
+                        <div>
+                          <div class="price-label">From</div>
+                          <div class="price-value">₱3,599 <span class="price-period">/ night</span></div>
+                        </div>
+                        <div class="notice">
+                          <p style="color:#8B0000; font-size: 25x; margin: 8px 0 12px 0; font-weight: 500;">50% down payment</p>
+                        </div>
+                      </div>
+                      <button class="btn-show-rates" onclick="selectRoom('premium-deluxe', event)">BOOK NOW</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+<!-- Exclusive Add-ons (UPDATED) -->
+<div class="addons-container" style="display:none;">
+  <h2>Exclusive Add-ons</h2>
+  <div class="addons-grid">
+
+    <!-- Executive Lounge -->
+    <div class="addon-card">
+      <!-- <img src="executive-lounge.jpg" alt="Executive Lounge"> -->
+      <div class="addon-info">
+        <div class="addon-desc">
+          <h3>Extra bed/Rollaway bed</h3>
+          <p>Add an extra bed for additional comfort during your stay.</p>
+        </div>
+        <div class="addon-right">
+          <div class="addon-price">
+            <div class="price-main">₱550</div>
+            <div class="price-specs">Per Night</div>
+            <div class="price-note">Excluding Taxes and Fees</div>
+          </div>
+          <div class="addon-actions">
+            <button class="btn-add-detail" onclick="toggleAddonDetails(this)">Add Details</button>
+          </div>
+        </div>
+      </div>
+      <div class="addon-details" style="display:none;">
+        <div class="addon-details-row">
+          <div class="addon-details-left">
+            <label>Number of Nights</label>
+            <div class="quantity-box">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <input type="text" value="1" readonly>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+          <div class="addon-details-right">
+            <div class="addon-total">
+              <div class="total-price">Total ₱0.00</div>
+              <div class="total-note">Including Taxes and Fees</div>
+            </div>
+            <div class="addon-actions">
+              <button class="btn-add-stay" onclick="addAddon('extra-bed', event)">Add to My Stay</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Breakfast Buffet -->
+    <div class="addon-card">
+      <!-- <img src="breakfast.jpg" alt="Breakfast Buffet"> -->
+      <div class="addon-info">
+        <div class="addon-desc">
+          <h3>Breakfast</h3>
+          <p>Wake up to a warm, freshly prepared breakfast to start your day right</p>
+        </div>
+        <div class="addon-right">
+          <div class="addon-price">
+            <div class="price-main">₱150</div>
+            <div class="price-specs">Per Person</div>
+            <div class="price-note">Excluding Taxes and Fees</div>
+          </div>
+          <div class="addon-actions">
+            <button class="btn-add-detail" onclick="toggleAddonDetails(this)">Add Details</button>
+          </div>
+        </div>
+      </div>
+      <div class="addon-details" style="display:none;">
+        <div class="addon-details-row">
+          <div class="addon-details-left">
+            <label>Number of Guests</label>
+            <div class="quantity-box">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <input type="text" value="1" readonly>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+          <div class="addon-details-right">
+            <div class="addon-total">
+              <div class="total-price">Total ₱0.00</div>
+              <div class="total-note">Including Taxes and Fees</div>
+            </div>
+            <div class="addon-actions">
+              <button class="btn-add-stay" onclick="addAddon('breakfast', event)">Add to My Stay</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- Wine Bottle -->
+    <div class="addon-card">
+      <!-- <img src="wine.jpg" alt="Wine Bottle"> -->
+      <div class="addon-info">
+        <div class="addon-desc">
+          <h3>Wine Bottle</h3>
+          <p>Celebrate special moments with a premium wine bottle delivered
+            to your room upon request.</p>
+        </div>
+        <div class="addon-right">
+          <div class="addon-price">
+            <div class="price-main">₱1,200</div>
+            <div class="price-specs">Per Bottle</div>
+            <div class="price-note">Excluding Taxes and Fees</div>
+          </div>
+          <div class="addon-actions">
+            <button class="btn-add-detail" onclick="toggleAddonDetails(this)">Add Details</button>
+          </div>
+        </div>
+      </div>
+      <div class="addon-details" style="display:none;">
+        <div class="addon-details-row">
+          <div class="addon-details-left">
+            <label>Quantity</label>
+            <div class="quantity-box">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <input type="text" value="1" readonly>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+          <div class="addon-details-right">
+            <div class="addon-total">
+              <div class="total-price">Total ₱0.00</div>
+              <div class="total-note">Including Taxes and Fees</div>
+            </div>
+            <div class="addon-actions">
+              <button class="btn-add-stay" onclick="addAddon('wine-bottle', event)">Add to My Stay</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Airport Transfer -->
+    <div class="addon-card">
+      <!-- <img src="airport-transfer.jpg" alt="Airport Transfer"> -->
+      <div class="addon-info">
+        <div class="addon-desc">
+          <h3>Airport Transfer</h3>
+          <p>Enjoy a stress-free arrival or departure with our reliable
+            airport transfer service directly to and from the hotel.</p>
+        </div>
+        <div class="addon-right">
+          <div class="addon-price">
+            <div class="price-main">₱1,500</div>
+            <div class="price-specs">Per Trip</div>
+            <div class="price-note">Excluding Taxes and Fees</div>
+          </div>
+          <div class="addon-actions">
+            <button class="btn-add-stay" onclick="addAddon('airport-transfer', event)">Add to My Stay</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spa Package -->
+    <div class="addon-card">
+      <!-- <img src="spa.jpg" alt="Spa Package"> -->
+      <div class="addon-info">
+        <div class="addon-desc">
+          <h3>Spa Package</h3>
+          <p>Unwind and rejuvenate with our signature spa treatments designed
+            to refresh your body and mind.</p>
+        </div>
+        <div class="addon-right">
+          <div class="addon-price">
+            <div class="price-main">₱3,200</div>
+            <div class="price-specs">Per Session</div>
+            <div class="price-note">Excluding Taxes and Fees</div>
+          </div>
+          <div class="addon-actions">
+            <button class="btn-add-stay" onclick="addAddon('spa-package', event)">Add to My Stay</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <!-- Late Checkout -->
+    <div class="addon-card">
+      <!-- <img src="late-checkout.jpg" alt="Late Checkout"> -->
+      <div class="addon-info">
+        <div class="addon-desc">
+          <h3>Late Checkout</h3>
+          <p>Extend your relaxation with the convenience of a late checkout until 3 PM.</p>
+        </div>
+        <div class="addon-right">
+          <div class="addon-price">
+            <div class="price-main">₱300</div>
+            <div class="price-specs">Per Hour</div>
+            <div class="price-note">Excluding Taxes and Fees</div>
+          </div>
+          <div class="addon-actions">
+            <button class="btn-add-stay" onclick="addAddon('late-checkout', event)">Add to My Stay</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- <button class="btn-skip" onclick="skipAddon()">Skip</button> -->
+</div>
+
+
+      <!--Existing cart and page structure remain the same -->
+      <aside class="cart-section">
+        <div class="booking-summary-container">
+          <!-- Header -->
+          <div class="cart-header">
+            <h2 class="cart-title">Your Cart: <span id="itemCount">0</span></h2>
+            <div class="cart-total">Total <span id="totalAmount">₱0.00</span></div>
+            <div class="cart-subtitle" id="taxesAndFees" style="display: none;">Including taxes and fees</div>
+          </div>
+
+          <!-- Room Items Container -->
+          <div id="roomsContainer"></div>
+      </div> 
+
+          <!-- Total Section -->
+          <div class="total-section total-highlight" >
+            <div class="total-label">Total</div>
+            <div class="total-amount" id="finalTotal">₱0.00</div>
+            <div class="total-subtitle" id="taxesFinal" style="display: none;">Including taxes and fees</div>
+          </div>
+          <!-- <div class="total-section downpayment-highlight">
+            <div class="total-label">Downpayment</div>
+            <div class="total-amount" id="downpayment">₱0.00</div>
+          </div> -->
+
+
+          <!-- Action Buttons -->
+          <button id="btnAddRoom" class="btn-add-room" onclick="addRoom()" style="display:none;">ADD A ROOM</button>
+          <button id="btnCheckout" class="btn-checkout" onclick="checkout()" style="display:none;">CHECKOUT</button>
+        </div>
+      </aside>
+
+        <div id="editModal" class="edit-modal">
+          <div class="modal-content" >
+            <div class="modal-header">
+              <h2 class="modal-title">Edit Booking Details</h2>
+              <button class="modal-close" onclick="closeBookingModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="booking-layout">
+                <div class="booking-top">
+                  <div class="date-card">
+                    <i class="fas fa-calendar-alt" style="color:#000000; margin-right:6px;"></i>
+                    <div>
+                      <div class="date-label" style="font-family: poppins, sans-serif;">Check-in</div>
+                      <div class="date-value" id="checkInDate" style="font-family: poppins, sans-serif;">Select date</div>
+                    </div>
+                  </div>
+                  <div class="date-card">
+                    <i class="fas fa-calendar-alt" style="color:#000000; margin-right:6px;"></i>
+                    <div>
+                      <div class="date-label" style="font-family: poppins, sans-serif;">Check-out</div>
+                      <div class="date-value" id="checkOutDate" style="font-family: poppins, sans-serif;">Select date</div>
+                    </div>
+                  </div>
+                  <div class="input-group counter-group">
+                  <label class="input-label" style="font-family: poppins, sans-serif; color: #000000;">
+                    <span class="input-icon"><i class="fas fa-user"></i></span> Child
+                  </label>                    
+                    <div class="counter-box">
+                      <button type="button" class="counter-btn" onclick="updateCounter('guestCount', -1)">−</button>
+                      <input type="text" id="guestCount" class="counter-input" value="2" readonly>
+                      <button type="button" class="counter-btn" onclick="updateCounter('guestCount', 1)">+</button>
+                    </div>
+                  </div>
+                  <div class="input-group counter-group">
+                  <label class="input-label" style="font-family: poppins, sans-serif; color: #000000;">
+                    <span class="input-icon"><i class="fas fa-child"></i></span> Child
+                  </label> 
+                  <div class="counter-box">
+                      <button type="button" class="counter-btn" onclick="updateCounter('childCount', -1)">−</button>
+                      <input type="text" id="childCount" class="counter-input" value="0" readonly>
+                      <button type="button" class="counter-btn" onclick="updateCounter('childCount', 1)">+</button>
+                    </div>
+                  </div>
+                  <button class="btn-check-rates" id="checkRatesBtn" onclick="saveBookingChanges()" disabled>
+                    Save Changes
+                  </button>
+                  
+                </div>
+                <div class="calendar-wrapper">
+                  <div class="calendar-container">
+                    <div class="calendar" id="checkInCalendar">
+                      <div class="calendar-header">
+                        <button class="calendar-nav" onclick="previousMonth('checkIn')">&lt;</button>
+                        <h3 class="calendar-title" id="checkInTitle">October 2025</h3>
+                        <button class="calendar-nav" onclick="nextMonth('checkIn')">&gt;</button>
+                      </div>
+                      <div class="calendar-weekdays">
+                        <div class="weekday">Sun</div>
+                        <div class="weekday">Mon</div>
+                        <div class="weekday">Tue</div>
+                        <div class="weekday">Wed</div>
+                        <div class="weekday">Thu</div>
+                        <div class="weekday">Fri</div>
+                        <div class="weekday">Sat</div>
+                      </div>
+                      <div class="calendar-days" id="checkInDays"></div>
+                    </div>
+                  </div>
+                  <div class="calendar-container">
+                    <div class="calendar" id="checkOutCalendar">
+                      <div class="calendar-header">
+                        <button class="calendar-nav" onclick="previousMonth('checkOut')">&lt;</button>
+                        <h3 class="calendar-title" id="checkOutTitle">November 2025</h3>
+                        <button class="calendar-nav" onclick="nextMonth('checkOut')">&gt;</button>
+                      </div>
+                      <div class="calendar-weekdays">
+                        <div class="weekday">Sun</div>
+                        <div class="weekday">Mon</div>
+                        <div class="weekday">Tue</div>
+                        <div class="weekday">Wed</div>
+                        <div class="weekday">Thu</div>
+                        <div class="weekday">Fri</div>
+                        <div class="weekday">Sat</div>
+                      </div>
+                      <div class="calendar-days" id="checkOutDays"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box">
+    <div class="modal-icon">⚠️</div>
+    <div class="modal-text">
+      <p class="modal-message" style="font-family: poppins, sans-serif;">Are you sure you want to remove this room from your booking?</p>
+      <small >Select yes to confirm item removal</small>
+      <div class="modal-actions">
+        <button class="btn-yes">YES</button>
+        <button class="btn-no">NO</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+        
+      </section>
+    </main>
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Logo -->
+    <div class="footer-logo">
+      <img src="vm-logo-nobg.png" alt="Logo">
+    </div>
+
+    <!-- <p class="footer-tagline">Stay simple. Stay comfortable.</p> -->
+
+    <!-- Links Row 1 -->
+    <div class="footer-links">
+      <a href="#">About Us</a>
+      <span class="divider">|</span>
+      <a href="#">Privacy Policy</a>
+      <span class="divider">|</span>
+      <a href="#">Terms & Conditions</a>
+      <span class="divider">|</span>
+      <a href="#">Contact Us</a>
+      <span class="divider">|</span>
+      <a href="feedback.html">Feedback</a>
+    </div>
+
+    <!-- Links Row 2 -->
+    <div class="footer-links">
+      <a href="manage-booking.html">Manage Booking</a>
+      <span class="divider">|</span>
+      <a href="#">Facebook</a>
+      <span class="divider">|</span>
+      <a href="#">Instagram</a>
+    </div>
+
+    <!-- Copyright -->
+    <div class="footer-divider-line"></div>
+    <p class="footer-copy">© 2025. All rights reserved.</p>
+  </div>
+</footer>
+
+    <script src="select-room.js"></script>
+  </body>
+</html>

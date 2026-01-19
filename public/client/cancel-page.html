@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cancellation Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"/>
+    <style>
+        /* Booking Actions Page (Rebooking & Cancellation) */
+.booking-actions-section {
+  font-family: "Poppins", sans-serif;
+}
+
+.booking-sidebar .list-group-item {
+  border: none;
+  border-left: 3px solid transparent;
+  border-radius: 0;
+  color: #1a2332;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.booking-sidebar .list-group-item.active {
+  border-left: 3px solid var(--luxury-red);
+  color: var(--luxury-red);
+  background: none;
+}
+
+.booking-box {
+  border: 1px solid var(--luxury-red);
+  padding: 2rem;
+  background: #fff;
+}
+
+.section-title {
+  color: var(--luxury-red);
+  font-family: "Playfair Display", serif;
+}
+
+.form-control {
+  border: 1px solid var(--luxury-red);
+  border-radius: 0;
+  font-size: 0.9rem;
+}
+
+.form-control:focus {
+  border-color: var(--luxury-red-hover);
+  box-shadow: none;
+}
+
+textarea.form-control {
+  resize: none;
+}
+
+.request-btn {
+  background: var(--luxury-red);
+  color: #fff;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 4rem;
+  padding: 0.5rem 1.3rem;
+  transition: var(--transition-fast);
+}
+
+.request-btn:hover {
+  background: darkred;
+}/* Custom Room Dropdown */
+.room-dropdown-btn {
+  border: 1px solid var(--luxury-red);
+  background: #fff;
+  color: #1a2332;
+  border-radius: 0;
+  font-size: 0.9rem;
+  text-align: left;
+  padding: 0.45rem 0.75rem;
+}
+
+.room-dropdown-btn:focus {
+  box-shadow: none;
+  border-color: var(--luxury-red-hover);
+}
+
+.room-dropdown-btn i {
+  color: var(--luxury-red);
+  font-size: 0.9rem;
+}
+
+.dropdown-menu {
+  border: 1px solid var(--luxury-red);
+  border-radius: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.dropdown-item {
+  font-size: 0.9rem;
+  color: #1a2332;
+}
+
+.dropdown-item:hover {
+  background: var(--luxury-red);
+  color: #fff;
+}
+
+
+    </style>
+</head>
+<body>
+        <!-- Header -->
+    <header class="header">
+      <div class="header-container">
+        <div class="header-content">
+          <a href="index.html" class="logo">
+            <!-- <img src="vm-logo.jpg" alt="Victoria Mansions Logo" class="logo-img"> -->
+            <span class="logo-text">Logo</span>
+          </a>
+          <nav class="nav">
+            <a href="#" class="nav-link">Rooms</a>
+            <a href="#" class="nav-link">About</a>
+            <a href="#" class="nav-link">Amenities</a>
+            <a href="#" class="nav-link">Contact</a>
+            <a href="manage-booking.html" class="nav-link">My Bookings</a> 
+          </nav>
+        </div>
+      </div>
+    </header>
+
+
+<section class="booking-actions-section py-5">
+  <div class="container">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-3 mb-4 mb-md-0">
+        <div class="list-group booking-sidebar">
+          <a href="#rebooking" class="list-group-item list-group-item-action active" data-bs-toggle="tab">Rebooking</a>
+          <a href="#cancellation" class="list-group-item list-group-item-action" data-bs-toggle="tab">Cancellation</a>
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <div class="col-md-9">
+        <div class="tab-content">
+          <!-- Rebooking Tab -->
+          <div class="tab-pane fade show active" id="rebooking">
+            <h3 class="mb-4 section-title">Rebooking</h3>
+            <div class="booking-box">
+              <form>
+              <div class="mb-3 position-relative">
+                <label class="form-label fw-semibold">New Room Type:</label>
+                    <div class="dropdown">
+                        <button class="form-control d-flex justify-content-between align-items-center room-dropdown-btn" 
+                                type="button" id="roomTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span id="selectedRoom">Basic Studio Room</span>
+                        <i class="fas fa-caret-down ms-2"></i>
+                        </button>
+                        <ul class="dropdown-menu w-100" aria-labelledby="roomTypeDropdown">
+                        <li><a class="dropdown-item" href="#" onclick="selectRoom('Basic Studio Room')">Basic Studio Room</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="selectRoom('Standard Room')">Standard Room</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="selectRoom('Family Room')">Family Room</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="selectRoom('Premium Room')">Premium Room</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">New Schedule:</label>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="small text-muted">Check-In:</label>
+                      <input type="date" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="small text-muted">Check-Out:</label>
+                      <input type="date" class="form-control">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Reason for Rebooking:</label>
+                  <textarea class="form-control" rows="4"></textarea>
+                </div>
+
+                <div class="text-end">
+                  <button type="submit" class="btn request-btn">Request</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Cancellation Tab -->
+          <div class="tab-pane fade" id="cancellation">
+            <h3 class="mb-4 section-title">Cancellation</h3>
+            <div class="booking-box">
+              <form>
+                <div class="row mb-3">
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label fw-semibold">Reservation ID:</label>
+                    <input type="text" class="form-control">
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label fw-semibold">Room Type:</label>
+                    <input type="text" class="form-control">
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label fw-semibold">Payment Method:</label>
+                    <input type="text" class="form-control">
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label fw-semibold">E-Wallet Number:</label>
+                    <input type="text" class="form-control">
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Schedule:</label>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="small text-muted">Check-In:</label>
+                      <input type="date" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="small text-muted">Check-Out:</label>
+                      <input type="date" class="form-control">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Reason for Cancellation:</label>
+                  <textarea class="form-control" rows="4"></textarea>
+                </div>
+
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="terms">
+                  <label class="form-check-label small" for="terms">
+                    Accept Terms & Conditions about Cancellation Rules and Regulations
+                  </label>
+                </div>
+
+                <div class="text-end">
+                  <button type="submit" class="btn request-btn">Request</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+    
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Logo -->
+    <div class="footer-logo">
+      <img src="vm-logo-nobg.png" alt="Logo">
+    </div>
+
+    <!-- <p class="footer-tagline">Stay simple. Stay comfortable.</p> -->
+
+    <!-- Links Row 1 -->
+    <div class="footer-links">
+      <a href="#">About Us</a>
+      <span class="divider">|</span>
+      <a href="#">Privacy Policy</a>
+      <span class="divider">|</span>
+      <a href="#">Terms & Conditions</a>
+      <span class="divider">|</span>
+      <a href="#">Contact Us</a>
+      <span class="divider">|</span>
+      <a href="feedback.html">Feedback</a>
+    </div>
+
+    <!-- Links Row 2 -->
+    <div class="footer-links">
+      <a href="manage-booking.html">Manage Booking</a>
+      <span class="divider">|</span>
+      <a href="#">Facebook</a>
+      <span class="divider">|</span>
+      <a href="#">Instagram</a>
+    </div>
+
+    <!-- Copyright -->
+    <div class="footer-divider-line"></div>
+    <p class="footer-copy">© 2025. All rights reserved.</p>
+  </div>
+    
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function selectRoom(roomName) {
+    document.getElementById('selectedRoom').textContent = roomName;
+    }
+    </script>
+
+</footer>
+</body>
+</html>

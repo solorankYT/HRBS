@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H+Hotel - Check-Out Details</title>
+    <script>
+        (function() {
+            try {
+                if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                    document.documentElement.classList.add('precollapsed');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="../styles.css" rel="stylesheet">
+    <link href="receptionist.css" rel="stylesheet">
+    <style>
+        /* Font Family Declarations */
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Headers and Titles */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .welcome-banner h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .hotel-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        .admin-label {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        /* Navigation */
+        .nav-link {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .nav-link span {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        /* Profile Section */
+        .profile-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .profile-role {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Search and Input Elements */
+        .search-input {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Buttons */
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-right: 8px;
+        }
+        
+        .hotel-logo {
+            display: none;
+        }
+        
+        /* Form Elements */
+        .form-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        /* Table Elements */
+        .table th {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .table td {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+        
+        .profile-section { border-top: 0 !important; }
+        .profile-section::before { content: none !important; }
+        .sidebar-divider { height: 1px; background-color: #e9ecef; margin: 0.5rem 0; width: 100%; }
+        .sidebar { transition: all 0.3s ease; }
+        .sidebar.collapsed { width: 60px; }
+        .sidebar.collapsed .hotel-name,
+        .sidebar.collapsed .logo-text,
+        .sidebar.collapsed .nav-link span,
+        .sidebar.collapsed .profile-name,
+        .sidebar.collapsed .profile-role { opacity: 0; display: none; }
+        .sidebar.collapsed .sidebar-header { padding: 0.75rem 0.5rem; text-align: center; border-bottom: 1px solid #e9ecef; display: flex; align-items: center; justify-content: center; min-height: 60px; }
+        .sidebar.collapsed .nav-link { text-align: center; padding: 0.75rem 0.5rem; justify-content: center; position: relative; min-height: 50px; display: flex; align-items: center; }
+        .sidebar.collapsed .nav-link i { margin: 0; font-size: 1rem; width: auto; }
+        .sidebar.collapsed .profile-info { justify-content: center; padding: 0.75rem 0.5rem; min-height: 60px; display: flex; align-items: center; }
+        .sidebar.collapsed .profile-icon { font-size: 1.5rem; margin: 0; }
+        .sidebar.collapsed .toggle-icon { display: block; }
+        .sidebar.collapsed .profile-info > div { display: none; }
+        main { transition: margin-left 0.3s ease; }
+        main.sidebar-collapsed { margin-left: 60px; }
+        @media (max-width: 767px) {
+            .sidebar.collapsed { width: 0; overflow: hidden; }
+            main.sidebar-collapsed { margin-left: 0; }
+        }
+        .top-bar-header { background: #ffffff !important; border-bottom: 1px solid #f0f0f0 !important; width: 100% !important; }
+        .top-bar-header .search-container { margin-left: 0 !important; }
+        .checkout-btn { background: #8b0000; color: #fff; border: 1px solid #7a0000; }
+        .checkout-btn:hover { background: #6e0000; color: #fff; border-color: #5f0000; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="sidebar-header clickable" id="sidebarToggle">
+                    <span class="logo-text">logo</span>
+                    <h4 class="hotel-name">H+Hotel</h4>
+                    <i class="fas fa-bars toggle-icon" aria-label="Collapse sidebar"></i>
+                </div>
+                
+                <ul class="nav flex-column main-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="receptionistdashboard.html" data-tooltip="Dashboard">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reservationreceptionist.html" data-tooltip="Reservations">
+                            <i class="fas fa-calendar"></i>
+                            <span>Reservations</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="checkinout.html" data-tooltip="Check-in/out">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Check-in/out</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="receptionistpayment.html" data-tooltip="Payments">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Payments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cancellation.html" data-tooltip="Cancellation">
+                            <i class="fas fa-ban"></i>
+                            <span>Cancellation</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="rebooking.html" data-tooltip="Rebooking">
+                            <i class="fas fa-redo"></i>
+                            <span>Rebooking</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="nav flex-column secondary-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="receptionistsettings.html" data-tooltip="Settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../admin/login.html" data-tooltip="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="sidebar-divider"></div>
+                
+                <div class="profile-section">
+                    <div class="profile-info" data-tooltip="Prince Gallardo - Receptionist">
+                        <i class="fas fa-user-circle profile-icon"></i>
+                        <div>
+                            <div class="profile-name">Prince Gallardo</div>
+                            <div class="profile-role">Receptionist</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="top-bar-header d-flex justify-content-between align-items-center">
+                    <div class="left-section">
+                        <span class="admin-label">Receptionist</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="search-container me-4">
+                            <input type="text" class="form-control search-input" placeholder="Search...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                        <div class="notification-icon me-3">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="user-dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reservation-header d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="reservation-title">Check-Out Details</h1>
+                </div>
+
+                <div class="container py-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="mb-2">Guest Information</h5>
+                <div class="row g-2 mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label small">First Name</label>
+                        <input type="text" class="form-control form-control-sm" value="John">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small">Last Name</label>
+                        <input type="text" class="form-control form-control-sm" value="Doe">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small">Contact Number</label>
+                        <input type="text" class="form-control form-control-sm" value="0092345678">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small">E-mail Address</label>
+                        <input type="email" class="form-control form-control-sm" value="johndoe@gmail.com">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label small">Address</label>
+                        <input type="text" class="form-control form-control-sm" value="123 Elms Street., Fourth Century, Makati, Philippines">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small">Adults</label>
+                        <input type="number" class="form-control form-control-sm" value="4" min="0">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small">Kids</label>
+                        <input type="number" class="form-control form-control-sm" value="2" min="0">
+                    </div>
+                </div>
+
+                <h5 class="mb-2">Guests Ledger</h5>
+                <div class="mb-3">
+                    <table class="table table-bordered align-middle table-sm w-100" style="border-collapse: separate; border-left: 1px solid #dee2e6; border-right: 1px solid #dee2e6;">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Guest ID</th>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Room</th>
+                                <th>Amount</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>202411</td>
+                                <td>John Doe</td>
+                                <td>12/10/2024</td>
+                                <td>Premium Room</td>
+                                <td>₱3,599.00</td>
+                                <td>₱0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="actionMessage" class="mb-2"></div>
+                <div class="d-flex flex-column align-items-center gap-2 mt-4">
+                    <button id="btnCheckOut" class="btn px-5 checkout-btn">Check-Out Guest</button>
+                    <a href="checkinout.html" class="btn btn-secondary px-5">Back</a>
+                </div>
+            </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="receptionist.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const messageBox = document.getElementById('actionMessage');
+            const btnCheckOut = document.getElementById('btnCheckOut');
+            // Make all form fields non-editable (display-only)
+            (function lockFields(){
+                const controls = Array.from(document.querySelectorAll('input, textarea, select'));
+                controls.forEach(el => {
+                    // Keep buttons clickable
+                    if (el.tagName === 'BUTTON') return;
+                    if (el.tagName === 'SELECT') el.disabled = true;
+                    if (el.tagName === 'TEXTAREA') el.readOnly = true;
+                    if (el.tagName === 'INPUT') {
+                        const t = (el.getAttribute('type')||'').toLowerCase();
+                        if (['text','email','number','date'].includes(t)) el.readOnly = true;
+                        if (['checkbox','radio'].includes(t)) el.disabled = true;
+                    }
+                });
+            })();
+
+            function showMessage(type, text) {
+                const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+                messageBox.innerHTML = `
+                    <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                        ${text}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+                messageBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            if (btnCheckOut) {
+                btnCheckOut.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    showMessage('success', 'Guest successfully checked out.');
+                });
+            }
+        });
+
+        // Sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.sidebar');
+            const main = document.querySelector('main');
+            
+            if (sidebarToggle && sidebar && main) {
+                sidebarToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    sidebar.classList.toggle('collapsed');
+                    main.classList.toggle('sidebar-collapsed');
+                    
+                    const icon = this.querySelector('.toggle-icon');
+                    if (sidebar.classList.contains('collapsed')) {
+                        icon.className = 'fas fa-chevron-right toggle-icon';
+                        document.documentElement.classList.add('precollapsed');
+                    } else {
+                        icon.className = 'fas fa-bars toggle-icon';
+                        document.documentElement.classList.remove('precollapsed');
+                    }
+                    
+                    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+                });
+                
+                const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+                if (isCollapsed) {
+                    sidebar.classList.add('collapsed');
+                    main.classList.add('sidebar-collapsed');
+                    const icon = sidebarToggle.querySelector('.toggle-icon');
+                    if (icon) { icon.className = 'fas fa-chevron-right toggle-icon'; }
+                    document.documentElement.classList.add('precollapsed');
+                } else {
+                    document.documentElement.classList.remove('precollapsed');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+

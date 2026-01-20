@@ -1,63 +1,77 @@
+async function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const errorEl = document.getElementById("loginError");
 
-async function login(email, password){
-    try{ 
-        const res = await fetch('/api/login',{
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify({email, password})    
-        });
-          if (!res.ok) {
-      throw new Error('Request failed')
-    }
-const data = await res.json();
+  errorEl.style.display = "none";
 
-return data;
-
-    }catch(err){
-        alert('Login failed: ' + err.message);
-    }
-    
-}
-
-
-
-
-
-
-
-async function getUser(id) {
   try {
-    const res = await fetch(`/api/admin/user/${id}`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json'
-      },
-      credentials: 'include'
-    })
+    await fetch("http://localhost:8000/sanctum/csrf-cookie", {
+      credentials: "include"
+    });
 
-    if (!res.ok) {
-      throw new Error('Request failed')
+    function getCookie(name) {
+      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      return match ? decodeURIComponent(match[2]) : null;
     }
+    const csrfToken = getCookie("XSRF-TOKEN");
 
-    const user = await res.json()
-    console.log('User data:', user)
+    const res = await fetch("http://localhost:8000/api/login", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-XSRF-TOKEN": csrfToken
+      },
+      body: JSON.stringify({ email, password })
+    });
 
-    document.getElementById('name').textContent = user.name
-    document.getElementById('email').textContent = user.email
-    document.getElementById('role').textContent = user.role
+    if (!res.ok) throw new Error("Invalid credentials");
+
+    const data = await res.json();
+
+    if (data.user.role === "receptionist") {
+      window.location.href = "admin-side/receptionist/receptionistdashboard.html";
+    } else {
+      window.location.href = "admin-side/admin/index.html";
+    }
 
   } catch (err) {
-    console.error(err)
-    alert('Error loading user')
+    console.error("Login failed:", err);
+    errorEl.style.display = "block";
   }
 }
 
 
 
+async function logout() {
+  try {
+
+    
+    const csrfToken = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('XSRF-TOKEN='))
+      ?.split('=')[1];
+
+    const res = await fetch("http://localhost:8000/api/logout", {
+      method: "GET",
+       credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-XSRF-TOKEN": csrfToken
+      },
+    });
+
+    if (!res.ok) throw new Error("Logout failed");
+    window.location.href = "/login.html";
+
+  } catch (err) {
+    console.error("Logout failed:", err);
+    alert("Error logging out");
+  }
+}
 
 
 

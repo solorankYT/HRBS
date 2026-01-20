@@ -453,7 +453,9 @@
                 <h2 class="login-title">Welcome Back</h2>
                 <p class="login-subtitle">Sign in to your account</p>
                 <p style="margin-top:10px;color:#6c757d;font-size:14px;">
-                    Note: Use <strong>user:</strong> <code>princegallardo</code> and <strong>password:</strong> <code>12345</code>
+                    Note: Use <strong>admin:</strong> <code>admin@hrbs.test</code> and <strong>password:</strong> <code>password</code>
+                   <br />
+                    <strong>receptionist:</strong> <code>reception@hrbs.test</code> and <strong>password:</strong> <code>password</code>
                 </p>
             </div>
             
@@ -466,7 +468,7 @@
                 <div class="form-group">
                     <div class="input-container">
                         <i class="fas fa-user input-icon"></i>
-                        <input type="text" class="form-input" placeholder="Username" id="username">
+                        <input type="text" class="form-input" placeholder="Email" id="email">
                     </div>
                 </div>
                 
@@ -488,14 +490,14 @@
                     <a href="#" class="forgot-password">Forgot password?</a>
                 </div>
                 
-                <button type="submit" class="signin-button">Sign In</button>
+                <button type="button" class="signin-button" onclick="login()">Sign In</button>
                 <div id="loginError" style="margin-top:12px;color:#dc3545;font-weight:600;display:none;">Invalid credentials. Please try again.</div>
             </form>
         </div>
     </div>
 
 
-        <script src="../js/script.js"></script>
+    <script src="../admin-side/js/script.js"></script>
     <script>
         function togglePassword() {
             const passwordInput = document.getElementById('password');

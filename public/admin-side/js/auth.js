@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const user = await response.json();
-    console.log("Logged in as:", user);
 
     const nameEl = document.getElementById("name");
     if (nameEl) {

@@ -270,11 +270,11 @@
                             <span>Settings</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../admin/login.html" data-tooltip="Logout">
+                  <li class="nav-item">
+                        <button class="nav-link"data-tooltip="Logout" onclick="logout()" type="button">
                             <i class="fas fa-sign-out-alt"></i>
                             <span>Logout</span>
-                        </a>
+                        </button>
                     </li>
                 </ul>
                 
@@ -384,6 +384,10 @@
             </div>
         </div>
     </div>
+
+      <script src="../js/script.js"></script>
+    <script src="../js/auth.js"></script>
+
 
     <script>
         // Show the Start Check-in/Check-out modal only when user clicks a service card

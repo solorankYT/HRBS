@@ -74,11 +74,11 @@
                             <span>Settings</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.html" data-tooltip="Logout">
+                     <li class="nav-item">
+                        <button class="nav-link"data-tooltip="Logout" onclick="logout()" type="button">
                             <i class="fas fa-sign-out-alt"></i>
                             <span>Logout</span>
-                        </a>
+                        </button>
                     </li>
                 </ul>
                 
@@ -498,7 +498,9 @@
             </div>
         </div>
     </div>
-    
+     <script src="../js/script.js"></script>
+    <script src="../js/auth.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const table = document.querySelector('.table');

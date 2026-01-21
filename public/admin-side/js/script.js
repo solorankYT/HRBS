@@ -47,8 +47,6 @@ async function login() {
 
 async function logout() {
   try {
-
-    
     const csrfToken = document.cookie
       .split('; ')
       .find(row => row.startsWith('XSRF-TOKEN='))

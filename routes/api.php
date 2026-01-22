@@ -17,6 +17,7 @@ Route::middleware('web')->group(function () {
 });
 
 Route::get('/users', [UserManagementController::class, 'index']);
+Route::get('/users/{id}', [UserManagementController::class, 'show']);
 Route::post('/users', [UserManagementController::class, 'create']);
 Route::put('/users/{id}', [UserManagementController::class, 'update']);
 Route::delete('/users/{id}', [UserManagementController::class, 'delete']);

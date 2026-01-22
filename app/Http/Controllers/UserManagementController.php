@@ -46,10 +46,9 @@ public function update(Request $request, $userid)
     $user = User::findOrFail($userid);
 
     $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|max:255|email|unique:users,email,' . $user->id,
-        'password' => 'nullable|string|min:8',
-        'role' => 'required|in:admin,receptionist',
+        'name' => 'sometimes|string|max:255',
+        'email' => 'sometimes|string|max:255|email|unique:users,email,' . $user->id,
+        'role' => 'sometimes|in:admin,receptionist',
     ]);
 
     if (!empty($validated['password'])) {
@@ -65,6 +64,7 @@ public function update(Request $request, $userid)
         'user' => $user
     ]);
 }
+
 
 
     public function delete($id)

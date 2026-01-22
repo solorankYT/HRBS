@@ -586,6 +586,8 @@ document.getElementById("addUserForm").addEventListener("submit", async function
 });
 </script>
 
+
+<!-- delete User -->
 <script>
     async function deleteUser(userId){
         if(!confirm("sure?")) return;
@@ -672,6 +674,7 @@ document.getElementById("addUserForm").addEventListener("submit", async function
                     modal?.hide();
                 });
             }
+            
             // Add User modal wiring
             const addBtn = document.getElementById('addUserBtn');
             if (addBtn) {
@@ -679,63 +682,10 @@ document.getElementById("addUserForm").addEventListener("submit", async function
                     new bootstrap.Modal(document.getElementById('addUserModal')).show();
                 });
             }
-            const saveNewUser = document.getElementById('saveNewUser');
-            if (saveNewUser) {
-                saveNewUser.addEventListener('click', function () {
-                    const modalEl = document.getElementById('addUserModal');
-                    const modal = bootstrap.Modal.getInstance(modalEl);
-                    // Read form values
-                    const name = (document.getElementById('addUserName')?.value || '').trim();
-                    const email = (document.getElementById('addUserEmail')?.value || '').trim();
-                    const role = (document.getElementById('addUserRole')?.value || 'Admin').trim();
-                    const status = (document.getElementById('addUserStatus')?.value || 'Active').trim();
-                    const phone = (document.getElementById('addUserPhone')?.value || '').trim();
-                    if (!name || !email) { return; }
-                    const tbody = document.querySelector('.reservations-table tbody');
-                    if (!tbody) { modal?.hide(); return; }
-                    // Helpers
-                    function formatJoined(d){
-                        const dd = String(d.getDate()).padStart(2,'0');
-                        const mm = String(d.getMonth()+1).padStart(2,'0');
-                        const yyyy = d.getFullYear();
-                        return `${dd}/${mm}/${yyyy}`;
-                    }
-                    function formatDateTime(d){ return d.toLocaleString('en-US'); }
-                    const now = new Date();
-                    const joined = formatJoined(now);
-                    const lastLogin = formatDateTime(now);
-                    const roleBadgeClass = role.toLowerCase().includes('receptionist') ? 'status-checkedin' : 'status-booked';
-                    const statusBadgeClass = status.toLowerCase().includes('inactive') ? 'status-checkedout' : 'status-checkedin';
-                    // Build row
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>
-                            <div class="guest-info">
-                                <i class="fas fa-user me-2"></i>
-                                <span>${name}</span>
-                                <small class="guest-count">Joined ${joined}</small>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="room-info">
-                                <i class="fas fa-envelope me-2"></i>
-                                <span>${email}</span>
-                                <small class="room-number">${phone || '+63 900 000 0000'}</small>
-                            </div>
-                        </td>
-                        <td><span class="status-badge ${roleBadgeClass}">${role}</span></td>
-                        <td><span class="status-badge ${statusBadgeClass}">${status}</span></td>
-                        <td>${lastLogin}</td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-sm btn-action" title="Edit"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-action" title="Delete"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </td>`;
-                    tbody.appendChild(tr);
-                    modal?.hide();
-                });
-            }
+
+            
+
+
 
             // --- Search and Role Filters ---
             const rows = Array.from(document.querySelectorAll('.reservations-table tbody tr'));

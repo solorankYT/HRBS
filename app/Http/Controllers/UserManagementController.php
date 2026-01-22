@@ -41,6 +41,31 @@ public function show(string $id): JsonResponse
          return response()->json(['message' => 'User Added']);
     }
 
+public function update(Request $request, $userid)
+{
+    $user = User::findOrFail($userid);
+
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|max:255|email|unique:users,email,' . $user->id,
+        'password' => 'nullable|string|min:8',
+        'role' => 'required|in:admin,receptionist',
+    ]);
+
+    if (!empty($validated['password'])) {
+        $validated['password'] = Hash::make($validated['password']);
+    } else {
+        unset($validated['password']);
+    }
+
+    $user->update($validated);
+
+    return response()->json([
+        'message' => 'User updated successfully',
+        'user' => $user
+    ]);
+}
+
 
     public function delete($id)
     {

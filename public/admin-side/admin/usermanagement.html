@@ -136,11 +136,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <ul id="userList"></ul>
-
-                <div class="reservations-table-container">
+ 
+                <div class="reservations-table-container table-scroll">
                     <div class="table-responsive">
                         <table class="table table-hover reservations-table">
                             <thead>
@@ -153,9 +150,7 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                           <tbody id="usersTableBody">
-
-                            </tbody>
+                           <tbody id="usersTableBody"></tbody>
 
                         </table>
                     </div>
@@ -169,6 +164,20 @@
     
     <style>
         /* Font Family Declarations */
+
+        .reservations-table thead th {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            z-index: 2;
+        }
+
+
+        .table-scroll {
+            max-height: 600px;   /* adjust as needed */
+            overflow-y: auto;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
         }
@@ -449,43 +458,6 @@
     <script src="../js/auth.js"></script>
 
 
-<!-- Create User -->
-<script>
-document.getElementById("addUserForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-
-    try {
-        const res = await fetch("http://localhost:8000/api/users", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Accept": "application/json"
-            },
-            body: formData
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            if (res.status === 422 && data.errors?.email) {
-                alert("Email already registered");
-                return;
-            }
-            throw new Error(data.message || "Failed");
-        }
-
-        closeAddUserModal();
-        loadUsers();
-
-    } catch (err) {
-        console.error(err);
-        alert("Error adding user");
-    }
-});
-</script>
-
 
 <!-- Load Users -->
 <script>
@@ -552,11 +524,11 @@ async function loadUsers() {
                 <td>
                     <div class="action-buttons">
                         <button class="btn btn-sm btn-action" 
-                            onclick="editUser(${user.id})">
+                            onclick=editUser(${user.id})>
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-action"
-                            onclick="deleteUser(${user.id})">
+                        <button class="btn btn-sm btn-action" type="button"
+                            onclick=deleteUser(${user.id})>
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -575,6 +547,68 @@ loadUsers();
 </script>
 
 
+
+<!-- Create User -->
+<script>
+document.getElementById("addUserForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    try {
+        const res = await fetch("http://localhost:8000/api/users", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Accept": "application/json"
+            },
+            body: formData
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            if (res.status === 422 && data.errors?.email) {
+                alert("Email already registered");
+                return;
+            }
+            throw new Error(data.message || "Failed");
+        }
+
+        alert("User Added");
+        // closeAddUserModal();
+         loadUsers();
+
+    } catch (err) {
+        console.error(err);
+        alert("Error adding user");
+    }
+});
+</script>
+
+<script>
+    async function deleteUser(userId){
+        if(!confirm("sure?")) return;
+        try{
+          const res = await fetch(`http://localhost:8000/api/users/${userId}`, {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+                "Accept": "application/json"
+            },
+        });
+
+        if (!res.ok) throw new Error("Failed to delete user");
+
+        alert("User deleted");
+        loadUsers();
+
+    } catch (err) {
+        console.error(err);
+        alert("Error deleting user");
+    }
+    }
+</script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

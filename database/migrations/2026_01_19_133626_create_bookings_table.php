@@ -31,10 +31,12 @@ return new class extends Migration
         'checked_out',
         'cancelled'
     ])->default('pending');
+    $table->decimal('total_amount', 10, 2)->default(0);
 
     $table->timestamps();
 
-    $table->index(['check_in', 'check_out']);
+    $table->index(['room_id', 'check_in', 'check_out']);
+
 });
 
     }

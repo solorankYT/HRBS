@@ -563,41 +563,54 @@ loadUsers();
 
 <!-- Create User -->
 <script>
-document.getElementById("addUserForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
 
-    const formData = new FormData(this);
+    const addUserButton = document.getElementById("addUserBtn");
+    const addUserModalEl = document.getElementById("addUserModal");
 
-    try {
-        const res = await fetch("http://localhost:8000/api/users", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Accept": "application/json"
-            },
-            body: formData
-        });
+    const addUserModal = new bootstrap.Modal(addUserModalEl);
 
-        const data = await res.json();
+    addUserButton.addEventListener("click", () => {
+        addUserModal.show();
+    });
 
-        if (!res.ok) {
-            if (res.status === 422 && data.errors?.email) {
-                alert("Email already registered");
-                return;
+    document.getElementById("addUserForm")
+        .addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            try {
+                const res = await fetch("http://localhost:8000/api/users", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "Accept": "application/json" },
+                    body: formData
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    if (res.status === 422 && data.errors?.email) {
+                        alert("Email already registered");
+                        return;
+                    }
+                    throw new Error(data.message || "Failed");
+                }
+
+                alert("User Added");
+                addUserModal.hide();
+                loadUsers();
+
+            } catch (err) {
+                console.error(err);
+                alert("Error adding user");
             }
-            throw new Error(data.message || "Failed");
-        }
-
-        alert("User Added");
-        closeAddUserModal();
-         loadUsers();
-
-    } catch (err) {
-        console.error(err);
-        alert("Error adding user");
-    }
+        });
 });
 </script>
+
+
 
 <!-- Update USERS -->
 <script>

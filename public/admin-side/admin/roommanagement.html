@@ -290,64 +290,68 @@
 
                 <div class="reservation-header d-flex justify-content-between align-items-center mb-4">
                     <h1 class="reservation-title">Room Management</h1>
-                    <button class="btn btn-primary new-reservation-btn" id="addRoomTypeBtn">
-                        <i class="fas fa-plus me-2"></i>Add Room Type
+                    <button class="btn btn-primary new-reservation-btn" id="addRoomBtn">
+                        <i class="fas fa-plus me-2"></i>Add Room
                     </button>
                 </div>
 
                 <!-- Summary Cards -->
-                <div class="row mb-4">
-                    <div class="col-xl-3 col-md-6 mb-3">
-                        <div class="kpi-card">
-                            <div class="kpi-icon light-blue">
-                                <i class="fas fa-bed"></i>
-                            </div>
-                            <div class="kpi-content">
-                                <h3 class="kpi-number">3</h3>
-                                <p class="kpi-label">Total Rooms</p>
-                            </div>
+             <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-3">
+                    <div class="kpi-card">
+                        <div class="kpi-icon light-blue">
+                            <i class="fas fa-bed"></i>
                         </div>
-                    </div>
-                    
-                    <div class="col-xl-3 col-md-6 mb-3">
-                        <div class="kpi-card">
-                            <div class="kpi-icon green">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <div class="kpi-content">
-                                <h3 class="kpi-number">1</h3>
-                                <p class="kpi-label">Available</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-xl-3 col-md-6 mb-3">
-                        <div class="kpi-card">
-                            <div class="kpi-icon orange">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="kpi-content">
-                                <h3 class="kpi-number">2</h3>
-                                <p class="kpi-label">Occupied</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-xl-3 col-md-6 mb-3">
-                        <div class="kpi-card">
-                            <div class="kpi-icon purple">
-                                <i class="fas fa-tools"></i>
-                            </div>
-                            <div class="kpi-content">
-                                <h3 class="kpi-number">0</h3>
-                                <p class="kpi-label">Maintenance</p>
-                            </div>
+                        <div class="kpi-content">
+                            <h3 class="kpi-number" id="kpiTotalRooms">0</h3>
+                            <p class="kpi-label">Total Rooms</p>
                         </div>
                     </div>
                 </div>
 
-                  <div class="table-responsive">
-                        <table class="table table-hover align-middle">
+                <div class="col-xl-3 col-md-6 mb-3">
+                    <div class="kpi-card">
+                        <div class="kpi-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3 class="kpi-number" id="kpiAvailable">0</h3>
+                            <p class="kpi-label">Available</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-3">
+                    <div class="kpi-card">
+                        <div class="kpi-icon purple">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3 class="kpi-number" id="kpiMaintenance">0</h3>
+                            <p class="kpi-label">Maintenance</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                    <div class="d-flex gap-2 mb-3">
+                        <select class="form-select w-auto" id="filterStatus">
+                            <option value="">All Status</option>
+                            <option value="available">Available</option>
+                            <option value="maintenance">Maintenance</option>
+                        </select>
+
+                        <select class="form-select w-auto" id="filterType">
+                            <option value="">All Types</option>
+                            <option value="Basic Studio Room">Basic Studio Room</option>
+                            <option value="Standard Room">Standard Room</option>
+                            <option value="Family Room">Family Room</option>
+                            <option value="Premium Room">Premium Room</option>
+                        </select>
+                    </div>
+
+                  <div class="table-responsive table-scroll">
+                       <table class="table table-hover reservations-table">
                             <thead class="table-light">
                                 <tr>
                                     <th>#</th>
@@ -360,9 +364,7 @@
                                     <th class="text-end">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="roomsTableBody">
-                                <!-- dynamic rows -->
-                            </tbody>
+                            <tbody id="roomsTableBody"></tbody>
                         </table>
                     </div>
 
@@ -375,121 +377,108 @@
     <script src="../js/script.js"></script>
     <script src="../js/auth.js"></script>
 
+ <!-- Load ROMMS -->
       <script>
-async function loadRooms() {
-    const res = await fetch('http://localhost:8000/api/rooms', {
-        credentials: 'include',
-        headers: { 'Accept': 'application/json' }
+        async function loadRooms() {
+                    const res = await fetch('http://localhost:8000/api/rooms', {
+                        credentials: 'include',
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    const rooms = await res.json();
+                    const tbody = document.getElementById('roomsTableBody');
+                    tbody.innerHTML = '';
+
+                    let available = 0, occupied = 0, maintenance = 0;
+
+                    rooms.forEach((room, index) => {
+                        if (room.status === 'Available') available++;
+                        if (room.status === 'Maintenance') maintenance++;
+
+                        tbody.innerHTML += renderRoomRow(room, index + 1);
+                    });
+
+                       updateRoomKPIs(rooms);
+                }
+      </script>
+
+<!-- FILTER ROWS -->
+                <script>
+                    function applyFilters() {
+                        const status = document.getElementById('filterStatus').value;
+                        const type = document.getElementById('filterType').value;
+
+                        document.querySelectorAll('#roomsTableBody tr').forEach(row => {
+                            const matchStatus = !status || row.dataset.status === status;
+                            const matchType = !type || row.dataset.type === type;
+
+                            row.style.display = (matchStatus && matchType) ? '' : 'none';
+                        });
+                    }
+
+                    document.getElementById('filterStatus').addEventListener('change', applyFilters);
+                    document.getElementById('filterType').addEventListener('change', applyFilters);
+                </script>
+
+ <!-- TABLE ROMMS -->
+      <script>
+       function renderRoomRow(room, index) {
+                const badgeClass =
+                    room.status === 'available' ? 'bg-success' :
+                    room.status === 'maintenance' ? 'bg-danger' :
+                    'bg-warning text-dark';
+
+                return `
+                    <tr data-status="${room.status}" data-type="${room.type}">
+                        <td>${index}</td>
+                        <td>${room.room_number}</td>
+                        <td>${room.type}</td>
+                        <td>₱${Number(room.price).toLocaleString()}</td>
+                        <td>${room.capacity}</td>
+                        <td>
+                            <span class="badge ${badgeClass}">
+                                ${room.status}
+                            </span>
+                        </td>
+                        <td class="text-muted small">
+                            ${room.amenities}
+                        </td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary"
+                                    onclick="editRoom(${room.id})">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }
+
+      </script>
+
+<!-- KPI ROOOMMMS -->
+<script> 
+function updateRoomKPIs(rooms) {
+    let available = 0;
+    let occupied = 0;
+    let maintenance = 0;
+
+    rooms.forEach(room => {
+        if (room.status === 'available') available++;
+        else if (room.status === 'maintenance') maintenance++;
     });
 
-    const rooms = await res.json();
-    const tbody = document.getElementById('roomsTableBody');
-    tbody.innerHTML = '';
-
-    let available = 0, occupied = 0, maintenance = 0;
-
-    rooms.forEach((room, index) => {
-        if (room.status === 'Available') available++;
-        if (room.status === 'Occupied') occupied++;
-        if (room.status === 'Maintenance') maintenance++;
-
-        tbody.innerHTML += renderRoomRow(room, index + 1);
-    });
-
-    updateKPIs(rooms.length, available, occupied, maintenance);
+    document.getElementById('kpiTotalRooms').textContent = rooms.length;
+    document.getElementById('kpiAvailable').textContent = available;
+    document.getElementById('kpiMaintenance').textContent = maintenance;
 }
+
 </script>
-
-      <script>
-        function renderRoomRow(room, index) {
-            const badgeClass =
-                room.status === 'Available' ? 'bg-success' :
-                room.status === 'Occupied' ? 'bg-danger' :
-                'bg-warning text-dark';
-
-            return `
-                <tr>
-                    <td>${index}</td>
-                    <td>${room.room_number}</td>
-                    <td>${room.type}</td>
-                    <td>₱${Number(room.price).toLocaleString()}</td>
-                    <td>${room.capacity}</td>
-                    <td>
-                        <span class="badge ${badgeClass}">
-                            ${room.status}
-                        </span>
-                    </td>
-                    <td class="text-muted small">
-                        ${room.amenities}
-                    </td>
-                    <td class="text-end">
-                        <button class="btn btn-sm btn-outline-primary"
-                                onclick="editRoom(${room.id})">
-                            Edit
-                        </button>
-                    </td>
-                </tr>
-            `;
-        }
-        </script>
 
 
 <script>
 document.addEventListener('DOMContentLoaded', loadRooms);
 </script>
 
-
-    <script>
-        // Neutralize any entrance animations applied by global scripts to avoid jumps
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.kpi-card, .info-card').forEach(function(card){
-                card.style.transition = 'none';
-                card.style.transform = 'none';
-                card.style.opacity = '1';
-            });
-            // Wire Add Room Type button
-            const addBtn = document.getElementById('addRoomTypeBtn');
-            if (addBtn) {
-                addBtn.addEventListener('click', function(){
-                    // Prefill defaults and tick amenities
-                    const typeName = document.getElementById('addTypeName');
-                    const typeRate = document.getElementById('addTypeRate');
-                    const typeCap = document.getElementById('addTypeCapacity');
-                    const amenWifi = document.getElementById('addAmenWifi');
-                    const amenTv = document.getElementById('addAmenTv');
-                    const amenAc = document.getElementById('addAmenAc');
-                    const typeDesc = document.getElementById('addTypeDesc');
-                    if (typeName) typeName.value = '';
-                    if (typeRate) typeRate.value = '';
-                    if (typeCap) typeCap.value = typeCap.value || '2';
-                    if (amenWifi) amenWifi.checked = true;
-                    if (amenTv) amenTv.checked = true;
-                    if (amenAc) amenAc.checked = true;
-                    if (typeDesc) typeDesc.value = typeDesc.value || '';
-                    const modal = new bootstrap.Modal(document.getElementById('addRoomTypeModal'));
-                    modal.show();
-                });
-            }
-            // Auto price by room type selection
-            (function(){
-                const rateByType = {
-                    'Basic Studio Room': 922,
-                    'Standard Room': 2599,
-                    'Family Room': 3599,
-                    'Premium Room': 3599
-                };
-                const typeSel = document.getElementById('addTypeName');
-                const rateInput = document.getElementById('addTypeRate');
-                if (typeSel && rateInput) {
-                    typeSel.addEventListener('change', function(){
-                        const val = this.value;
-                        const rate = rateByType[val];
-                        rateInput.value = rate != null ? String(rate) : '';
-                    });
-                }
-            })();
-        });
-    </script>
     
     <!-- Add Room Type Modal -->
     <div class="modal fade" id="addRoomTypeModal" tabindex="-1" aria-labelledby="addRoomTypeLabel" aria-hidden="true">
@@ -502,9 +491,15 @@ document.addEventListener('DOMContentLoaded', loadRooms);
                 <div class="modal-body">
                     <form id="addRoomTypeForm">
                         <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label class="form-label">Room number</label>
+                                <input type="text" class="form-control" name="room_number">
+                            </div>
+
                             <div class="col-md-6">
                                 <label class="form-label">Room Type</label>
-                                <select class="form-select" id="addTypeName">
+                                <select class="form-select" name="type" id="type">
                                     <option value="" selected disabled>Select room type</option>
                                     <option value="Basic Studio Room">Basic Studio Room</option>
                                     <option value="Standard Room">Standard Room</option>
@@ -512,41 +507,38 @@ document.addEventListener('DOMContentLoaded', loadRooms);
                                     <option value="Premium Room">Premium Room</option>
                                 </select>
                             </div>
+
                             <div class="col-md-6">
                                 <label class="form-label">Base Rate per night (₱)</label>
-                                <input type="number" class="form-control" id="addTypeRate" min="0" step="1" placeholder="3500">
+                                <input type="number" class="form-control" name="price" id="price" min="0" step="1" placeholder="3500">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Default Capacity</label>
-                                <input type="number" class="form-control" id="addTypeCapacity" min="1" step="1" placeholder="2">
+                                <input type="number" class="form-control" name="capacity" id="capacity" min="1" step="1" placeholder="2">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Status</label>
-                                <select class="form-select" id="addTypeStatus">
-                                    <option value="Available" selected>Available</option>
-                                    <option value="Occupied">Occupied</option>
-                                    <option value="Maintenance">Maintenance</option>
+                                <select class="form-select" name="status">
+                                    <option value="available" selected>Available</option>
+                                    <option value="maintenance ">Maintenance</option>
                                 </select>
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Amenities</label>
                                 <div class="d-flex flex-wrap gap-3">
-                                    <div class="form-check"><input class="form-check-input" type="checkbox" id="addAmenWifi"><label class="form-check-label" for="addAmenWifi">Wifi</label></div>
-                                    <div class="form-check"><input class="form-check-input" type="checkbox" id="addAmenTv"><label class="form-check-label" for="addAmenTv">Tv</label></div>
-                                    <div class="form-check"><input class="form-check-input" type="checkbox" id="addAmenAc"><label class="form-check-label" for="addAmenAc">Ac</label></div>
+                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="amenities[]" value="wifi"><label class="form-check-label" for="addAmenWifi">Wifi</label></div>
+                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="amenities[]" value="tv"><label class="form-check-label" for="addAmenTv">Tv</label></div>
+                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="amenities[]" value="ac"><label class="form-check-label" for="addAmenAc">Ac</label></div>
                                 </div>
                             </div>
-                            <div class="col-12">
-                                <label class="form-label">Description</label>
-                                <textarea class="form-control" id="addTypeDesc" rows="3" placeholder="Describe this room type"></textarea>
-                            </div>
                         </div>
-                    </form>
+                 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="saveAddRoomType">Save</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
+            </form>
             </div>
         </div>
     </div>
@@ -563,8 +555,8 @@ document.addEventListener('DOMContentLoaded', loadRooms);
                     <form id="editRoomForm">
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label">Room</label>
-                                <input type="text" class="form-control" id="editRoomName">
+                                <label class="form-label">Room Number</label>
+                                <input type="text" class="form-control" id="editRoomNumber" disabled>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Type</label>
@@ -581,269 +573,200 @@ document.addEventListener('DOMContentLoaded', loadRooms);
                             <div class="col-md-6">
                                 <label class="form-label">Status</label>
                                 <select class="form-select" id="editRoomStatus">
-                                    <option value="Available">Available</option>
-                                    <option value="Occupied">Occupied</option>
-                                    <option value="Maintenance">Maintenance</option>
+                                    <option value="available">Available</option>
+                                    <option value="maintenance">Maintenance</option>
                                 </select>
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Amenities</label>
                                 <div class="d-flex flex-wrap gap-3">
-                                    <div class="form-check"><input class="form-check-input" type="checkbox" id="amenWifi"><label class="form-check-label" for="amenWifi">Wifi</label></div>
-                                    <div class="form-check"><input class="form-check-input" type="checkbox" id="amenTv"><label class="form-check-label" for="amenTv">Tv</label></div>
-                                    <div class="form-check"><input class="form-check-input" type="checkbox" id="amenAc"><label class="form-check-label" for="amenAc">Ac</label></div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="amenities[]" id="amenityWifi" value="wifi">
+                                        <label class="form-check-label" for="amenityWifi">Wifi</label>
+                                        </div>
+                                        <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="amenities[]" id="amenityTv" value="tv">
+                                        <label class="form-check-label" for="amenityTv">Tv</label>
+                                        </div>
+                                        <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="amenities[]" id="amenityAc" value="ac">
+                                        <label class="form-check-label" for="amenityAc">Ac</label>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-12">
-                                <label class="form-label">Description</label>
-                                <textarea class="form-control" id="editRoomDesc" rows="3"></textarea>
-                            </div>
                         </div>
-                    </form>
+                  
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="saveRoomChanges">Save Changes</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
+                  </form>
             </div>
         </div>
     </div>
-    
+
+
+    <!-- CREATE ROOMMMMMMMMMM -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.room-edit-large').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const room = this.getAttribute('data-room') || '';
-                    const rate = this.getAttribute('data-rate') || '';
-                    const cap = this.getAttribute('data-capacity') || '';
-                    const type = this.getAttribute('data-type') || '';
-                    const card = this.closest('.info-card');
-                    // Track which card is being edited
-                    window._editingRoomCard = card;
-                    // Prefill fields
-                    document.getElementById('editRoomName').value = room;
-                    document.getElementById('editRoomRate').value = rate.replace(/[^\d]/g,'');
-                    document.getElementById('editRoomCapacity').value = cap;
-                    document.getElementById('editRoomType').value = type;
-                    
-                    // Get current status from the status badge
-                    const statusBadge = card.querySelector('.status-badge');
-                    const currentStatus = statusBadge ? statusBadge.textContent.trim() : 'Available';
-                    document.getElementById('editRoomStatus').value = currentStatus;
-                    // Prefill description from card if available
-                    const descText = card?.querySelector('.room-description p')?.textContent || 'Comfortable room with modern amenities';
-                    document.getElementById('editRoomDesc').value = descText;
-                    // Ensure amenities are checked by default
-                    const amenWifi = document.getElementById('amenWifi'); if (amenWifi) amenWifi.checked = true;
-                    const amenTv = document.getElementById('amenTv'); if (amenTv) amenTv.checked = true;
-                    const amenAc = document.getElementById('amenAc'); if (amenAc) amenAc.checked = true;
-                    const modal = new bootstrap.Modal(document.getElementById('editRoomModal'));
-                    modal.show();
+    document.addEventListener("DOMContentLoaded", () => {
+    const addRoomButton = document.getElementById("addRoomBtn");
+    const addRoomTypeModalEl = document.getElementById("addRoomTypeModal");
+
+    const addRoomTypeModal = new bootstrap.Modal(addRoomTypeModalEl);
+
+    addRoomButton.addEventListener("click", () => {
+        addRoomTypeModal.show();
+    });
+
+    document.getElementById("addRoomTypeForm")
+        .addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            try {
+                const res = await fetch("http://localhost:8000/api/rooms", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "Accept": "application/json" },
+                    body: formData
                 });
-            });
-            const saveBtn = document.getElementById('saveRoomChanges');
-            if (saveBtn) {
-                saveBtn.addEventListener('click', function () {
-                    const modalEl = document.getElementById('editRoomModal');
-                    const modal = bootstrap.Modal.getInstance(modalEl);
-                    // Apply updates to the card being edited
-                    const card = window._editingRoomCard;
-                    if (card) {
-                        const roomName = (document.getElementById('editRoomName')?.value || '').trim();
-                        const roomType = (document.getElementById('editRoomType')?.value || '').trim();
-                        const rateNum = Number((document.getElementById('editRoomRate')?.value || '0').replace(/[^\d]/g,'')) || 0;
-                        const capVal = (document.getElementById('editRoomCapacity')?.value || '').trim();
-                        const descVal = (document.getElementById('editRoomDesc')?.value || '').trim();
-                        const statusVal = (document.getElementById('editRoomStatus')?.value || 'Available').trim();
-                        const formatCurrency = (n) => `₱${Number(n).toLocaleString('en-PH')}`;
-                        // Header: Update room type and keep room number
-                        const headerDiv = card.querySelector('.card-header div');
-                        if (headerDiv) {
-                            const h5 = headerDiv.querySelector('h5');
-                            const roomNumber = headerDiv.querySelector('small');
-                            if (h5) h5.textContent = roomType;
-                            // Keep existing room number
-                        }
-                        // Rate per night
-                        const rateSpan = card.querySelector('.detail-row .detail-value');
-                        if (rateSpan) rateSpan.textContent = formatCurrency(rateNum);
-                        // Capacity
-                        const capSpan = card.querySelector('.detail-row.mb-3 .detail-value');
-                        if (capSpan) capSpan.innerHTML = `<i class="fas fa-users me-2"></i>${capVal || '1'} guests`;
-                        // Description
-                        const descP = card.querySelector('.room-description p');
-                        if (descP) descP.textContent = descVal || 'Comfortable room with modern amenities';
-                        
-                        // Update status badge
-                        const statusBadge = card.querySelector('.status-badge');
-                        if (statusBadge) {
-                            statusBadge.textContent = statusVal;
-                            // Update status badge classes based on status
-                            statusBadge.className = 'status-badge';
-                            if (statusVal === 'Available') {
-                                statusBadge.classList.add('status-checkedin');
-                            } else if (statusVal === 'Occupied') {
-                                statusBadge.classList.add('status-checkedout');
-                            } else if (statusVal === 'Maintenance') {
-                                statusBadge.classList.add('status-cancelled');
-                            }
-                        }
-                        // Sync Edit button data attributes for next edit
-                        const editBtn = card.querySelector('.room-edit-large');
-                        if (editBtn) {
-                            editBtn.setAttribute('data-room', roomName);
-                            editBtn.setAttribute('data-rate', formatCurrency(rateNum));
-                            editBtn.setAttribute('data-capacity', capVal || '1');
-                            editBtn.setAttribute('data-type', roomType);
-                        }
-                        // Clear editing ref
-                        window._editingRoomCard = null;
-                        
-                        // Update KPI counters after status change
-                        updateKPICounters();
-                    }
-                    modal?.hide();
-                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.message || "Failed");
+                }
+
+                alert("Rooms Added");
+                addRoomTypeModal.hide();
+                loadRooms();
+
+            } catch (err) {
+                console.error(err);
+                alert("Error adding user");
             }
-            const saveAddBtn = document.getElementById('saveAddRoomType');
-            if (saveAddBtn) {
-                saveAddBtn.addEventListener('click', function(){
-                    const modalEl = document.getElementById('addRoomTypeModal');
-                    const modal = bootstrap.Modal.getInstance(modalEl);
-                    // Read form values
-                    const typeName = (document.getElementById('addTypeName')?.value || '').trim();
-                    const typeRate = (document.getElementById('addTypeRate')?.value || '').trim();
-                    const typeCap = (document.getElementById('addTypeCapacity')?.value || '').trim();
-                    const typeStatus = (document.getElementById('addTypeStatus')?.value || 'Available').trim();
-                    const amenWifi = !!document.getElementById('addAmenWifi')?.checked;
-                    const amenTv = !!document.getElementById('addAmenTv')?.checked;
-                    const amenAc = !!document.getElementById('addAmenAc')?.checked;
-                    const typeDesc = (document.getElementById('addTypeDesc')?.value || '').trim();
-                    if (!typeName) { modal?.hide(); return; }
-                    // Determine next room number by counting existing cards
-                    // Find the room cards row by locating any existing info-card and climbing to its row
-                    const anyCard = document.querySelector('.info-card');
-                    const cardsSection = anyCard ? anyCard.closest('.row') : document.querySelector('.row');
-                    const existingCards = Array.from(cardsSection?.querySelectorAll('.info-card') || []);
-                    const nextNum = 100 + existingCards.length + 1;
-                    const roomLabel = `Room ${nextNum}`; // auto-generated
-                    const rateDisplay = typeRate ? `₱${Number(typeRate).toLocaleString('en-PH')}` : '₱0';
-                    
-                    // Determine status badge class based on selected status
-                    let statusClass = 'status-checkedin'; // Default to Available
-                    if (typeStatus === 'Occupied') {
-                        statusClass = 'status-checkedout';
-                    } else if (typeStatus === 'Maintenance') {
-                        statusClass = 'status-cancelled';
-                    }
-                    // Build amenities HTML
-                    const amenItems = [];
-                    if (amenWifi) amenItems.push('<div class="amenity-item"><i class="fas fa-wifi me-2"></i><span>Wifi</span></div>');
-                    if (amenTv) amenItems.push('<div class="amenity-item"><i class="fas fa-tv me-2"></i><span>Tv</span></div>');
-                    if (amenAc) amenItems.push('<div class="amenity-item"><i class="fas fa-snowflake me-2"></i><span>Ac</span></div>');
-                    const amenHtml = amenItems.join('\n                                        ');
-                    // Create column and card
-                    const col = document.createElement('div');
-                    col.className = 'col-xl-4 col-md-6 mb-4';
-                    col.innerHTML = `
-                        <div class="info-card">
-                            <div class="card-header d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h5>${typeName}</h5>
-                                    <small class="text-muted">${roomLabel}</small>
-                                </div>
-                                <span class="status-badge ${statusClass}">${typeStatus}</span>
-                            </div>
-                            <div class="card-body">
-                                <div class="room-details">
-                                    <div class="detail-row mb-2">
-                                        <span class="field-label">Rate per night</span>
-                                        <span class="detail-value">${rateDisplay}</span>
-                                    </div>
-                                    <div class="detail-row mb-3">
-                                        <span class="field-label">Capacity</span>
-                                        <span class="detail-value"><i class="fas fa-users me-2"></i>${typeCap || '1'} guests</span>
-                                    </div>
-                                    <div class="field-label mb-1">Amenities</div>
-                                    <div class="room-amenities mb-3">
-                                        ${amenHtml}
-                                    </div>
-                                    <div class="room-description mb-3">
-                                        <p class="text-muted">${typeDesc || 'Comfortable room with modern amenities'}</p>
-                                    </div>
-                                    <div class="room-actions">
-                                        <button class="room-edit-large" data-room="${typeName}" data-rate="${rateDisplay}" data-capacity="${typeCap || '1'}" data-type="${typeName}"><i class="fas fa-pen"></i> Edit</button>
-                                        <button class="btn btn-link room-delete" title="Delete"><i class="fas fa-trash"></i></button>
-                
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`;
-                    // Insert at the end (beside the last room)
-                    const cols = Array.from(cardsSection.querySelectorAll(':scope > .col-xl-4.col-md-6.mb-4'));
-                    cardsSection.appendChild(col);
-                    
-                    // Update KPI counters after adding new room
-                    updateKPICounters();
-                    // Re-bind edit button for the newly added card
-                    const newEditBtn = col.querySelector('.room-edit-large');
-                    if (newEditBtn) {
-                        newEditBtn.addEventListener('click', function () {
-                            const room = this.getAttribute('data-room') || '';
-                            const rate = this.getAttribute('data-rate') || '';
-                            const cap = this.getAttribute('data-capacity') || '';
-                            const type = this.getAttribute('data-type') || '';
-                            document.getElementById('editRoomName').value = room;
-                            document.getElementById('editRoomRate').value = rate.replace(/[^\d]/g,'');
-                            document.getElementById('editRoomCapacity').value = cap;
-                            document.getElementById('editRoomType').value = type;
-                            document.getElementById('editRoomDesc').value = '';
-                            document.getElementById('editRoomStatus').value = 'Available';
-                            const editModal = new bootstrap.Modal(document.getElementById('editRoomModal'));
-                            editModal.show();
-                        });
-                    }
-                    modal?.hide();
-                });
-            }
-            
-            // Function to update KPI counters based on current room statuses
-            function updateKPICounters() {
-                const allRooms = document.querySelectorAll('.info-card');
-                let totalRooms = allRooms.length;
-                let availableCount = 0;
-                let occupiedCount = 0;
-                let maintenanceCount = 0;
-                
-                allRooms.forEach(room => {
-                    const statusBadge = room.querySelector('.status-badge');
-                    if (statusBadge) {
-                        const status = statusBadge.textContent.trim();
-                        if (status === 'Available') {
-                            availableCount++;
-                        } else if (status === 'Occupied') {
-                            occupiedCount++;
-                        } else if (status === 'Maintenance') {
-                            maintenanceCount++;
-                        }
-                    }
-                });
-                
-                // Update KPI numbers
-                const totalRoomsEl = document.querySelector('.kpi-card:nth-child(1) .kpi-number');
-                const availableEl = document.querySelector('.kpi-card:nth-child(2) .kpi-number');
-                const occupiedEl = document.querySelector('.kpi-card:nth-child(3) .kpi-number');
-                const maintenanceEl = document.querySelector('.kpi-card:nth-child(4) .kpi-number');
-                
-                if (totalRoomsEl) totalRoomsEl.textContent = totalRooms;
-                if (availableEl) availableEl.textContent = availableCount;
-                if (occupiedEl) occupiedEl.textContent = occupiedCount;
-                if (maintenanceEl) maintenanceEl.textContent = maintenanceCount;
-            }
-            
-            // Initialize KPI counters on page load
-            updateKPICounters();
+
         });
+        
+    });
     </script>
+
+    <!-- Update ROOOOOOOOOOOOM -->
+     <script>
+        let editingRoomId = null;
+        function editRoom(id) {
+            editingRoomId = id;
+
+            fetch(`http://localhost:8000/api/rooms/${id}`, {
+                credentials: "include",
+                headers: { "Accept": "application/json" }
+            })
+            .then(res => res.json())
+            .then(rooms => {
+                document.getElementById("editRoomNumber").value = rooms.room_number;
+                document.getElementById("editRoomType").value = rooms.type;
+                document.getElementById("editRoomRate").value = rooms.price;
+                document.getElementById("editRoomCapacity").value = rooms.capacity;
+                document.getElementById("editRoomStatus").value = rooms.status;
+          
+                  const amenities = rooms.amenities;
+                    ['wifi', 'tv', 'ac'].forEach(a => {
+                        const checkbox = document.getElementById('amenity' + a.charAt(0).toUpperCase() + a.slice(1));
+                        if (checkbox) checkbox.checked = amenities.includes(a);
+                    });
+                     });
+
+            new bootstrap.Modal(document.getElementById("editRoomModal")).show();
+        }
+    </script>
+
+    <!-- SAVE UPDATE CHANGE -->
+    <script>
+        document.getElementById("editRoomForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            if (!editingRoomId) return alert("No room selected");
+
+            const amenities = Array.from(
+                document.querySelectorAll('input[name="amenities[]"]:checked')
+            ).map(cb => cb.value);
+
+            const payload = {
+                type: document.getElementById("editRoomType").value,
+                price: document.getElementById("editRoomRate").value,
+                capacity: document.getElementById("editRoomCapacity").value,
+                status: document.getElementById("editRoomStatus").value,
+                amenities: amenities,
+            };
+
+            try {
+                const res = await fetch(`http://localhost:8000/api/rooms/${editingRoomId}`, {
+                    method: "PUT",
+                    credentials: "include",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message);
+
+                alert("Room updated successfully");
+                bootstrap.Modal.getInstance(
+                    document.getElementById("editRoomModal")
+                ).hide();
+
+                loadRooms();
+            } catch (err) {
+                console.error(err);
+                alert("Error editing room");
+            }
+        });
+        </script>
+
+
+    <!-- RATE PRICEE edit only if rate is changed or capacity by TYPE-->
+        <script>
+        (function () {
+            const rateByType = {
+                'Basic Studio Room': 1500,
+                'Standard Room': 2500,
+                'Family Room': 3500,
+                'Premium Room': 5000
+            };
+
+            const capacityByType = {
+                'Basic Studio Room': 2,
+                'Standard Room': 4,
+                'Family Room': 5,
+                'Premium Room': 6
+            };
+
+            const typeSel = document.getElementById('type');
+            const rateInput = document.getElementById('price');
+            const capacityInput = document.getElementById('capacity');
+
+            if (typeSel) {
+                typeSel.addEventListener('change', function () {
+                    const val = this.value;
+
+                    if (rateInput) {
+                        rateInput.value = rateByType[val] ?? '';
+                    }
+
+                    if (capacityInput) {
+                        capacityInput.value = capacityByType[val] ?? '';
+                    }
+                });
+            }
+        })();
+        </script>
+
+
+    
 </body>
 </html>

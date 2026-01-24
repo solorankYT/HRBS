@@ -12,9 +12,6 @@ Route::middleware('web')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     })->middleware('auth:sanctum');
-
-
-
 });
 
 //USER MANAGEMENTT
@@ -27,4 +24,6 @@ Route::delete('/users/{id}', [UserManagementController::class, 'delete']);
 
 //ROOMMM MANAMANGEMETTs
 Route::get('/rooms', [RoomManagementController::class, 'index']);
-
+Route::post('/rooms', [RoomManagementController::class, 'create']);
+Route::put('/rooms/{id}', [RoomManagementController::class, 'update']);
+Route::get('/rooms/{id}', [RoomManagementController::class, 'show']);

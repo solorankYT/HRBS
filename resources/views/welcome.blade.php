@@ -7,6 +7,6 @@
         @endif
     </body>
     <script>
-        window.location.href = "/login.html";
+        window.location.href = "/client/index.html";
     </script>
 </html>

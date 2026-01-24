@@ -14,23 +14,30 @@ class RoomManagementController extends Controller
     return response()->json($rooms);
     }
 
+    public function show(string $id): JsonResponse
+    {
+        $rooms = Room::findOrFail($id);
 
-    public function create(Request $request)
+        return response()->json($rooms);
+    }
+
+    public function create(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'room_number' => 'required|string|max:50|unique:rooms,room_number',
             'type'        => 'required|string|max:255',
             'capacity'    => 'required|integer|min:1',
             'price'       => 'required|numeric|min:0',
-            'amenities'   => 'required|array',
+            'amenities'   => 'array',
             'amenities.*' => 'string',
             'status'      => 'required|in:available,maintenance',
         ]);
 
-        Room::create($validated);
+        $room = Room::create($validated);
 
         return response()->json([
-            'message' => 'Room created successfully'
+            'message' => 'Room created successfully',
+            'data'    => $room
         ], 201);
     }
 

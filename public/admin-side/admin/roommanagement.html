@@ -382,7 +382,7 @@
         async function loadRooms() {
                     const res = await fetch('http://localhost:8000/api/rooms', {
                         credentials: 'include',
-                        headers: { 'Accept': 'application/json' }
+                        headers: { 'Accept': 'application/json', "Content-Type": "application/json" }
                     });
 
                     const rooms = await res.json();

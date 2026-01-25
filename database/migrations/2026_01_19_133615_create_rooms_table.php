@@ -15,6 +15,7 @@ return new class extends Migration
         $table->id();
         $table->string('room_number')->unique();
         $table->string('type');
+        $table->string('description');
         $table->unsignedTinyInteger('capacity');
         $table->json('amenities');
         $table->decimal('price', 10, 2);

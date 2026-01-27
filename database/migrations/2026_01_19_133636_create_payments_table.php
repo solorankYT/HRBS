@@ -11,19 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-     Schema::create('payments', function (Blueprint $table) {
-    $table->id();
+        Schema::create('payments', function (Blueprint $table) {
+            $table->id();
 
-    $table->foreignId('booking_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('booking_id')->constrained()->cascadeOnDelete();
 
-    $table->decimal('amount', 10, 2);
-    $table->string('reference')->nullable();
-    $table->enum('method', ['cash', 'card', 'gcash', 'bank']);
-    $table->enum('status', ['pending', 'paid', 'failed'])->default('pending');
+            $table->decimal('amount', 10, 2);
+            $table->string('reference')->nullable();
+            $table->enum('method', ['cash', 'card', 'gcash', 'bank']);
+            $table->enum('status', ['pending', 'paid', 'failed'])->default('pending');
 
-    $table->timestamps();
-});
+            // New field
+            $table->timestamp('paid_at')->nullable();
 
+            $table->timestamps();
+        });
     }
 
     /**

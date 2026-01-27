@@ -155,11 +155,15 @@ function updateDateDisplay() {
 
     if (selectedCheckIn) {
         checkInDisplay.textContent = selectedCheckIn.toLocaleDateString('en-US', options);
+        checkInDisplay.dataset.value = selectedCheckIn.toISOString().split('T')[0];
     }
+
     if (selectedCheckOut) {
         checkOutDisplay.textContent = selectedCheckOut.toLocaleDateString('en-US', options);
+        checkOutDisplay.dataset.value = selectedCheckOut.toISOString().split('T')[0];
     } else {
         checkOutDisplay.textContent = 'Select date';
+        delete checkOutDisplay.dataset.value;
     }
 }
 
@@ -210,18 +214,27 @@ function nextMonth(type) {
 }
 
 function proceedToRoomSelection() {
-  if (selectedCheckIn && selectedCheckOut) {
-    const bookingData = {
-      checkIn: selectedCheckIn,
-      checkOut: selectedCheckOut,
-      guests: parseInt(document.getElementById('guestCount').value, 10),
-      children: parseInt(document.getElementById('childCount').value, 10), // ✅ ADD THIS
-    };
+  const checkIn = document.getElementById('checkInDate').dataset.value;
+  const checkOut = document.getElementById('checkOutDate').dataset.value;
+  const adults = document.getElementById('guestCount').value;
+  const children = document.getElementById('childCount').value;
 
-    localStorage.setItem('bookingData', JSON.stringify(bookingData));
-    window.location.href = 'select-room.html';
+  if (!checkIn || !checkOut) {
+    alert('Please select dates');
+    return;
   }
+
+  const totalGuests = parseInt(adults) + parseInt(children);
+
+  const params = new URLSearchParams({
+    check_in: checkIn,
+    check_out: checkOut,
+    number_of_guests: totalGuests
+  });
+
+  window.location.href = `select-room.html?${params.toString()}`;
 }
+
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {

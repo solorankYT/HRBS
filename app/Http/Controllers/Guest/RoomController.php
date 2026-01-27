@@ -23,23 +23,44 @@ public function index()
         return response()->json($rooms);
     }
 
-    public function availability(Request $request)
+ public function availability(Request $request)
 {
     $request->validate([
         'check_in' => 'required|date',
         'check_out' => 'required|date|after:check_in',
+        'number_of_guests' => 'required|integer|min:1',
     ]);
 
-    $rooms = Room::where('status', 'available')
+    $availableRooms = Room::query()
+        ->where('status', 'available')
+        ->where('capacity', '>=', $request->number_of_guests)
         ->whereDoesntHave('bookings', function ($query) use ($request) {
-            $query->whereIn('booking_status', ['confirmed', 'checked_in'])
-                  ->where('check_in', '<', $request->check_out)
-                  ->where('check_out', '>', $request->check_in);
+            $query->whereIn('booking_status', [
+                    'confirmed',
+                    'checked_in',
+                    'pending_payment'
+                ])
+                ->where('check_in', '<', $request->check_out)
+                ->where('check_out', '>', $request->check_in);
         })
         ->get();
 
+    $rooms = $availableRooms
+        ->groupBy('type')
+        ->map(function ($group) {
+            return [
+                'type' => $group->first()->type,
+                'capacity' => $group->first()->capacity,
+                'price' => $group->first()->price,
+                'available_count' => $group->count(),
+            ];
+        })
+        ->values();
+
     return response()->json($rooms);
 }
+
+
 
 
     

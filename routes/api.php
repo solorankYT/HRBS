@@ -38,8 +38,8 @@ Route::prefix('guest')->middleware('web')->group(function () {
 
     // Rooms
     Route::get('/rooms', [GuestRoomController::class, 'index']);
-    Route::get('/rooms/{room}', [GuestRoomController::class, 'show']);
     Route::get('/rooms/availability', [GuestRoomController::class, 'availability']);
+    Route::get('/rooms/{room}', [GuestRoomController::class, 'show']);
 
     // // Bookings
     // Route::post('/bookings', [GuestBookingController::class, 'store']);

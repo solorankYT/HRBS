@@ -1,3 +1,98 @@
+
+#roomsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.room-card {
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.room-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+.room-image img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.room-info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.room-header h3 {
+  font-size: 1.25rem;
+  color: #333;
+  margin: 0;
+}
+
+.room-price {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #2e8b57;
+}
+
+.room-details p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.select-room-btn {
+  margin-top: 15px;
+  padding: 12px 18px;
+  border: none;
+  background-color: #2e8b57;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.select-room-btn:hover {
+  background-color: #276749;
+  transform: scale(1.05);
+}
+
+.no-rooms {
+  font-size: 1.1rem;
+  color: #888;
+  text-align: center;
+  margin-top: 50px;
+}
+
+
+
+
+
+
+
+
+
 /* =============================
    Select Room Layout with Sidebar
 ============================= */

@@ -11,34 +11,37 @@ return new class extends Migration
      */
     public function up(): void
     {
-      Schema::create('bookings', function (Blueprint $table) {
-    $table->id();
+        Schema::create('bookings', function (Blueprint $table) {
+            $table->id();
 
-    $table->foreignId('room_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('room_id')->constrained()->cascadeOnDelete();
 
-    // Guest info
-    $table->string('guest_name');
-    $table->string('guest_email')->nullable();
-    $table->string('guest_phone')->nullable();
+            // Guest info
+            $table->string('guest_name');
+            $table->string('guest_email')->nullable();
+            $table->string('guest_phone')->nullable();
 
-    $table->date('check_in');
-    $table->date('check_out');
+            $table->date('check_in');
+            $table->date('check_out');
 
-    $table->enum('booking_status', [
-        'pending',
-        'confirmed',
-        'checked_in',
-        'checked_out',
-        'cancelled'
-    ])->default('pending');
-    $table->decimal('total_amount', 10, 2)->default(0);
+            $table->unsignedTinyInteger('number_of_guests')->default(1);
+            $table->text('special_requests')->nullable();
 
-    $table->timestamps();
+            $table->enum('booking_status', [
+                'pending',
+                'confirmed',
+                'checked_in',
+                'checked_out',
+                'cancelled'
+            ])->default('pending');
 
-    $table->index(['room_id', 'check_in', 'check_out']);
+            $table->decimal('total_amount', 10, 2)->default(0);
 
-});
+            $table->timestamps();
 
+            // Index for faster lookups
+            $table->index(['room_id', 'check_in', 'check_out']);
+        });
     }
 
     /**

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Room;
 use Illuminate\Database\Seeder;
+use App\Models\Room;
 
 class RoomSeeder extends Seeder
 {
@@ -12,43 +12,45 @@ class RoomSeeder extends Seeder
         $rooms = [
             [
                 'room_number' => '101',
-                'type' => 'Standard',
-                'capacity' => 2,
-                'amenities' => json_encode(['Wifi', 'Tv', 'Ac']),
-                'price' => 1500,
+                'type' => 'Single',
+                'description' => 'Cozy single room with queen bed.',
+                'capacity' => 1,
+                'amenities' => ['wifi', 'ac', 'tv'],
+                'price' => 50.00,
                 'status' => 'available',
+                'floor_number' => 1,
+                'image_urls' => [
+                    'https://example.com/images/room101-1.jpg',
+                    'https://example.com/images/room101-2.jpg'
+                ],
             ],
             [
                 'room_number' => '102',
-                'type' => 'Standard',
+                'type' => 'Double',
+                'description' => 'Spacious double room for two guests.',
                 'capacity' => 2,
-                'amenities' => json_encode(['Wifi', 'Tv', 'Ac']),
-                'price' => 1500,
+                'amenities' => ['wifi', 'ac', 'tv', 'mini-fridge'],
+                'price' => 80.00,
                 'status' => 'available',
+                'floor_number' => 1,
+                'image_urls' => [
+                    'https://example.com/images/room102-1.jpg',
+                    'https://example.com/images/room102-2.jpg'
+                ],
             ],
             [
                 'room_number' => '201',
-                'type' => 'Deluxe',
-                'capacity' => 4,
-                'amenities' => json_encode(['Wifi', 'Tv', 'Ac', 'Mini Bar']),
-                'price' => 2500,
-                'status' => 'available',
-            ],
-            [
-                'room_number' => '202',
-                'type' => 'Deluxe',
-                'capacity' => 4,
-                'amenities' => json_encode(['Wifi', 'Tv', 'Ac', 'Mini Bar']),
-                'price' => 2500,
-                'status' => 'maintenance',
-            ],
-            [
-                'room_number' => '301',
                 'type' => 'Suite',
-                'capacity' => 6,
-                'amenities' => json_encode(['Wifi', 'Tv', 'Ac', 'Mini Bar', 'Jacuzzi']),
-                'price' => 4000,
+                'description' => 'Luxury suite with living area and sea view.',
+                'capacity' => 4,
+                'amenities' => ['wifi', 'ac', 'tv', 'mini-fridge', 'balcony'],
+                'price' => 200.00,
                 'status' => 'available',
+                'floor_number' => 2,
+                'image_urls' => [
+                    'https://example.com/images/room201-1.jpg',
+                    'https://example.com/images/room201-2.jpg'
+                ],
             ],
         ];
 

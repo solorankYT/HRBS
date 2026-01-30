@@ -2,7 +2,7 @@
 let booking = {
   check_in: '',
   check_out: '',
-  number_of_guests: 0,
+  number_of_guests: 4,
   rooms: [] // each room: {type, price, description, available}
 };
 
@@ -47,7 +47,7 @@ function renderCart() {
 // --- Render Guest Accordion ---
 function renderGuestAccordion() {
   const accordion = document.getElementById('roomsAccordion');
-  accordion.innerHTML = ''; // clear previous
+  accordion.innerHTML = '';
 
   booking.rooms.forEach((room, i) => {
     const div = document.createElement('div');
@@ -158,7 +158,7 @@ async function getAvailableRooms(checkIn, checkOut, guests) {
 // Updated addRoom function
 async function addRoomToBooking(roomId) {
   try {
-    const availableRooms = await getAvailableRooms(booking.check_in, booking.check_out, booking.guests);
+    const availableRooms = await getAvailableRooms(booking.check_in, booking.check_out, booking.number_of_guests);
     const selectedRoom = availableRooms.find(r => r.id === roomId);
 
     if (!selectedRoom) return alert('Room not found.');
@@ -182,7 +182,7 @@ async function openRoomModal() {
   const container = document.getElementById('roomOptionsContainer');
   container.innerHTML = '';
 
-  const availableRooms = await getAvailableRooms(booking.check_in, booking.check_out);
+  const availableRooms = await getAvailableRooms(booking.check_in, booking.check_out, booking.number_of_guests);
 
   availableRooms.forEach((room, index) => {
     const div = document.createElement('div');
@@ -227,7 +227,7 @@ function selectRoom(index) {
 // // --- Confirm room from modal ---
 // document.getElementById('confirmRoomBtn').addEventListener('click', async () => {
 //   if (selectedRoomIndex !== null) {
-//     const availableRooms = await getAvailableRooms(booking.check_in, booking.check_out);
+//     const availableRooms = await getAvailableRooms(booking.check_in, booking.check_out, booking.number_of_guests);
 //     const selectedRoom = availableRooms[selectedRoomIndex];
 
 //     if (selectedRoom.available <= booking.rooms.filter(r => r.type === selectedRoom.type).length) {

@@ -22,7 +22,6 @@ return new class extends Migration
             $table->enum('status', ['available', 'maintenance'])->default('available');
 
             // New fields
-            $table->unsignedSmallInteger('floor_number')->nullable();
             $table->json('image_urls')->nullable();
 
             $table->timestamps();

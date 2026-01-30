@@ -11,33 +11,36 @@ class BookingSeeder extends Seeder
 {
     public function run(): void
     {
-        $room1 = Room::where('room_number', '101')->first();
-        $room2 = Room::where('room_number', '102')->first();
+        $room = Room::where('status', 'available')->first();
+
+        if (!$room) {
+            return;
+        }
 
         Booking::create([
-            'room_id' => $room1->id,
-            'guest_name' => 'John Doe',
-            'guest_email' => 'johndoe@example.com',
+            'room_id' => $room->id,
+            'guest_name' => 'Juan Dela Cruz',
+            'guest_email' => 'juan@example.com',
             'guest_phone' => '09123456789',
-            'check_in' => Carbon::today()->addDays(1),
-            'check_out' => Carbon::today()->addDays(3),
-            'number_of_guests' => 1,
-            'special_requests' => 'Late check-in',
+            'check_in' => Carbon::now()->addDays(3),
+            'check_out' => Carbon::now()->addDays(5),
+            'number_of_guests' => 2,
+            'special_requests' => 'Late check-in requested',
             'booking_status' => 'confirmed',
-            'total_amount' => $room1->price * 2,
+            'total_amount' => 5000,
         ]);
 
         Booking::create([
-            'room_id' => $room2->id,
-            'guest_name' => 'Jane Smith',
-            'guest_email' => 'janesmith@example.com',
+            'room_id' => $room->id,
+            'guest_name' => 'Maria Santos',
+            'guest_email' => 'maria@example.com',
             'guest_phone' => '09987654321',
-            'check_in' => Carbon::today()->addDays(2),
-            'check_out' => Carbon::today()->addDays(5),
-            'number_of_guests' => 2,
+            'check_in' => Carbon::now()->addDays(10),
+            'check_out' => Carbon::now()->addDays(12),
+            'number_of_guests' => 1,
             'special_requests' => null,
             'booking_status' => 'pending',
-            'total_amount' => $room2->price * 3,
+            'total_amount' => 5000,
         ]);
     }
 }

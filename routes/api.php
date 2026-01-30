@@ -18,7 +18,7 @@ Route::middleware('web')->group(function () {
 
 //ADMIN ROUTES
 //USER MANAGEMENTT
-Route::middleware(['web', 'auth:sanctum'])->group(function () {
+
 Route::get('/users', [UserManagementController::class, 'index']);
 Route::get('/users/{id}', [UserManagementController::class, 'show']);
 Route::post('/users', [UserManagementController::class, 'create']);
@@ -31,7 +31,7 @@ Route::get('/rooms', [RoomManagementController::class, 'index']);
 Route::post('/rooms', [RoomManagementController::class, 'create']);
 Route::put('/rooms/{id}', [RoomManagementController::class, 'update']);
 Route::get('/rooms/{id}', [RoomManagementController::class, 'show']);
-});
+
 
 //Public Routes
 Route::prefix('guest')->middleware('web')->group(function () {

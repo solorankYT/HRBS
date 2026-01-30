@@ -18,13 +18,11 @@ class Payment extends Model
         'paid_at',
     ];
 
-    protected $dates = [
-        'paid_at',
-        'created_at',
-        'updated_at',
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'paid_at' => 'datetime',
     ];
 
-    // Relationships
     public function booking()
     {
         return $this->belongsTo(Booking::class);

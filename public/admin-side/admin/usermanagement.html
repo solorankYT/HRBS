@@ -577,6 +577,25 @@ loadUsers();
         .addEventListener("submit", async function (e) {
             e.preventDefault();
 
+             const name = this.name.value.trim();
+            const email = this.email.value.trim();
+            const password = this.password.value;
+
+            if (!name) {
+                alert("Name is required");
+                return;
+            }
+
+            if (!email.includes("@")) {
+                alert("Enter a valid email");
+                return;
+            }
+
+            if (password.length < 8) {
+                alert("Password must be at least 8 characters");
+                return;
+            }
+
             const formData = new FormData(this);
 
             try {

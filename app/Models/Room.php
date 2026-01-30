@@ -17,18 +17,26 @@ class Room extends Model
         'amenities',
         'price',
         'status',
-        'floor_number',
         'image_urls',
     ];
 
     protected $casts = [
-        'amenities' => 'array',
+        'amenities'  => 'array',
         'image_urls' => 'array',
+        'price'      => 'decimal:2',
     ];
 
-    // Relationships
-    public function bookings()
+    /* ======================
+       SIMPLE HELPERS
+       ====================== */
+
+    public function isAvailable(): bool
     {
-        return $this->hasMany(Booking::class);
+        return $this->status === 'available';
+    }
+
+    public function isUnderMaintenance(): bool
+    {
+        return $this->status === 'maintenance';
     }
 }

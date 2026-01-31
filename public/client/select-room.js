@@ -1,3 +1,43 @@
+
+//select-room.js
+
+function renderRooms(rooms) {
+  const container = document.getElementById('roomsContainer');
+  container.innerHTML = '';
+
+  if (rooms.length === 0) {
+    container.innerHTML = '<p class="no-rooms">No rooms available for selected dates.</p>';
+    return;
+  }
+
+  rooms.forEach(room => {
+    const div = document.createElement('div');
+    div.className = 'room-card';
+    div.dataset.type = room.type.toLowerCase().replace(/\s/g, '-');
+
+    div.innerHTML = `
+      <div class="room-image">
+        <img src="https://via.placeholder.com/320x180?text=${encodeURIComponent(room.type)}" alt="${room.type}">
+      </div>
+      <div class="room-info">
+        <div class="room-header">
+          <h3>${room.type}</h3>
+          <span class="room-price">₱${room.price}</span>
+        </div>
+        <div class="room-details">
+          <p>Capacity: <strong>${room.capacity} guests</strong></p>
+          <p>Available: <strong>${room.available_count}</strong></p>
+        </div>
+        <button class="select-room-btn" onclick="addRoomToCart(${room.id}, '${room.type}', ${room.price}, ${room.capacity})">
+          Select Room
+        </button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+
 document.addEventListener('DOMContentLoaded', fetchAvailability);
 
 function fetchAvailability() {
@@ -43,59 +83,20 @@ function renderSearchSummary(params) {
   `;
 }
 
-function renderRooms(rooms) {
-  const container = document.getElementById('roomsContainer');
-  container.innerHTML = '';
-
-  if (rooms.length === 0) {
-    container.innerHTML = '<p class="no-rooms">No rooms available for selected dates.</p>';
-    return;
-  }
-
-  rooms.forEach(room => {
-    const div = document.createElement('div');
-    div.classList.add('room-card');
-    div.dataset.type = room.type.toLowerCase().replace(/\s/g, '-'); // for filtering
-
-    div.innerHTML = `
-      <div class="room-image">
-        <img src="https://via.placeholder.com/320x180?text=${encodeURIComponent(room.type)}" alt="${room.type}">
-      </div>
-      <div class="room-info">
-        <div class="room-header">
-          <h3>${room.type}</h3>
-          <span class="room-price">₱${room.price}</span>
-        </div>
-        <div class="room-details">
-          <p>Capacity: <strong>${room.capacity} guests</strong></p>
-          <p>Available: <strong>${room.available_count}</strong></p>
-        </div>
-        <button class="select-room-btn" onclick="addRoomToCart(${room.id}, '${room.type}', ${room.price}, ${room.capacity})">
-          Select Room
-        </button>
-      </div>
-    `;
-
-    container.appendChild(div);
-  });
-}
-
-
-
 //add room to cart
 
 let cart = [];
 
 function addRoomToCart(id, type, price, capacity) {
-  if (cart.find(r => r.id === id)) return alert('Room already added.');
+  if (cart.find(r => r.id === id)) return alert('Room already selected.');
 
-  const room = { id, type, price, capacity};
+  const room = { id, type, price, capacity };
   cart.push(room);
 
   updateCartUI();
-  // showAddons();
   enableCheckout();
 }
+
 
 function updateCartUI() {
   const cartContainer = document.getElementById('cartRoomsContainer');
@@ -106,7 +107,7 @@ function updateCartUI() {
     total += room.price;
 
     const div = document.createElement('div');
-    div.classList.add('cart-room-item');
+    div.className = 'cart-room-item';
     div.innerHTML = `
       <span class="cart-room-name">${room.type}</span>
       <span class="cart-room-price">₱${room.price}</span>
@@ -120,19 +121,17 @@ function updateCartUI() {
   document.getElementById('finalTotal').textContent = `₱${total.toLocaleString()}`;
 }
 
-function removeRoom(id) {
-  cart = cart.filter(r => r.id !== id);
+
+function removeRoom(type) {
+  cart = cart.filter(r => r.type !== type);
   updateCartUI();
-  if (cart.length === 0) hideAddons();
 }
+
 
 function enableCheckout() {
   document.getElementById('btnCheckout').style.display = 'block';
 }
 
-// function showAddons() {
-//   document.querySelector('.addons-container').style.display = 'block';
-// }
 
 function hideAddons() {
   document.querySelector('.addons-container').style.display = 'none';
@@ -182,7 +181,6 @@ function selectRoom(type) {
 function goBack() {
   window.history.back();
 }
-
 
 function checkout() {
   if (cart.length === 0) return alert('Please select at least one room.');

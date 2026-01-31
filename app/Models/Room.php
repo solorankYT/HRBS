@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'room_number',
         'type',
@@ -21,22 +18,13 @@ class Room extends Model
     ];
 
     protected $casts = [
-        'amenities'  => 'array',
+        'amenities' => 'array',
         'image_urls' => 'array',
-        'price'      => 'decimal:2',
     ];
 
-    /* ======================
-       SIMPLE HELPERS
-       ====================== */
+ public function bookingRooms()
+{
+    return $this->hasMany(BookingRoom::class);
+}
 
-    public function isAvailable(): bool
-    {
-        return $this->status === 'available';
-    }
-
-    public function isUnderMaintenance(): bool
-    {
-        return $this->status === 'maintenance';
-    }
 }

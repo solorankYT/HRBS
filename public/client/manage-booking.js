@@ -1,34 +1,49 @@
 let foundBooking = null
 
-document.getElementById('retrieveBtn').addEventListener('click', () => {
-    const bookingRef = document.getElementById('bookingRefInput').value.trim()
-    const contactValue = document.getElementById('contactInput').value.trim()
-    const method = document.getElementById('contactLabel').textContent.includes('Email') ? 'email' : 'phone'
+document.getElementById('retrieveBtn').addEventListener('click', async () => {
+  const bookingRef = document.getElementById('bookingRefInput').value.trim()
+  const contactValue = document.getElementById('contactInput').value.trim()
+  const isEmail = document.getElementById('contactLabel').textContent.includes('Email')
 
-    if (!bookingRef) return alert('Booking reference is required')
-    if (!/^RES-\d{3}$/.test(bookingRef)) return alert('Invalid booking reference format')
-    if (!contactValue) return alert('Contact information is required')
-    if (method === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactValue)) return alert('Invalid email address')
-    if (method === 'phone' && !/^\+?\d{7,15}$/.test(contactValue)) return alert('Invalid phone number')
+  const params = new URLSearchParams(
+    isEmail ? { email: contactValue } : { phone: contactValue }
+  )
 
-    foundBooking = {
-        reference: bookingRef,
-        checkIn: '2/15/2025',
-        checkOut: '2/18/2025',
-        guests: 2,
-        room: 'Basic Studio Room',
-        guest: 'Edward Prima',
-        total: 15525,
-        paid: 7762.5,
-        due: 7762.5
-    }
+  try {
+    const res = await fetch(`/api/guest/bookings/${bookingRef}?${params.toString()}`, {
+      headers: { 'Accept': 'application/json' }
+    })
 
-    document.getElementById('retrieveBookingCard').classList.add('d-none')
-    document.getElementById('bookingDetails').classList.remove('d-none')
-    document.getElementById('actionButtons').classList.remove('d-none')
-    document.getElementById('paymentHistory').classList.remove('d-none')
-    document.getElementById('cancelRef').textContent = bookingRef
+    const data = await res.json()
+    if (!res.ok) throw data
+
+    foundBooking = data
+    renderBooking(data)
+
+  } catch (err) {
+    alert(err.message || 'Booking not found')
+  }
 })
+
+function renderBooking(booking) {
+  document.getElementById('retrieveBookingCard').classList.add('d-none')
+  document.getElementById('bookingDetails').classList.remove('d-none')
+
+  document.querySelector('.badge').textContent = booking.status
+  document.getElementById('totalAmount').textContent = `₱${booking.total.toLocaleString()}`
+  document.getElementById('roomDisplay').textContent =
+    booking.rooms.map(r => r.type).join(', ')
+}
+
+document.getElementById('confirmCancelBtn').addEventListener('click', async () => {
+  await fetch(`/api/guest/bookings/${foundBooking.reference}/cancel`, {
+    method: 'POST'
+  })
+  alert('Booking cancelled')
+  location.reload()
+})
+
+
 
 document.getElementById('closeDetailsBtn').addEventListener('click', () => {
     document.getElementById('retrieveBookingCard').classList.remove('d-none')

@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Payment;
 use App\Models\Booking;
-use Carbon\Carbon;
+use App\Models\Payment;
+use Illuminate\Database\Seeder;
 
 class PaymentSeeder extends Seeder
 {
@@ -13,17 +12,13 @@ class PaymentSeeder extends Seeder
     {
         $booking = Booking::first();
 
-        if (!$booking) {
-            return;
-        }
-
         Payment::create([
             'booking_id' => $booking->id,
-            'amount' => $booking->total_amount,
-            'reference' => 'GCASH-REF-001',
+            'amount' => 7500,
+            'reference' => 'GCASH-123456',
             'method' => 'gcash',
             'status' => 'paid',
-            'paid_at' => Carbon::now(),
+            'paid_at' => now(),
         ]);
     }
 }

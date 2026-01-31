@@ -13,14 +13,8 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('room_id')->constrained()->cascadeOnDelete();
-
-            // Guest info
-            $table->string('guest_name');
-            $table->string('guest_email')->nullable();
-            $table->string('guest_phone')->nullable();
-
+            
+            $table->string('reference_number')->unique();
             $table->date('check_in');
             $table->date('check_out');
 
@@ -38,9 +32,10 @@ return new class extends Migration
             $table->decimal('total_amount', 10, 2)->default(0);
 
             $table->timestamps();
+            
 
             // Index for faster lookups
-            $table->index(['room_id', 'check_in', 'check_out']);
+            $table->index([ 'check_in', 'check_out']);
         });
     }
 

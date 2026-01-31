@@ -4,19 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Payment extends Model
+class BookingGuest extends Model
 {
     protected $fillable = [
         'booking_id',
-        'amount',
-        'reference',
-        'method',
-        'status',
-        'paid_at',
-    ];
-
-    protected $casts = [
-        'paid_at' => 'datetime',
+        'name',
+        'email',
+        'phone',
+        'special_requests',
     ];
 
     public function booking()

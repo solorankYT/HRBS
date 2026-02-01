@@ -7,6 +7,7 @@ use App\Http\Controllers\Guest\RoomController as GuestRoomController;
 use App\Http\Controllers\RoomManagementController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\Guest\BookingController as GuestBookingController;
+use App\Http\Controllers\Receptionist\ReservationController as ReservationController;
 
 Route::middleware('web')->group(function () {
     Route::post('/login', [AuthenticationController::class, 'login']);
@@ -27,19 +28,13 @@ Route::prefix('guest')->middleware('api')->group(function () {
     Route::post('/bookings', [GuestBookingController::class, 'store']);
       Route::get('/bookings/{reference}', [GuestBookingController::class, 'show']);
     Route::post('/bookings/{reference}/cancel', [GuestBookingController::class, 'cancel']);
-
     
-    // Route::get('/bookings/{reference}', [GuestBookingController::class, 'show']);
-    // Route::post('/bookings/{reference}/cancel', [GuestBookingController::class, 'cancel']);
 });
-
-Route::get('/guest/bookings/{reference}', [GuestBookingController::class, 'show']);
 
 
 
 //ADMIN ROUTES
 //USER MANAGEMENTT
-
 Route::get('/users', [UserManagementController::class, 'index']);
 Route::get('/users/{id}', [UserManagementController::class, 'show']);
 Route::post('/users', [UserManagementController::class, 'create']);
@@ -54,4 +49,6 @@ Route::put('/rooms/{id}', [RoomManagementController::class, 'update']);
 Route::get('/rooms/{id}', [RoomManagementController::class, 'show']);
 
 
+
+Route::get('/reservation', [ReservationController::class, 'index']);
 //Public Routes

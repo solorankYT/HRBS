@@ -134,16 +134,19 @@ if (safeGet("confirmedRemainingBalance"))
   if (tableBody && selectedRooms.length > 0) {
     let tableHTML = "";
 
-    selectedRooms.forEach((room, index) => {
-      const roomTotal = room.price * nights;
-      tableHTML += `
-        <tr>
-          <td><strong>${room.roomName}</strong></td>
-          <td>${nights} night${nights > 1 ? "s" : ""}</td>
-          <td>${formatPHP(room.price)}</td>
-          <td>${formatPHP(roomTotal)}</td>
-        </tr>
-      `;
+  selectedRooms.forEach(room => {
+  const roomTotal = room.price * nights;
+
+  tableHTML += `
+    <tr>
+      <td><strong>${room.type}</strong></td>
+      <td>${nights} night${nights > 1 ? "s" : ""}</td>
+      <td>${formatPHP(room.price)}</td>
+      <td>${formatPHP(roomTotal)}</td>
+    </tr>
+  `;
+
+
 
       // If the room has add-ons, list them right below
       if (room.addOns && room.addOns.length > 0) {
@@ -175,12 +178,14 @@ if (safeGet("confirmedRemainingBalance"))
 
     selectedRooms.forEach((room, i) => {
       const paymentMethod = guests[i]?.paymentMethod || "N/A";
+
       paymentHTML += `
         <div class="payment-method" style="font-size: 0.80rem; font-family: 'poppins',sans-serif;">
-          <strong>${room.roomName}</strong> — Paid via <strong>${paymentMethod}</strong>
+          <strong>${room.type}</strong> — Paid via <strong>${paymentMethod}</strong>
         </div>
       `;
     });
+
 
     paymentSummary.innerHTML = paymentHTML;
   }

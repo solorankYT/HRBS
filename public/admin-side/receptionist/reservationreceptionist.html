@@ -502,9 +502,9 @@
                         </div>
                     </div>
 
-                    <div class="payment-table-container reservations-table-container">
+                    <div class="table-wrapper">
                             <table class="table table-hover reservations-table payment-table">
-                                <thead>
+                                <thead class="table-light">
                                     <tr>
                                         <th>Reservation ID</th>
                                         <th>Guest Name</th>
@@ -516,107 +516,7 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>815368</td>
-                                        <td>
-                                            <div class="guest-info">
-                                                <i class="fas fa-user me-2"></i>
-                                                <span class="guest-name">Lance Prima</span>
-                                                <small class="guest-count">4 guests</small>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="room-info">
-                                                <i class="fas fa-bed me-2"></i>
-                                                <span>Basic Studio Room</span>
-                                                <small class="room-number">Room 101</small>
-                                            </div>
-                                        </td>
-                                        <td id="lanceCheckIn"></td>
-                                        <td id="lanceCheckOut"></td>
-                                        <td>
-                                            <span class="status-badge status-booked">Pending</span>
-                                            <div class="status-actions">
-                                                <i class="fas fa-check-circle accept"></i>
-                                                <i class="fas fa-times-circle reject"></i>
-                                            </div>
-                                        </td>
-                                        <td>₱922</td>
-                                        <td>
-                                            <div class="action-buttons">
-                                                <button class="btn btn-sm btn-action" title="View">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-action" title="Delete">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>680085</td>
-                                        <td>
-                                            <div class="guest-info">
-                                                <i class="fas fa-user me-2"></i>
-                                                <span class="guest-name">Edward Ricafranca</span>
-                                                <small class="guest-count">1 guest</small>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="room-info">
-                                                <i class="fas fa-bed me-2"></i>
-                                                <span>Standard Room</span>
-                                                <small class="room-number">Room 102</small>
-                                            </div>
-                                        </td>
-                                        <td id="edwardCheckIn"></td>
-                                        <td id="edwardCheckOut"></td>
-                                        <td><span class="status-badge status-checkedin">Checked In</span></td>
-                                        <td>₱2,599</td>
-                                        <td>
-                                            <div class="action-buttons">
-                                                <button class="btn btn-sm btn-action" title="View">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-action" title="Delete">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>639621</td>
-                                        <td>
-                                            <div class="guest-info">
-                                                <i class="fas fa-user me-2"></i>
-                                                <span class="guest-name">Franz Siochi</span>
-                                                <small class="guest-count">1 guest</small>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="room-info">
-                                                <i class="fas fa-bed me-2"></i>
-                                                <span>Standard Room</span>
-                                                <small class="room-number">Room 103</small>
-                                            </div>
-                                        </td>
-                                        <td id="franzCheckIn"></td>
-                                        <td id="franzCheckOut"></td>
-                                        <td><span class="status-badge status-checkedout">Checked Out</span></td>
-                                        <td>₱2,599</td>
-                                        <td>
-                                            <div class="action-buttons">
-                                                <button class="btn btn-sm btn-action" title="View">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-action" title="Delete">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                <tbody id="reservationTable"></tbody>
                             </table>
                     </div>
                 </div>
@@ -1215,5 +1115,6 @@
 
        <script src="../js/script.js"></script>
     <script src="../js/auth.js"></script>
+    <script src="../receptionist/reservation.js"></script>
 </body>
 </html>

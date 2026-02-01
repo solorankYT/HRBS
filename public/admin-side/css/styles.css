@@ -8,13 +8,42 @@
             position: sticky;
             top: 0;
             background: #fff;
-            z-index: 2;
-        }
+            z-index: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.table-wrapper {
+  max-height: 500px;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Sticky header */
+.reservation-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  /* Frosted glass effect */
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  /* Optional polish */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Fix column alignment */
+.reservation-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
 
 
-        .table-scroll {
-            max-height: 500px; 
-            overflow-y: auto;
+.table-scroll {
+    max-height: 500px; 
+    overflow-y: auto;
 }
 
 
@@ -1140,7 +1169,7 @@ main.sidebar-collapsed {
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    overflow: hidden;
+
 }
 
 .reservations-table {

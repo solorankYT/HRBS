@@ -1,66 +1,66 @@
-async function loadReservations() {
-    try {
-        const res = await fetch('http://localhost:8000/api/reservation', {
-            credentials: 'include',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        });
+let currentPage = 1;
+let lastPage = 1;
 
-        const data = await res.json();
-        const tbody = document.getElementById('reservationTable');
-        tbody.innerHTML = '';
+async function loadReservations(page = 1) {
+    const res = await fetch(`/api/reservation?page=${page}`);
+    const json = await res.json();
 
-        data.forEach(r => {
-            const tr = document.createElement('tr');
+    const tbody = document.getElementById('reservationTable');
+    tbody.innerHTML = '';
 
-            tr.innerHTML = `
-                <td class="reservation-id">${r.reference_number ?? r.id}</td>
-                <td>${r.guest_name}</td>
-                <td>${r.rooms}</td>
-                <td>${formatDate(r.check_in)}</td>
-                <td>${formatDate(r.check_out)}</td>
-                <td>
-                    <span class="status-badge ${statusClass(r.status)}">
-                        ${formatStatus(r.status)}
-                    </span>
-                </td>
-                <td>₱${Number(r.amount).toLocaleString()}</td>
-                <td class="action-buttons">
-                    <button class="btn btn-sm btn-outline-primary" title="View">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </td>
-            `;
+json.data.forEach(r => {
+    tbody.innerHTML += `
+        <tr>
+            <td>${r.reference_number}</td>
+            <td>${r.guest_name}</td>
+            <td>${r.rooms}</td>
+            <td>${formatDate(r.check_in)}</td>
+            <td>${formatDate(r.check_out)}</td>
+            <td>
+                <span class="status-badge ${statusClass(r.status)}">
+                    ${r.status}
+                </span>
+            </td>
+            <td>₱${Number(r.amount).toLocaleString()}</td>
+            <td>
+                <a href="reservationdetails.html?id=${r.id}"
+                   class="btn btn-sm btn-outline-primary">
+                   View
+                </a>
+            </td>
+        </tr>
+    `;
+});
 
-            tbody.appendChild(tr);
-        });
 
-    } catch (err) {
-        console.error('Failed to load reservations', err);
-    }
+    currentPage = json.current_page;
+    lastPage = json.last_page;
+
+    updatePaginationUI();
 }
+
+function updatePaginationUI() {
+    document.getElementById('pageInfo').textContent =
+        `Page ${currentPage} of ${lastPage}`;
+
+    document.getElementById('prevBtn').disabled = currentPage === 1;
+    document.getElementById('nextBtn').disabled = currentPage === lastPage;
+}
+
+document.getElementById('prevBtn').onclick = () => {
+    if (currentPage > 1) loadReservations(currentPage - 1);
+};
+
+document.getElementById('nextBtn').onclick = () => {
+    if (currentPage < lastPage) loadReservations(currentPage + 1);
+};
 
 function formatDate(date) {
-    if (!date) return '—';
-    const d = new Date(date);
-    return d.toLocaleDateString('en-GB');
-}
-
-function formatStatus(status) {
-    return status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return new Date(date).toLocaleDateString();
 }
 
 function statusClass(status) {
-    switch (status) {
-        case 'booked': return 'status-booked';
-        case 'checked_in': return 'status-checkedin';
-        case 'checked_out': return 'status-checkedout';
-        case 'cancelled': return 'status-cancelled';
-        case 'pending' : return 'pending';
-        default: return '';
-    }
+    return `status-${status}`;
 }
 
-document.addEventListener('DOMContentLoaded', loadReservations);
+document.addEventListener('DOMContentLoaded', () => loadReservations());

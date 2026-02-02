@@ -56,6 +56,22 @@
 }
 
 
+.payment-paid {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.payment-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.payment-unpaid {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #f8f9fa;

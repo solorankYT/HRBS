@@ -15,11 +15,14 @@ class ReservationController extends Controller
      */
 public function index()
 {
-    $bookings = Booking::with(['guests', 'rooms.room'])
+    $bookings = Booking::with(['guests', 'rooms.room', 'payments'])
         ->orderBy('created_at', 'desc')
-        ->paginate(6); 
+        ->paginate(6);
 
     $data = $bookings->getCollection()->map(function ($booking) {
+
+        $latestPayment = $booking->payments->sortByDesc('created_at')->first();
+
         return [
             'id' => $booking->id,
             'reference_number' => $booking->reference_number,
@@ -30,6 +33,7 @@ public function index()
             'check_in' => $booking->check_in,
             'check_out' => $booking->check_out,
             'status' => $booking->booking_status,
+            'payment_status' => $latestPayment->status ?? 'pending',
             'amount' => $booking->total_amount,
         ];
     });
@@ -43,13 +47,6 @@ public function index()
     ]);
 }
 
-
-
-
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -70,6 +67,7 @@ public function show($id)
         'check_out' => $booking->check_out,
         'date_booked' => $booking->created_at->toDateString(),
         'total_amount' => $booking->total_amount,
+        'number_of_guests' =>$booking->number_of_guests,
 
         'guest' => [
             'name' => optional($booking->guests->first())->name,
@@ -78,10 +76,12 @@ public function show($id)
             'special_requests' => optional($booking->guests->first())->special_requests,
         ],
 
+
+
         'rooms' => $booking->rooms->map(function ($br) {
             return [
                 'room_number' => $br->room->room_number ?? 'N/A',
-                'room_type' => $br->room->room_type ?? 'N/A',
+                'room_type' => $br->room->type ?? 'N/A',
                 'price_per_night' => $br->price_per_night,
                 'nights' => $br->nights,
                 'subtotal' => $br->subtotal,
@@ -93,19 +93,39 @@ public function show($id)
 }
 
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Booking $booking)
-    {
-        //
+public function checkIn(string $id)
+{
+    $booking = Booking::findOrFail($id);
+
+    if ($booking->booking_status !== 'confirmed') {
+        return response()->json([
+            'message' => 'Booking must be confirmed before check-in'
+        ], 422);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Booking $booking)
-    {
-        //
-    }
+    $booking->booking_status = 'checked_in';
+    $booking->save();
+
+    return response()->json([
+        'message' => 'Check-in successful',
+        'status'  => $booking->booking_status
+    ]);
+}
+
+
+ public function checkOut(string $id){
+        $booking = Booking::findorFail($id);
+
+        $booking->status = $booking->booking_status === 'confirmed' 
+        ? 'checked_out'
+        : 'pending';
+
+         $booking->save();
+
+        return response()->json([
+            'message' => 'booking status updated',
+            'status'  => $booking->booking_status
+        ]);
+ }
+
 }

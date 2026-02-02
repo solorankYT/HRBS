@@ -52,4 +52,7 @@ Route::get('/rooms/{id}', [RoomManagementController::class, 'show']);
 
 Route::get('/reservation', [ReservationController::class, 'index']);
 Route::get('/reservation/{id}', [ReservationController::class, 'show']);
+Route::patch('/reservation/checkin/{id}', [ReservationController::class, 'checkIn']);
+
+
 //Public Routes

@@ -249,15 +249,16 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small mb-1">Status</label>
-                        <select id="reservationStatus" class="form-select form-select-sm">
-                            <option selected>Approved Reservation</option>
-                            <option>Pending</option>
-                            <option>Cancelled</option>
+                       <select id="reservationStatus" class="form-select form-select-sm" disabled>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="checked_in">Checked In</option>
+                            <option value="pending">Pending</option>
+                            <option value="cancelled">Cancelled</option>
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small mb-1">Room Type</label>
-                        <input type="text" class="form-control form-control-sm" value="Premium Room">
+                        <input id="roomType" type="text" class="form-control form-control-sm">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small mb-1">Proof of Payment</label>
@@ -281,7 +282,7 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label small mb-1">Date Booked</label>
-                        <input type="date" class="form-control form-control-sm" value="2024-09-03">
+                        <input id="dateBooked" type="date" class="form-control form-control-sm" value="2024-09-03">
                     </div>
                 </div>
 
@@ -293,7 +294,7 @@
                     </div>
                     <div class="col-md-3">
                         <label class="form-label small mb-1">Last Name</label>
-                        <input type="text" class="form-control form-control-sm" value="Doe">
+                        <input id="guestLastName" type="text" class="form-control form-control-sm">
                     </div>
                     <div class="col-md-3">
                         <label class="form-label small mb-1">Contact Number</label>
@@ -304,12 +305,8 @@
                         <input id="guestEmail" type="email" class="form-control form-control-sm">
                     </div>
                     <div class="col-md-2">
-                        <label class="form-label small mb-1">Adults</label>
-                        <input type="number" class="form-control form-control-sm" value="4" min="0">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label small mb-1">Kids</label>
-                        <input type="number" class="form-control form-control-sm" value="2" min="0">
+                        <label class="form-label small mb-1">Count of guests</label>
+                        <input id="numberGuest" type="number" class="form-control form-control-sm" min="0">
                     </div>
                     <div class="col-12">
                         <label class="form-label small mb-1">Special Request/s</label>
@@ -319,8 +316,10 @@
 
                 <div id="actionMessage" class="mb-1"></div>
                 <div class="d-flex gap-1">
-                    <button id="btnCheckIn" class="btn checkin-btn btn-sm"><i class="fas fa-check me-1"></i>Check-in Guest</button>
-                    <a href="checkinout.html" class="btn btn-secondary btn-sm">Back</a>
+                <div id="checkInContainer">
+
+                </div>
+                <a href="checkinout.html" class="btn btn-secondary btn-sm">Back</a>
                 </div>
             </div>
         </div>
@@ -362,73 +361,7 @@
             }
         });
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const messageBox = document.getElementById('actionMessage');
-            const btnCheckIn = document.getElementById('btnCheckIn');
-            const btnCancel = document.getElementById('btnCancelReservation');
-            // Real-time dates and lock fields (only Status editable)
-            (function initRealtimeAndLock(){
-                function toYMD(d){
-                    const yyyy = d.getFullYear();
-                    const mm = String(d.getMonth()+1).padStart(2,'0');
-                    const dd = String(d.getDate()).padStart(2,'0');
-                    return `${yyyy}-${mm}-${dd}`;
-                }
-                const today = new Date();
-                const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1);
-                const dateInputs = Array.from(document.querySelectorAll('input[type="date"]'));
-                if (dateInputs.length >= 3) {
-                    // Order assumed: Check-in, Check-out, Date Booked
-                    dateInputs[0].value = toYMD(today);
-                    dateInputs[1].value = toYMD(tomorrow);
-                    dateInputs[2].value = toYMD(today);
-                }
-                const statusSelect = document.querySelector('select.form-select.form-select-sm');
-                const controls = Array.from(document.querySelectorAll('input, textarea, select'));
-                controls.forEach(el => {
-                    if (el === statusSelect) return; // keep status editable
-                    // Keep proof of payment View button clickable
-                    if (el.tagName === 'BUTTON') return;
-                    // Disable editable fields
-                    if (el.tagName === 'SELECT') el.disabled = true;
-                    if (el.tagName === 'TEXTAREA') el.readOnly = true;
-                    if (el.tagName === 'INPUT') {
-                        const t = (el.getAttribute('type')||'').toLowerCase();
-                        if (['text','email','number','date'].includes(t)) el.readOnly = true;
-                        if (['checkbox','radio'].includes(t)) el.disabled = true;
-                    }
-                });
-            })();
-
-            function showMessage(type, text) {
-                const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
-                messageBox.innerHTML = `
-                    <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
-                        ${text}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                `;
-                messageBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-
-            if (btnCheckIn) {
-                btnCheckIn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    showMessage('success', 'Guest successfully checked in.');
-                });
-            }
-
-            if (btnCancel) {
-                btnCancel.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    showMessage('danger', 'Reservation has been cancelled.');
-                });
-            }
-
-            // Removed View Details feature
-        });
-    </script>
+   
     <script>
         // Sidebar toggle functionality
         document.addEventListener('DOMContentLoaded', function() {

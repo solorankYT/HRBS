@@ -17,10 +17,17 @@ json.data.forEach(r => {
             <td>${formatDate(r.check_in)}</td>
             <td>${formatDate(r.check_out)}</td>
             <td>
-                <span class="status-badge ${statusClass(r.status)}">
+                <span class=" ${statusClass(r.status)}">
                     ${r.status}
                 </span>
             </td>
+
+            <td>
+                <span class="payment-badge payment-${r.payment_status.toLowerCase()}">
+                    ${r.payment_status}
+                </span>
+            </td>
+
             <td>₱${Number(r.amount).toLocaleString()}</td>
             <td>
                 <a href="reservationdetails.html?id=${r.id}"

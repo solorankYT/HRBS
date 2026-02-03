@@ -28,7 +28,7 @@ Route::prefix('guest')->middleware('api')->group(function () {
     Route::post('/bookings', [GuestBookingController::class, 'store']);
       Route::get('/bookings/{reference}', [GuestBookingController::class, 'show']);
     Route::post('/bookings/{reference}/cancel', [GuestBookingController::class, 'cancel']);
-    
+    Route::get('/bookings/success/{reference}', [GuestBookingController::class, 'bookingSuccess']);
 });
 
 

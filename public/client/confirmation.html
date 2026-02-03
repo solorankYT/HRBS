@@ -1,496 +1,488 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Booking Confirmation - Invoice</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css"/>
-</head>
-<style>
-    :root{
-      --vm-red: #8B0000;   /* theme red */
-      --vm-accent: #1a2332; /* accent used earlier */
-      --muted: #666;
-      --border: #ccc;
-      --light-gray: #f4f4f4;
-    }
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Booking Confirmation - Invoice</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="styles.css"/>
+    </head>
+    <style>
+        :root{
+          --vm-red: #8B0000;   /* theme red */
+          --vm-accent: #1a2332; /* accent used earlier */
+          --muted: #666;
+          --border: #ccc;
+          --light-gray: #f4f4f4;
+        }
 
 
-    /* Invoice box */
-    .confirmation-wrapper{
-      max-width: 900px;
-      margin: 0 auto;
-      background: #fff;
-      border: 1px solid var(--border); /* thin gray border */
-      padding: 36px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.03);
-      margin-bottom: 2rem;
-      margin-top: 2rem;
-      /* NO border-radius per request */
-    }
+        /* Invoice box */
+        .confirmation-wrapper{
+          max-width: 900px;
+          margin: 0 auto;
+          background: #fff;
+          border: 1px solid var(--border); /* thin gray border */
+          padding: 36px;
+          box-shadow: 0 6px 18px rgba(0,0,0,0.03);
+          margin-bottom: 2rem;
+          margin-top: 2rem;
+          /* NO border-radius per request */
+        }
 
-    /* Top: big title centered, contact under it */
-    .invoice-title{
-      text-align: center;
-      font-size: 34px;
-      font-weight: 600;
-      color: var(--vm-red);
-      margin: 0 0 6px 0;
-      letter-spacing: 0.6px;
-    }
+        /* Top: big title centered, contact under it */
+        .invoice-title{
+          text-align: center;
+          font-size: 34px;
+          font-weight: 600;
+          color: var(--vm-red);
+          margin: 0 0 6px 0;
+          letter-spacing: 0.6px;
+        }
 
-    .invoice-contact{
-      text-align: center;
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
+        .invoice-contact{
+          text-align: center;
+          font-size: 14px;
+          color: var(--muted);
+          margin-bottom: 12px;
+        }
 
-    .divider{
-      height: 1px;
-      background: var(--border);
-      margin: 12px 0 24px 0;
-    }
+        .divider{
+          height: 1px;
+          background: var(--border);
+          margin: 12px 0 24px 0;
+        }
 
-    /* Top two-column area */
-    .top-section{
-      display: flex;
-      gap: 20px;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
+        /* Top two-column area */
+        .top-section{
+          display: flex;
+          gap: 20px;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 18px;
+          flex-wrap: wrap;
+        }
 
-    .left-col{
-      flex-basis: 58%;
-      min-width: 260px;
-    }
+        .left-col{
+          flex-basis: 58%;
+          min-width: 260px;
+        }
 
-    .right-col {
-      transform: translateX(-20px); /* moves it 20px to the left */
-    }
+        .right-col {
+          transform: translateX(-20px); /* moves it 20px to the left */
+        }
 
-    /* Labels / values layout in booking details */
-    .info-row{
-      display: flex;
-      gap: 12px;
-      align-items: baseline;
-      margin-bottom: 6px;
-    }
+        /* Labels / values layout in booking details */
+        .info-row{
+          display: flex;
+          gap: 12px;
+          align-items: baseline;
+          margin-bottom: 6px;
+        }
 
-    .info-label{
-      width: 120px;               /* fixed width to create spacing */
-      font-weight: 600;
-      color: var(--vm-accent);
-    }
+        .info-label{
+          width: 120px;               /* fixed width to create spacing */
+          font-weight: 600;
+          color: var(--vm-accent);
+        }
 
-    .info-value{
-      color: #222;
-      font-size: 13px;
-      word-break: break-word;
-    }
-    .info-label, .info-row{
-      font-family: 'poppins', sans-serif;
-      font-size: 0.80rem;
-    }
+        .info-value{
+          color: #222;
+          font-size: 13px;
+          word-break: break-word;
+        }
+        .info-label, .info-row{
+          font-family: 'poppins', sans-serif;
+          font-size: 0.80rem;
+        }
 
-    /* Title for sections */
-    .section-title{
-      font-weight: 700;
-      color: var(--vm-red);
-      margin-top: 10px;
-      margin-bottom: 8px;
-      font-size: 0.90rem;
-    }
+        /* Title for sections */
+        .section-title{
+          font-weight: 700;
+          color: var(--vm-red);
+          margin-top: 10px;
+          margin-bottom: 8px;
+          font-size: 0.90rem;
+        }
 
-    /* Table styling: visible grid-style borders, header in theme red */
-    .table-invoice{
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 6px;
-      font-size: 14px;
-    }
+        /* Table styling: visible grid-style borders, header in theme red */
+        .table-invoice{
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 6px;
+          font-size: 14px;
+        }
 
-    .table-invoice thead th{
-      background: var(--vm-red);
-      color: #fff;
-      border: 1px solid var(--border);
-      padding: 12px;
-      text-align: left;
-      font-weight: 600;
-    }
+        .table-invoice thead th{
+          background: var(--vm-red);
+          color: #fff;
+          border: 1px solid var(--border);
+          padding: 12px;
+          text-align: left;
+          font-weight: 600;
+        }
 
-    .table-invoice tbody td{
-      border: 1px solid var(--border);
-      padding: 10px 12px;
-      vertical-align: middle;
-    }
+        .table-invoice tbody td{
+          border: 1px solid var(--border);
+          padding: 10px 12px;
+          vertical-align: middle;
+        }
 
-    /* Totals block aligned to right */
-    .totals-block{
-      margin-top: 12px;
-      display: flex;
-      justify-content: flex-end;
-    }
+        /* Totals block aligned to right */
+        .totals-block{
+          margin-top: 12px;
+          display: flex;
+          justify-content: flex-end;
+        }
 
-    .totals-table{
-      width: 320px;
-      border-collapse: collapse;
-      font-size: 14px;
-      margin-left: 12px;
-    }
+        .totals-table{
+          width: 320px;
+          border-collapse: collapse;
+          font-size: 14px;
+          margin-left: 12px;
+        }
 
-    .totals-table td{
-      padding: 8px 10px;
-      border: none;
-    }
+        .totals-table td{
+          padding: 8px 10px;
+          border: none;
+        }
 
-    .totals-table .label{
-      text-align: left;
-      color: #444;
-    }
+        .totals-table .label{
+          text-align: left;
+          color: #444;
+        }
 
-    .totals-table .value{
-      text-align: right;
-      color: #222;
-      font-weight: 600;
-    }
+        .totals-table .value{
+          text-align: right;
+          color: #222;
+          font-weight: 600;
+        }
 
-    .totals-table .total-row{
-      background: var(--light-gray);
-      font-weight: 700;
-    }
+        .totals-table .total-row{
+          background: var(--light-gray);
+          font-weight: 700;
+        }
 
-    /* Payment summary */
-    .payment-summary{
-      margin-top: 18px;
-      border-top: 1px solid var(--border);
-      padding-top: 12px;
-      font-size: 14px;
-    }
+        /* Payment summary */
+        .payment-summary{
+          margin-top: 18px;
+          border-top: 1px solid var(--border);
+          padding-top: 12px;
+          font-size: 14px;
+        }
 
-    .payment-method{
-      margin-bottom: 8px;
-    }
+        .payment-method{
+          margin-bottom: 8px;
+        }
 
-    .payment-ref{
-      display: block;
-      color: #777;
-      font-size: 12px;
-      margin-top: 4px;
-      margin-left: 6px;
-    }
+        .payment-ref{
+          display: block;
+          color: #777;
+          font-size: 12px;
+          margin-top: 4px;
+          margin-left: 6px;
+        }
 
-    .additional-info{
-      margin-top: 18px;
-      font-size: 13px;
-      color: #444;
-    }
+        .additional-info{
+          margin-top: 18px;
+          font-size: 13px;
+          color: #444;
+        }
 
-    /* Continue button */
-    .btn-continue{
-      display: inline-block; 
-      width: 100px;
-      text-align: center;
-      margin: 28px 0 0 0; 
-      background: var(--vm-red);
-      color: #fff;
-      padding: 10px 16px;
-      text-decoration: none;
-      font-weight: 500;
-      border: none;
-    }
-  
+        /* Continue button */
+        .btn-continue{
+          display: inline-block; 
+          width: max-content;
+          text-align: center;
+          margin: 28px 0 0 0; 
+          background: var(--vm-red);
+          color: #fff;
+          padding: 10px 16px;
+          text-decoration: none;
+          font-weight: 500;
+          border: none;
+        }
+      
 
-    /* Right-aligned small booking meta like status column in sample */
-    .meta-right{
-      text-align: start;
-      font-size: 0.80rem;
-      color: #222;
-      font-family: 'poppins',sans-serif;
-    }
+        /* Right-aligned small booking meta like status column in sample */
+        .meta-right{
+          text-align: start;
+          font-size: 0.80rem;
+          color: #222;
+          font-family: 'poppins',sans-serif;
+        }
 
-    /* make sure logo fits */
-    .logo-placeholder{
-      width: 160px;
-      height: auto;
-      object-fit: contain;
-      display: inline-block;
-    }
+        /* make sure logo fits */
+        .logo-placeholder{
+          width: 160px;
+          height: auto;
+          object-fit: contain;
+          display: inline-block;
+        }
 
-    @media (max-width: 768px){
-      .left-col, .right-col{ width: 100%; text-align: left; }
-      .right-col{ margin-top: 12px; text-align: left; }
-      .totals-block{ justify-content: flex-start; }
-      .totals-table{ width: 100%; }
-    }
-</style>
-<body>
-    <!-- Header -->
-    <header class="header">
-      <div class="header-container">
-        <div class="header-content">
-          <a href="index.html" class="logo">
-            <!-- <img src="vm-logo.jpg" alt="Victoria Mansions Logo" class="logo-img"> -->
-            <span class="logo-text">Logo</span>
-          </a>
-          <nav class="nav">
-            <a href="#" class="nav-link">Rooms</a>
-            <a href="#" class="nav-link">About</a>
-            <a href="#" class="nav-link">Amenities</a>
-            <a href="#" class="nav-link">Contact</a>
-            <a href="manage-booking.html" class="nav-link">My Bookings</a> 
-          </nav>
-        </div>
-      </div>
-    </header>
-
-    <!-- Booking Progress Stepper -->
-    <section class="stepper-section">
-      <div class="container">
-        <div class="stepper">
-          <div class="step completed">
-            <div class="step-indicator"><div class="step-icon">✓</div></div>
-            <div class="step-content">
-              <div class="step-title">Select Dates</div>
-              <div class="step-subtitle">Completed</div>
+        @media (max-width: 768px){
+          .left-col, .right-col{ width: 100%; text-align: left; }
+          .right-col{ margin-top: 12px; text-align: left; }
+          .totals-block{ justify-content: flex-start; }
+          .totals-table{ width: 100%; }
+        }
+    </style>
+    <body>
+        <!-- Header -->
+        <header class="header">
+          <div class="header-container">
+            <div class="header-content">
+              <a href="index.html" class="logo">
+                <!-- <img src="vm-logo.jpg" alt="Victoria Mansions Logo" class="logo-img"> -->
+                <span class="logo-text">Logo</span>
+              </a>
+              <nav class="nav">
+                <a href="#" class="nav-link">Rooms</a>
+                <a href="#" class="nav-link">About</a>
+                <a href="#" class="nav-link">Amenities</a>
+                <a href="#" class="nav-link">Contact</a>
+                <a href="manage-booking.html" class="nav-link">My Bookings</a> 
+              </nav>
             </div>
           </div>
-          <div class="step-connector"></div>
-          <div class="step completed">
-            <div class="step-indicator"><div class="step-icon">✓</div></div>
-            <div class="step-content">
-              <div class="step-title">Select Room</div>
-              <div class="step-subtitle">Completed</div>
+        </header>
+
+        <!-- Booking Progress Stepper -->
+        <section class="stepper-section">
+          <div class="container">
+            <div class="stepper">
+              <div class="step completed">
+                <div class="step-indicator"><div class="step-icon">✓</div></div>
+                <div class="step-content">
+                  <div class="step-title">Select Dates</div>
+                  <div class="step-subtitle">Completed</div>
+                </div>
+              </div>
+              <div class="step-connector"></div>
+              <div class="step completed">
+                <div class="step-indicator"><div class="step-icon">✓</div></div>
+                <div class="step-content">
+                  <div class="step-title">Select Room</div>
+                  <div class="step-subtitle">Completed</div>
+                </div>
+              </div>
+              <div class="step-connector"></div>
+              <div class="step completed">
+                <div class="step-indicator"><div class="step-icon">✓</div></div>
+                <div class="step-content">
+                  <div class="step-title">Guest Details & Payment</div>
+                  <div class="step-subtitle">Next</div>
+                </div>
+              </div>
+              <div class="step-connector"></div>
+              <div class="step active">
+                <div class="step-indicator"><div class="step-number">4</div></div>
+                <div class="step-content">
+                  <div class="step-title">Confirmation</div>
+                  <div class="step-subtitle">Final Step</div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="step-connector"></div>
-          <div class="step completed">
-            <div class="step-indicator"><div class="step-icon">✓</div></div>
-            <div class="step-content">
-              <div class="step-title">Guest Details & Payment</div>
-              <div class="step-subtitle">Next</div>
+        </section>
+
+
+
+      <!-- Select Room Header -->
+      <section class="select-room-header">
+        <div class="container">
+          <div class="select-room-nav">
+            <button class="back-btn" onclick="goBack()"><span>←</span> Back</button>
+            <div class="page-title-container">
+              <h1 class="page-title">Confirmation</h1>
             </div>
-          </div>
-          <div class="step-connector"></div>
-          <div class="step active">
-            <div class="step-indicator"><div class="step-number">4</div></div>
-            <div class="step-content">
-              <div class="step-title">Confirmation</div>
-              <div class="step-subtitle">Final Step</div>
-            </div>
+            <div class="spacer"></div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-
-
-  <!-- Select Room Header -->
-  <section class="select-room-header">
-    <div class="container">
-      <div class="select-room-nav">
-        <button class="back-btn" onclick="goBack()"><span>←</span> Back</button>
-        <div class="page-title-container">
-          <h1 class="page-title">Confirmation</h1>
-        </div>
-        <div class="spacer"></div>
-      </div>
-    </div>
-  </section>
-
- <div class="confirmation-wrapper">
-    <div style="text-align:center;">
-      <div class="invoice-title">Reservation Pending</div>
-      <div class="invoice-contact">
-        <!-- 1234 Mabini St, Malate, Manila &nbsp; • &nbsp; +63 912 345 6789 &nbsp; • &nbsp; info@victoriamansions.com &nbsp; • &nbsp; www.victoriamansions.com -->
-            1234 Tondo, Manila &nbsp; • &nbsp; +63 912 345 6789 &nbsp; • &nbsp; info@hotelreservation@gmail.com &nbsp; • &nbsp; www.hotel_reservation.com
-      </div>
-    </div>
-
-    <div class="divider" role="presentation"></div>
-
-    <!-- Top two columns: booking details (left) and logo / meta (right) -->
-    <div class="top-section">
-      <div class="left-col">
-        <div class="section-title">Booking Details</div>
-
-        <div class="info-row">
-          <div class="info-label">Check in</div>
-          <div class="info-value" id="confirmedCheckIn">Sunday, August 11, 2025</div>
+    <div class="confirmation-wrapper">
+        <div style="text-align:center;">
+          <div class="invoice-title">Reservation Pending</div>
+          <div class="invoice-contact">
+            <!-- 1234 Mabini St, Malate, Manila &nbsp; • &nbsp; +63 912 345 6789 &nbsp; • &nbsp; info@victoriamansions.com &nbsp; • &nbsp; www.victoriamansions.com -->
+                1234 Tondo, Manila &nbsp; • &nbsp; +63 912 345 6789 &nbsp; • &nbsp; info@hotelreservation@gmail.com &nbsp; • &nbsp; www.hotel_reservation.com
+          </div>
         </div>
 
-        <div class="info-row">
-          <div class="info-label">Check out</div>
-          <div class="info-value" id="confirmedCheckOut">Monday, August 12, 2025</div>
+        <div class="divider" role="presentation"></div>
+
+        <!-- Top two columns: booking details (left) and logo / meta (right) -->
+        <div class="top-section">
+          <div class="left-col">
+            <div class="section-title">Booking Details</div>
+
+            <div class="info-row">
+              <div class="info-label">Check in</div>
+              <div class="info-value" id="confirmedCheckIn">Sunday, August 11, 2025</div>
+            </div>
+
+            <div class="info-row">
+              <div class="info-label">Check out</div>
+              <div class="info-value" id="confirmedCheckOut">Monday, August 12, 2025</div>
+            </div>
+
+            <div class="info-row">
+              <div class="info-label">Guests</div>
+              <div class="info-value" id="confirmedGuests">Loading....</div>
+            </div>
+
+            <div style="height:8px;"></div>
+
+            <div class="section-title" style="margin-top:12px;">Booked By</div>
+
+            <div class="info-row">
+              <div class="info-label">Name</div>
+              <div class="info-value" id="confirmedGuestName">Prince Gallardo</div>
+            </div>
+
+            <div class="info-row">
+              <div class="info-label">Email</div>
+              <div class="info-value" id="confirmedGuestEmail">princegallardo@gmail.com</div>
+            </div>
+
+          </div>
+
+          <div class="right-col">
+            <!-- logo placeholder -->
+            <img src="#" class="logo-placeholder" alt="Hotel Logo">
+
+            <div style="height:10px;"></div>
+
+            <div class="info-row">
+              <div class="info-label">Booking #</div>
+              <div class="info-value" id="bookingReference">000123</div>
+            </div>
+
+            <div class="info-row">
+              <div class="info-label">Booking Date</div>
+              <div class="info-value" id="invoiceDate">26-07-2025</div>
+            </div>
+
+            <div class="info-row">
+              <div class="info-label">Status</div>
+              <div class="info-value">Pending</div>
+            </div>
+          </div>
         </div>
 
-        <div class="info-row">
-          <div class="info-label">Guests</div>
-          <div class="info-value" id="confirmedGuests">Loading....</div>
+        <!-- Table of items -->
+        <table class="table-invoice" role="table" aria-label="Booking items">
+          <thead style="font-size: 1rem;">
+            <tr>
+              <th scope="col">Description</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Unit Price</th>
+              <th scope="col">Amount</th>
+            </tr>
+          </thead>
+          <tbody style="font-family: 'poppins',sans-serif; font-size: 0.80rem;">
+            <tr>
+              <td>Premium Room</td>
+              <td>2 nights</td>
+              <td>₱3,599</td>
+              <td>₱7,198</td>
+            </tr>
+            <tr>
+              <td>Family Room</td>
+              <td>3 nights</td>
+              <td>₱3,599</td>
+              <td>₱7,198</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- totals on the right -->
+        <div class="totals-block" aria-hidden="false">
+          <table class="totals-table" role="table">
+            <tbody style="font-family: 'poppins',sans-serif; font-size:0.90rem;">
+              <tr>
+                <td class="label">Total:</td>
+                <td class="value" id="confirmedTotalAmount">₱0.00</td>
+              </tr>
+              <tr>
+                <td class="label">Total paid:</td>
+                <td class="value" id="totalPaid">₱0.00</td>
+              </tr>
+              <!-- <tr>
+                <td class="label">VAT (12%)</td>
+                <td class="value" id="confirmedTaxes">₱0.00</td>
+              </tr> -->
+
+              <tr class="total-row">
+                <td class="label">Remaining Balance:</td>
+                <td class="value" id="confirmedRemainingBalance">₱0.00</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <div style="height:8px;"></div>
+        <!-- Payment summary -->
+        <div class="payment-summary">
+          <div class="section-title" style="margin-top:0; font-size: 1rem;">Payment Summary</div>
 
-        <div class="section-title" style="margin-top:12px;">Booked By</div>
 
-        <div class="info-row">
-          <div class="info-label">Name</div>
-          <div class="info-value" id="confirmedGuestName">Prince Gallardo</div>
         </div>
 
-        <div class="info-row">
-          <div class="info-label">Email</div>
-          <div class="info-value" id="confirmedGuestEmail">princegallardo@gmail.com</div>
+        <!-- Additional info -->
+        <div class="additional-info">
+          <div class="section-title" style="margin-top:16px;">Additional Information</div>
+          <div>Check-in time: 2:00 PM | Check-out time: 12:00 NN</div>
+          <div>Please present this confirmation upon arrival.</div>
         </div>
 
-      </div>
-
-      <div class="right-col">
-        <!-- logo placeholder -->
-        <img src="#" class="logo-placeholder" alt="Hotel Logo">
-
-        <div style="height:10px;"></div>
-
-        <div class="info-row">
-          <div class="info-label">Booking #</div>
-          <div class="info-value" id="bookingReference">000123</div>
-        </div>
-
-        <div class="info-row">
-          <div class="info-label">Booking Date</div>
-          <div class="info-value" id="invoiceDate">26-07-2025</div>
-        </div>
-
-        <div class="info-row">
-          <div class="info-label">Status</div>
-          <div class="info-value">Pending</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Table of items -->
-    <table class="table-invoice" role="table" aria-label="Booking items">
-      <thead style="font-size: 1rem;">
-        <tr>
-          <th scope="col">Description</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Unit Price</th>
-          <th scope="col">Amount</th>
-        </tr>
-      </thead>
-      <tbody style="font-family: 'poppins',sans-serif; font-size: 0.80rem;">
-        <tr>
-          <td>Premium Room</td>
-          <td>2 nights</td>
-          <td>₱3,599</td>
-          <td>₱7,198</td>
-        </tr>
-        <tr>
-          <td>Family Room</td>
-          <td>3 nights</td>
-          <td>₱3,599</td>
-          <td>₱7,198</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- totals on the right -->
-    <div class="totals-block" aria-hidden="false">
-      <table class="totals-table" role="table">
-        <tbody style="font-family: 'poppins',sans-serif; font-size:0.90rem;">
-          <tr>
-            <td class="label">Total:</td>
-            <td class="value" id="confirmedTotalAmount">₱0.00</td>
-          </tr>
-          <tr>
-            <td class="label">Total paid:</td>
-            <td class="value" id="totalPaid">₱0.00</td>
-          </tr>
-          <tr>
-            <td class="label">VAT (12%)</td>
-            <td class="value" id="confirmedTaxes">₱0.00</td>
-          </tr>
-
-          <tr class="total-row">
-            <td class="label">Remaining Balance:</td>
-            <td class="value" id="confirmedRemainingBalance">₱0.00</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Payment summary -->
-    <div class="payment-summary">
-      <div class="section-title" style="margin-top:0; font-size: 1rem;">Payment Summary</div>
-
-      <div class="payment-method" style="font-size: 0.80rem; font-family: 'poppins',sans-serif;">
-        <strong>Premium Room</strong> — Paid via <strong>GCash</strong>
-        <!-- <span class="payment-ref">Ref No: GC-2025101678921</span> -->
-      </div>
-
-      <div class="payment-method" style="font-size: 0.80rem; font-family: 'poppins',sans-serif;"">
-        <strong>Family Room</strong> — Paid via <strong>Paypal</strong>
-        <!-- <span class="payment-ref">Ref No: CC-2025101678933</span> -->
-      </div>
-    </div>
-
-    <!-- Additional info -->
-    <!-- <div class="additional-info">
-      <div class="section-title" style="margin-top:16px;">Additional Information</div>
-      <div>Check-in time: 2:00 PM | Check-out time: 12:00 NN</div>
-      <div>Please present this confirmation upon arrival.</div>
-    </div> -->
-
+        <!-- Continue button -->
     <!-- Continue button -->
- <!-- Continue button -->
-<div style="text-align:right;">
-  <a href="index.html" class="btn-continue">Continue</a>
-</div>
-
-</div> 
-
-
-<footer class="footer">
-  <div class="footer-container">
-    <!-- Logo -->
-    <div class="footer-logo">
-      <img src="vm-logo-nobg.png" alt="Logo">
+    <div style="text-align:right">
+      <a href="#" class="btn-continue" onclick="finalizeBooking()">Confirm & Book</a>
     </div>
 
-    <!-- <p class="footer-tagline">Stay simple. Stay comfortable.</p> -->
+    </div> 
 
-    <!-- Links Row 1 -->
-    <div class="footer-links">
-      <a href="#">About Us</a>
-      <span class="divider">|</span>
-      <a href="#">Privacy Policy</a>
-      <span class="divider">|</span>
-      <a href="#">Terms & Conditions</a>
-      <span class="divider">|</span>
-      <a href="#">Contact Us</a>
-      <span class="divider">|</span>
-      <a href="feedback.html">Feedback</a>
-    </div>
 
-    <!-- Links Row 2 -->
-    <div class="footer-links">
-      <a href="manage-booking.html">Manage Booking</a>
-      <span class="divider">|</span>
-      <a href="#">Facebook</a>
-      <span class="divider">|</span>
-      <a href="#">Instagram</a>
-    </div>
+    <footer class="footer">
+      <div class="footer-container">
+        <!-- Logo -->
+        <div class="footer-logo">
+          <img src="vm-logo-nobg.png" alt="Logo">
+        </div>
 
-    <!-- Copyright -->
-    <div class="footer-divider-line"></div>
-    <p class="footer-copy">© 2025. All rights reserved.</p>
-  </div>
-</footer>
+        <!-- <p class="footer-tagline">Stay simple. Stay comfortable.</p> -->
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="confirmation.js"></script>
-</body>
-</html>
+        <!-- Links Row 1 -->
+        <div class="footer-links">
+          <a href="#">About Us</a>
+          <span class="divider">|</span>
+          <a href="#">Privacy Policy</a>
+          <span class="divider">|</span>
+          <a href="#">Terms & Conditions</a>
+          <span class="divider">|</span>
+          <a href="#">Contact Us</a>
+          <span class="divider">|</span>
+          <a href="feedback.html">Feedback</a>
+        </div>
+
+        <!-- Links Row 2 -->
+        <div class="footer-links">
+          <a href="manage-booking.html">Manage Booking</a>
+          <span class="divider">|</span>
+          <a href="#">Facebook</a>
+          <span class="divider">|</span>
+          <a href="#">Instagram</a>
+        </div>
+
+        <!-- Copyright -->
+        <div class="footer-divider-line"></div>
+        <p class="footer-copy">© 2025. All rights reserved.</p>
+      </div>
+    </footer>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="confirmation.js"></script>
+    </body>
+    </html>

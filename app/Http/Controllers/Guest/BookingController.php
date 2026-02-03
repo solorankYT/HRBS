@@ -14,6 +14,45 @@ use Illuminate\Support\Str;
 
 class BookingController extends Controller
 {
+
+  public function bookingSuccess($reference)
+{
+    $booking = Booking::with(['rooms.room', 'guests', 'payments'])
+        ->where('reference_number', $reference)
+        ->first();
+
+    if (!$booking) {
+        return response()->json(['message' => 'Booking not found'], 404);
+    }
+
+    return response()->json([
+        'reference' => $booking->reference_number,
+        'status' => $booking->booking_status,
+        'check_in' => $booking->check_in,
+        'check_out' => $booking->check_out,
+        'guests' => $booking->number_of_guests,
+        'created_at' => $booking->created_at->format('Y-m-d'),
+        'guest' => $booking->guests->first() ? [
+            'name' => $booking->guests->first()->name,
+            'email' => $booking->guests->first()->email,
+        ] : null,
+        'items' => $booking->rooms->map(function ($room) {
+            return [
+                'room' => $room->room->room_name ?? 'N/A',
+                'nights' => $room->nights,
+                'price' => $room->price_per_night,
+                'subtotal' => $room->subtotal,
+            ];
+        }),
+        'total' => $booking->total_amount,
+        'paid' => $booking->payments->sum('amount'),
+        'vat' => round($booking->total_amount * 0.12, 2),
+        'balance' => $booking->total_amount - $booking->payments->sum('amount'),
+    ]);
+}
+
+
+
     public function store(Request $request): JsonResponse
     {
         $request->validate([
@@ -82,12 +121,10 @@ class BookingController extends Controller
             ]);
 
             if (!$request->email && !$request->phone) {
-                return response()->json([
-                    'message' => 'Email or phone is required'
-                ], 422);
+                return response()->json(['message' => 'Email or phone is required'], 422);
             }
 
-            $booking = Booking::with(['rooms.room'])
+            $booking = Booking::with(['rooms.room', 'guests'])
                 ->where('reference_number', $reference)
                 ->first();
 
@@ -96,31 +133,37 @@ class BookingController extends Controller
             }
 
             $guestMatch = $booking->guests->filter(function ($guest) use ($request) {
-                return ($request->email && $guest->email === $request->email) ||
-                       ($request->phone && $guest->phone === $request->phone);
+                return ($request->email && $guest->email === $request->email)
+                    || ($request->phone && $guest->phone === $request->phone);
             });
 
             if ($guestMatch->isEmpty()) {
                 return response()->json(['message' => 'Guest not found for this booking'], 404);
             }
 
+            $primaryGuest = $guestMatch->first();
+
             return response()->json([
                 'reference' => $booking->reference_number,
                 'status' => $booking->booking_status,
                 'check_in' => $booking->check_in,
                 'check_out' => $booking->check_out,
-                'guests' => $booking->number_of_guests,
+                'guests_count' => $booking->number_of_guests,
                 'total' => $booking->total_amount,
+
+                'primary_guest' => [
+                    'name' => $primaryGuest->name,
+                    'email' => $primaryGuest->email,
+                ],
+
                 'rooms' => $booking->rooms->map(function ($br) {
                     return [
                         'room_number' => $br->room->room_number,
                         'type' => $br->room->type,
                         'price' => $br->room->price,
-                        'guest_name' => $br->guest_name,
-                        'guest_email' => $br->guest_email,
                         'payment_method' => $br->payment_method,
                     ];
-                })
+                }),
             ]);
         }
 

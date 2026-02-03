@@ -17,10 +17,9 @@ return new class extends Migration
             $table->foreignId('booking_id')->constrained()->cascadeOnDelete();
 
             $table->decimal('amount', 10, 2);
-            $table->string('reference')->nullable();
+            $table->string('reference')->nullable(); //IMAGE URL
             $table->enum('method', ['cash', 'card', 'gcash', 'bank']);
             $table->enum('status', ['pending', 'paid', 'failed'])->default('pending');
-
             // New field
             $table->timestamp('paid_at')->nullable();
 

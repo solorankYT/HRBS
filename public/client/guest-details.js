@@ -277,5 +277,56 @@ function addRoomToBooking(room) {
   renderGuestAccordion();
 }
 
+function proceedToConfirmation() {
+  if (!document.getElementById('privacyTerms').checked ||
+      !document.getElementById('bookingConditions').checked) {
+    return alert("Please agree to Privacy Terms and Booking Conditions.");
+  }
+
+  const accordions = document.querySelectorAll('#roomsAccordion .accordion-item');
+
+  const roomsPayload = booking.rooms.map((room, index) => {
+    const acc = accordions[index];
+
+    return {
+      id: room.id,
+      type: room.type,
+      price: room.price,
+      nights: calculateNights(),
+      guest: {
+        name: acc.querySelector('.guest-name').value.trim(),
+        email: acc.querySelector('.guest-email').value.trim(),
+        phone: acc.querySelector('.guest-phone').value.trim(),
+        special_requests: acc.querySelector('.guest-requests')?.value.trim() || ''
+      },
+      payment_method: acc.querySelector('input[type="radio"]:checked')?.value || null
+    };
+  });
+
+  for (let room of roomsPayload) {
+    if (!room.guest.name || !room.guest.email || !room.guest.phone || !room.payment_method) {
+      return alert('Please complete all guest details and payment method.');
+    }
+  }
+
+  const confirmationPayload = {
+    check_in: booking.check_in,
+    check_out: booking.check_out,
+    number_of_guests: booking.number_of_guests,
+    rooms: roomsPayload,
+    created_at: new Date().toISOString()
+  };
+
+  // 🔐 TEMP STORAGE (safe for 1 session)
+  sessionStorage.setItem(
+    'pendingBooking',
+    JSON.stringify(confirmationPayload)
+  );
+
+  window.location.href = 'confirmation.html';
+}
+
+
+
 // ---------------- Initialize ----------------
 window.addEventListener('DOMContentLoaded', loadBooking);

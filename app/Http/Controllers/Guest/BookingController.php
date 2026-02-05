@@ -150,6 +150,7 @@ class BookingController extends Controller
                 'check_out' => $booking->check_out,
                 'guests_count' => $booking->number_of_guests,
                 'total' => $booking->total_amount,
+                'payment_status' => $booking->payment_status ?? 'pending',
 
                 'primary_guest' => [
                     'name' => $primaryGuest->name,
@@ -160,7 +161,9 @@ class BookingController extends Controller
                     return [
                         'room_number' => $br->room->room_number,
                         'type' => $br->room->type,
-                        'price' => $br->room->price,
+                        'price_per_night' => $br->price_per_night,
+                        'nights' => $br->nights,
+                        'subtotal' => $br->subtotal,
                         'payment_method' => $br->payment_method,
                     ];
                 }),
@@ -180,5 +183,40 @@ class BookingController extends Controller
 
     return response()->json(['message' => 'Booking cancelled']);
 }
+
+    public function submitPaymentProof(Request $request, $reference)
+    {
+        $request->validate([
+            'payment_method' => 'required|string|in:bank_transfer,gcash,paypal,credit_card,other',
+            'proof_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'transaction_id' => 'nullable|string|max:100',
+        ]);
+
+        $booking = Booking::where('reference_number', $reference)->first();
+
+        if (!$booking) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        }
+
+        // Store the image
+        $path = $request->file('proof_image')->store('payment-proofs', 'public');
+
+        // Create payment record (status: pending for admin verification)
+        $payment = $booking->payments()->create([
+            'amount' => $booking->total_amount,
+            'method' => $request->payment_method,
+            'reference' => $request->transaction_id,
+            'status' => 'pending',
+            'proof_image' => $path,
+            'paid_at' => now(),
+        ]);
+        // mark booking as submitted
+        $booking->update(['payment_status' => 'submitted']);
+
+        return response()->json([
+            'message' => 'Payment proof submitted successfully. Waiting for verification.',
+            'payment_id' => $payment->id,
+        ], 201);
+    }
 
 }

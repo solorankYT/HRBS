@@ -8,6 +8,7 @@ use App\Http\Controllers\RoomManagementController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\Guest\BookingController as GuestBookingController;
 use App\Http\Controllers\Receptionist\ReservationController as ReservationController;
+use App\Http\Controllers\Receptionist\PaymentController as ReceptionistPaymentController;
 
 Route::middleware('web')->group(function () {
     Route::post('/login', [AuthenticationController::class, 'login']);
@@ -28,7 +29,14 @@ Route::prefix('guest')->middleware('api')->group(function () {
     Route::post('/bookings', [GuestBookingController::class, 'store']);
       Route::get('/bookings/{reference}', [GuestBookingController::class, 'show']);
     Route::post('/bookings/{reference}/cancel', [GuestBookingController::class, 'cancel']);
+    Route::post('/bookings/{reference}/payment-proof', [GuestBookingController::class, 'submitPaymentProof']);
     Route::get('/bookings/success/{reference}', [GuestBookingController::class, 'bookingSuccess']);
+});
+
+Route::prefix('receptionist')->middleware('api')->group(function () {
+    Route::get('/payments', [ReceptionistPaymentController::class, 'index']);
+    Route::get('/payments/{id}', [ReceptionistPaymentController::class, 'show']);
+    Route::post('/payments/{id}/status', [ReceptionistPaymentController::class, 'updateStatus']);
 });
 
 

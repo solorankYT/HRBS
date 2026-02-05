@@ -13,6 +13,7 @@ class Booking extends Model
         'number_of_guests',
         'special_requests',
         'booking_status',
+        'payment_status',
         'total_amount',
     ];
 

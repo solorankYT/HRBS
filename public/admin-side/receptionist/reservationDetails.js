@@ -96,7 +96,15 @@ function renderCheckInButton(status) {
                 Guest is already checked in
             </div>
         `;
-    } else {
+    }
+    else if(status === 'checked_out'){
+         container.innerHTML = `
+              <div class="text-danger fw-semibold">
+                Guest is checked out
+            </div>
+             `;
+    }
+    else {
         container.innerHTML = `
             <button onclick="checkIn()" class="btn checkin-btn btn-sm">
                 <i class="fas fa-check me-1"></i>Check-in Guest

@@ -170,6 +170,8 @@ class BookingController extends Controller
             ]);
         }
 
+        
+
 
     public function cancel($reference)
 {

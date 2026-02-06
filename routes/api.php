@@ -9,6 +9,7 @@ use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\Guest\BookingController as GuestBookingController;
 use App\Http\Controllers\Receptionist\ReservationController as ReservationController;
 use App\Http\Controllers\Receptionist\PaymentController as ReceptionistPaymentController;
+use App\Http\Controllers\Receptionist\CheckOutController as ReceptionistCheckOutController;
 
 Route::middleware('web')->group(function () {
     Route::post('/login', [AuthenticationController::class, 'login']);
@@ -37,7 +38,9 @@ Route::prefix('receptionist')->middleware('api')->group(function () {
     Route::get('/payments', [ReceptionistPaymentController::class, 'index']);
     Route::get('/payments/{id}', [ReceptionistPaymentController::class, 'show']);
     Route::post('/payments/{id}/status', [ReceptionistPaymentController::class, 'updateStatus']);
-});
+    Route::post('/checkouts/{reference}', [ReceptionistCheckOutController::class, 'complete']);
+    Route::get('/checkouts/{reference}', [ReceptionistCheckOutController::class, 'show']);
+    });
 
 
 

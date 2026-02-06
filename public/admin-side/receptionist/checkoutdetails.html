@@ -243,121 +243,246 @@
                     <h1 class="reservation-title">Check-Out Details</h1>
                 </div>
 
-                <div class="container py-2">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="mb-2">Guest Information</h5>
-                <div class="row g-2 mb-3">
-                    <div class="col-md-3">
-                        <label class="form-label small">First Name</label>
-                        <input type="text" class="form-control form-control-sm" value="John">
+                <div class="py-2">
+                    <!-- Load Reservation Section -->
+                    <div id="loadSection" class="card mb-3">
+                        <div class="card-body">
+                            <div class="row g-2 mb-3">
+                                <div class="col-md-8">
+                                    <label class="form-label">Reservation ID</label>
+                                    <input id="reservationRef" class="form-control" placeholder="Enter reservation ID (10 characters)">
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button id="loadBtn" class="btn btn-primary w-100">Load Reservation</button>
+                                </div>
+                            </div>
+                            <div id="noResult" class="alert alert-warning" style="display:none;">No booking found for the provided reference.</div>
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label small">Last Name</label>
-                        <input type="text" class="form-control form-control-sm" value="Doe">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label small">Contact Number</label>
-                        <input type="text" class="form-control form-control-sm" value="0092345678">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label small">E-mail Address</label>
-                        <input type="email" class="form-control form-control-sm" value="johndoe@gmail.com">
-                    </div>
-                    <div class="col-md-8">
-                        <label class="form-label small">Address</label>
-                        <input type="text" class="form-control form-control-sm" value="123 Elms Street., Fourth Century, Makati, Philippines">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label small">Adults</label>
-                        <input type="number" class="form-control form-control-sm" value="4" min="0">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label small">Kids</label>
-                        <input type="number" class="form-control form-control-sm" value="2" min="0">
-                    </div>
-                </div>
 
-                <h5 class="mb-2">Guests Ledger</h5>
-                <div class="mb-3">
-                    <table class="table table-bordered align-middle table-sm w-100" style="border-collapse: separate; border-left: 1px solid #dee2e6; border-right: 1px solid #dee2e6;">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Guest ID</th>
-                                <th>Name</th>
-                                <th>Date</th>
-                                <th>Room</th>
-                                <th>Amount</th>
-                                <th>Balance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>202411</td>
-                                <td>John Doe</td>
-                                <td>12/10/2024</td>
-                                <td>Premium Room</td>
-                                <td>₱3,599.00</td>
-                                <td>₱0.00</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <!-- Guest Details Section -->
+                    <div id="detailsSection" style="display:none;">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="mb-2">Guest Information</h5>
+                                <div class="row g-2 mb-3">
+                                    <div class="col-md-3">
+                                        <label class="form-label small">First Name</label>
+                                        <input type="text" id="firstName" class="form-control form-control-sm" readonly>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small">Last Name</label>
+                                        <input type="text" id="lastName" class="form-control form-control-sm" readonly>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small">Contact Number</label>
+                                        <input type="text" id="contactNumber" class="form-control form-control-sm" readonly>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small">E-mail Address</label>
+                                        <input type="email" id="emailAddress" class="form-control form-control-sm" readonly>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label class="form-label small">Address</label>
+                                        <input type="text" id="address" class="form-control form-control-sm" readonly>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label small">Adults</label>
+                                        <input type="number" id="adults" class="form-control form-control-sm" readonly>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label small">Kids</label>
+                                        <input type="number" id="kids" class="form-control form-control-sm" readonly>
+                                    </div>
+                                </div>
 
-                <div id="actionMessage" class="mb-2"></div>
-                <div class="d-flex flex-column align-items-center gap-2 mt-4">
-                    <button id="btnCheckOut" class="btn px-5 checkout-btn">Check-Out Guest</button>
-                    <a href="checkinout.html" class="btn btn-secondary px-5">Back</a>
-                </div>
-            </div>
+                                <h5 class="mb-2">Room Information</h5>
+                                <table class="table table-bordered align-middle table-sm w-100">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Room Number</th>
+                                            <th>Type</th>
+                                            <th>Days</th>
+                                            <th>Price / Night</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="roomsBody"></tbody>
+                                </table>
+
+                                <div class="d-flex justify-content-end mb-3">
+                                    <h6>Total Amount: <strong id="totalAmount">₱0.00</strong></h6>
+                                </div>
+
+                                <div id="actionMessage" class="mb-3"></div>
+                                <div class="d-flex flex-column align-items-center gap-2 mt-4">
+                                    <button id="btnCheckOut" class="btn px-5 checkout-btn">Check-Out Guest</button>
+                                    <a href="checkinout.html" class="btn btn-secondary px-5">Back</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>
     </div>
+
+    <!-- Toast -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+        <div id="checkoutToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Receptionist</strong>
+                <small class="text-muted">now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastBody"></div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="receptionist.js"></script>
-       <script src="../js/script.js"></script>
+    <script src="../js/script.js"></script>
     <script src="../js/auth.js"></script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const messageBox = document.getElementById('actionMessage');
-            const btnCheckOut = document.getElementById('btnCheckOut');
-            // Make all form fields non-editable (display-only)
-            (function lockFields(){
-                const controls = Array.from(document.querySelectorAll('input, textarea, select'));
-                controls.forEach(el => {
-                    // Keep buttons clickable
-                    if (el.tagName === 'BUTTON') return;
-                    if (el.tagName === 'SELECT') el.disabled = true;
-                    if (el.tagName === 'TEXTAREA') el.readOnly = true;
-                    if (el.tagName === 'INPUT') {
-                        const t = (el.getAttribute('type')||'').toLowerCase();
-                        if (['text','email','number','date'].includes(t)) el.readOnly = true;
-                        if (['checkbox','radio'].includes(t)) el.disabled = true;
+        // DOM Elements
+        const qs = new URLSearchParams(window.location.search);
+        const refFromUrl = qs.get('ref');
+        const reservationRefEl = document.getElementById('reservationRef');
+        const loadBtn = document.getElementById('loadBtn');
+        const loadSection = document.getElementById('loadSection');
+        const detailsSection = document.getElementById('detailsSection');
+        const noResult = document.getElementById('noResult');
+        const roomsBody = document.getElementById('roomsBody');
+        const totalAmountEl = document.getElementById('totalAmount');
+        const btnCheckOut = document.getElementById('btnCheckOut');
+        const toastEl = document.getElementById('checkoutToast');
+        const toastBody = document.getElementById('toastBody');
+        const actionMessage = document.getElementById('actionMessage');
+        const bsToast = new bootstrap.Toast(toastEl);
+
+        let currentBooking = null;
+
+        // Check if reservation ID was passed in URL
+        if (refFromUrl) {
+            reservationRefEl.value = refFromUrl;
+            loadBooking();
+        }
+
+        loadBtn.addEventListener('click', loadBooking);
+
+        function showToast(message) {
+            toastBody.textContent = message;
+            bsToast.show();
+        }
+
+        function showMessage(type, text) {
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+            actionMessage.innerHTML = `
+                <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                    ${text}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            actionMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function loadBooking() {
+            const ref = (reservationRefEl.value || '').trim();
+            if (!ref) {
+                showToast('Please enter a Reservation ID');
+                return;
+            }
+
+            const apiUrl = `/api/receptionist/checkouts/${encodeURIComponent(ref)}`;
+            console.log('Loading booking from:', apiUrl);
+
+            fetch(apiUrl)
+                .then(r => {
+                    console.log('Response status:', r.status, 'ok:', r.ok);
+                    if (!r.ok) throw new Error(`API Error: ${r.status}`);
+                    return r.json();
+                })
+                .then(data => {
+                    console.log('Booking data received:', data);
+                    currentBooking = data.booking || data;
+                    
+                    if (!currentBooking || !currentBooking.reference_number) {
+                        throw new Error('Invalid booking data received');
                     }
+                    
+                    renderBooking(currentBooking);
+                    showToast('Booking loaded successfully');
+                })
+                .catch((error) => {
+                    console.error('Error loading booking:', error);
+                    loadSection.style.display = '';
+                    detailsSection.style.display = 'none';
+                    noResult.style.display = '';
+                    showToast('Reservation not found or server error. Check browser console for details.');
                 });
-            })();
+        }
 
-            function showMessage(type, text) {
-                const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
-                messageBox.innerHTML = `
-                    <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
-                        ${text}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+        function renderBooking(b) {
+            noResult.style.display = 'none';
+            loadSection.style.display = 'none';
+            detailsSection.style.display = '';
+
+            // Populate guest information
+            const guestName = b.guest_name || b.guest?.name || '';
+            const nameParts = guestName.split(' ');
+            document.getElementById('firstName').value = nameParts[0] || '';
+            document.getElementById('lastName').value = nameParts.slice(1).join(' ') || '';
+            document.getElementById('contactNumber').value = b.guest?.contact_number || b.contact_number || '';
+            document.getElementById('emailAddress').value = b.guest?.email || b.email || '';
+            document.getElementById('address').value = b.guest?.address || b.address || '';
+            document.getElementById('adults').value = b.adults || '0';
+            document.getElementById('kids').value = b.kids || '0';
+
+            // Populate room information
+            roomsBody.innerHTML = '';
+            let total = 0;
+            (b.rooms || []).forEach(r => {
+                const tr = document.createElement('tr');
+                const subtotal = Number(r.subtotal || 0);
+                tr.innerHTML = `
+                    <td>${r.room_number || ''}</td>
+                    <td>${r.type || ''}</td>
+                    <td>${r.nights || r.days || ''}</td>
+                    <td>${r.price_per_night ?? r.price ?? '0'}</td>
+                    <td>₱${subtotal.toFixed(2)}</td>
                 `;
-                messageBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
+                roomsBody.appendChild(tr);
+                total += subtotal;
+            });
+            totalAmountEl.textContent = '₱' + total.toFixed(2);
+        }
 
-            if (btnCheckOut) {
-                btnCheckOut.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    showMessage('success', 'Guest successfully checked out.');
-                });
-            }
+        btnCheckOut.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (!currentBooking) return;
+
+            const ref = currentBooking.reference_number;
+            fetch(`/api/receptionist/checkouts/${encodeURIComponent(ref)}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            })
+                .then(r => r.json().then(body => ({ ok: r.ok, body })))
+                .then(({ ok, body }) => {
+                    if (ok) {
+                        showMessage('success', 'Guest successfully checked out.');
+                        // Update booking status
+                        currentBooking.booking_status = 'checked_out';
+                    } else {
+                        showMessage('danger', body.message || 'Failed to check out');
+                    }
+                })
+                .catch(() => showMessage('danger', 'Server error'));
         });
+    </script>
 
-        // Sidebar toggle functionality
+    <!-- Sidebar Toggle Functionality -->
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const sidebarToggle = document.getElementById('sidebarToggle');
             const sidebar = document.querySelector('.sidebar');

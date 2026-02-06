@@ -375,8 +375,8 @@
                         <input type="text" class="form-control" id="cioReservationId" placeholder="Enter Reservation ID">
                     </div>
                     <div class="form-text">Proceed to details to confirm identity and room information.</div>
-                    <div class="mt-2 small text-muted">Note: Use Reservation ID <strong>12345</strong> before proceeding.</div>
-                    <div id="cioError" class="text-danger small mt-2" style="display:none;">Invalid Reservation ID. Please use <strong>12345</strong>.</div>
+                    <div class="mt-2 small text-muted">Note: Enter a 10-character Reservation ID to proceed.</div>
+                    <div id="cioError" class="text-danger small mt-2" style="display:none;">Invalid Reservation ID. Reservation ID must be 10 characters long.</div>
                 </div>
                 <div class="modal-footer">
                     <a href="reservationdetails.html" class="btn btn-primary" id="goToDetails">Continue</a>
@@ -385,6 +385,8 @@
         </div>
     </div>
 
+
+    
       <script src="../js/script.js"></script>
     <script src="../js/auth.js"></script>
 
@@ -401,7 +403,8 @@
             const errorEl = document.getElementById('cioError');
 
             function updateContinueState() {
-                const ok = (idInput?.value || '').trim() === '12345';
+                const value = (idInput?.value || '').trim();
+                const ok = value.length === 10;
                 if (continueBtn) {
                     continueBtn.classList.toggle('disabled', !ok);
                     continueBtn.setAttribute('aria-disabled', String(!ok));
@@ -434,10 +437,10 @@
                 });
             }
 
-            // Gate the Continue action on valid ID 12345
+            // Gate the Continue action on valid ID (10 characters)
             if (continueBtn) {
                 continueBtn.addEventListener('click', function (e) {
-                    const ok = (idInput?.value || '').trim() === '12345';
+                    const ok = (idInput?.value || '').trim().length === 10;
                     if (!ok) {
                         e.preventDefault();
                         if (errorEl) errorEl.style.display = '';

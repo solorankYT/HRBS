@@ -504,18 +504,7 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="reservations.html" data-tooltip="Reservations">
-                            <i class="fas fa-calendar"></i>
-                            <span>Reservations</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="payment.html" data-tooltip="Payments">
-                            <i class="fas fa-credit-card"></i>
-                            <span>Payments</span>
-                        </a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="usermanagement.html" data-tooltip="User Management">
                             <i class="fas fa-users"></i>
@@ -641,98 +630,15 @@
                     <h2 class="section-title">Reservation Report</h2>
                     
                     <!-- Reservation Metrics -->
-                    <div class="row mb-4">
-                        <div class="col-xl-4 col-md-6 mb-3">
-                            <div class="metric-card total-reservations">
-                                <div class="metric-value total-reservations">69</div>
-                                <div class="metric-label">Total Reservations</div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 mb-3">
-                            <div class="metric-card confirmed">
-                                <div class="metric-value confirmed">25</div>
-                                <div class="metric-label">Confirmed</div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 mb-3">
-                            <div class="metric-card pending">
-                                <div class="metric-value pending">20</div>
-                                <div class="metric-label">Pending</div>
-                            </div>
-                        </div>
+                    <div class="row mb-4" id="reservationMetricsContainer">
+                        <!-- Dynamically populated -->
                     </div>
 
-                </div>
+                    <!-- Reservation Breakdown -->
+                    <div id="reservationBreakdownContainer">
+                        <!-- Dynamically populated -->
+                    </div>
 
-                <!-- Booking Sources and Upcoming Reservations Side by Side -->
-                <div class="row">
-                    <div class="col-xl-6 mb-4">
-                        <div class="booking-sources-section">
-                            <h2 class="section-title">Booking Sources</h2>
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">Direct Website</span>
-                                <div class="breakdown-bar">
-                                    <div class="breakdown-fill" style="width: 90%;"></div>
-                                </div>
-                                <span class="breakdown-value">101</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">Online Travel Agencies</span>
-                                <div class="breakdown-bar">
-                                    <div class="breakdown-fill" style="width: 45%;"></div>
-                                </div>
-                                <span class="breakdown-value">50</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">Walk-ins</span>
-                                <div class="breakdown-bar">
-                                    <div class="breakdown-fill" style="width: 20%;"></div>
-                                </div>
-                                <span class="breakdown-value">12</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-xl-6 mb-4">
-                        <div class="upcoming-reservations-section">
-                            <h2 class="section-title">Upcoming Reservations</h2>
-                            <div class="empty-state">
-                                <i class="fas fa-calendar-alt fa-3x mb-3"></i>
-                                <p>No upcoming reservations to display</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Export Reports Section -->
-                <div class="reports-section">
-                    <h2 class="section-title">Export Reports</h2>
-                    <div class="row">
-                        <div class="col-xl-4 col-md-6 mb-3">
-                            <div class="report-card export-pdf">
-                                <div class="report-icon export-pdf">
-                                    <i class="fas fa-file-pdf"></i>
-                                </div>
-                                <h3 class="report-title">PDF Report</h3>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 mb-3">
-                            <div class="report-card export-excel">
-                                <div class="report-icon export-excel">
-                                    <i class="fas fa-file-excel"></i>
-                                </div>
-                                <h3 class="report-title">Excel Report</h3>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 mb-3">
-                            <div class="report-card export-email">
-                                <div class="report-icon export-email">
-                                    <i class="fas fa-envelope"></i>
-                                </div>
-                                <h3 class="report-title">Email Report</h3>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
             </main>
@@ -743,17 +649,115 @@
        <script src="../js/script.js"></script>
     <script src="../js/auth.js"></script>
     <script>
-        // Animate progress bars on load
-        window.addEventListener('load', function() {
-            const progressBars = document.querySelectorAll('.breakdown-fill, .trend-fill');
-            progressBars.forEach(bar => {
-                const width = bar.style.width;
-                bar.style.width = '0%';
+        function formatCurrency(amount) {
+            return '₱' + Math.round(amount).toLocaleString('en-US');
+        }
+
+        function formatPercent(num) {
+            const sign = num >= 0 ? '+' : '';
+            return sign + num.toFixed(1) + '%';
+        }
+
+        function populateReservations(data) {
+            const metricsContainer = document.getElementById('reservationMetricsContainer');
+            const breakdownContainer = document.getElementById('reservationBreakdownContainer');
+            
+            if (!data || !data.reservations) {
+                metricsContainer.innerHTML = '<p>No data available</p>';
+                return;
+            }
+
+            const reservations = data.reservations;
+            const metrics = [
+                {
+                    title: 'Total Reservations',
+                    value: reservations.total_reservations.toLocaleString('en-US'),
+                    change: formatPercent(reservations.change_percent),
+                    classType: 'total-reservations'
+                },
+                {
+                    title: 'Confirmed',
+                    value: reservations.metrics.confirmed.toLocaleString('en-US'),
+                    change: 'Active',
+                    classType: 'confirmed'
+                },
+                {
+                    title: 'Pending',
+                    value: reservations.metrics.pending.toLocaleString('en-US'),
+                    change: 'Awaiting confirmation',
+                    classType: 'pending'
+                }
+            ];
+
+            metricsContainer.innerHTML = metrics.map(metric => `
+                <div class="col-xl-4 col-md-6 mb-3">
+                    <div class="metric-card ${metric.classType}">
+                        <div class="metric-value ${metric.classType}">${metric.value}</div>
+                        <div class="metric-label">${metric.title}</div>
+                        <div style="font-size: 12px; margin-top: 8px; color: #666;">${metric.change}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Breakdown by status
+            if (reservations.breakdown && reservations.breakdown.length > 0) {
+                const breakdownHtml = `
+                    <div class="reports-section">
+                        <h2 class="section-title">Reservation Status Breakdown</h2>
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                            ${reservations.breakdown.map(item => `
+                                <div class="breakdown-item">
+                                    <div>
+                                        <span class="breakdown-label">${item.status}</span>
+                                        <span style="margin-left: 10px; font-size: 0.9em; color: #666;">${item.percentage}%</span>
+                                    </div>
+                                    <div class="breakdown-bar">
+                                        <div class="breakdown-fill" style="width: ${item.percentage}%;"></div>
+                                    </div>
+                                    <span class="breakdown-value">${item.count} bookings</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+
+                breakdownContainer.innerHTML = breakdownHtml;
+
+                // Animate bars
                 setTimeout(() => {
-                    bar.style.width = width;
-                }, 500);
-            });
-        });
-    </script>
-</body>
-</html>
+                    const fills = breakdownContainer.querySelectorAll('.breakdown-fill');
+                    fills.forEach(fill => {
+                        const width = fill.style.width;
+                        fill.style.width = '0%';
+                        setTimeout(() => {
+                            fill.style.width = width;
+                        }, 50);
+                    });
+                }, 100);
+            }
+        }
+
+        async function loadReservationData() {
+            try {
+                const token = localStorage.getItem('auth_token');
+                const response = await fetch('/api/admin/reports/dashboard', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                populateReservations(data);
+            } catch (error) {
+                console.error('Error loading reservation data:', error);
+                document.getElementById('reservationMetricsContainer').innerHTML = '<p class="text-danger">Error loading data</p>';
+                document.getElementById('reservationBreakdownContainer').innerHTML = '<p class="text-danger">Error loading data</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadReservationData);

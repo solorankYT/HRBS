@@ -505,18 +505,7 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="reservations.html" data-tooltip="Reservations">
-                            <i class="fas fa-calendar"></i>
-                            <span>Reservations</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="payment.html" data-tooltip="Payments">
-                            <i class="fas fa-credit-card"></i>
-                            <span>Payments</span>
-                        </a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="usermanagement.html" data-tooltip="User Management">
                             <i class="fas fa-users"></i>
@@ -642,156 +631,23 @@
                     <h2 class="section-title">Occupancy Report</h2>
                     
                     <!-- Occupancy Metrics -->
-                    <div class="row mb-4">
-                        <div class="col-xl-3 col-md-6 mb-3">
-                            <div class="metric-card total-rooms">
-                                <div class="metric-value total-rooms">150</div>
-                                <div class="metric-label">Total Rooms</div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-md-6 mb-3">
-                            <div class="metric-card occupied">
-                                <div class="metric-value occupied">75</div>
-                                <div class="metric-label">Occupied</div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-md-6 mb-3">
-                            <div class="metric-card available">
-                                <div class="metric-value available">75</div>
-                                <div class="metric-label">Available</div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-md-6 mb-3">
-                            <div class="metric-card occupancy-rate">
-                                <div class="metric-value occupancy-rate">50%</div>
-                                <div class="metric-label">Occupancy Rate</div>
-                            </div>
-                        </div>
+                    <div class="row mb-4" id="occupancyMetricsContainer">
+                        <!-- Dynamically populated -->
                     </div>
 
-                    <!-- Occupancy by Room Type and Weekly Trend Side by Side -->
+                    <!-- Occupancy by Room Type -->
                     <div class="row">
-                        <div class="col-xl-6 mb-4">
+                        <div class="col-xl-12 mb-4">
                             <div class="occupancy-breakdown-section">
                                 <h3 class="section-title">Occupancy by Room Type</h3>
-                                <div class="breakdown-item">
-                                    <span class="breakdown-label">Basic Studio</span>
-                                    <div class="breakdown-bar">
-                                        <div class="breakdown-fill" style="width: 87%;"></div>
-                                    </div>
-                                    <span class="breakdown-value">39/45 (86.7%)</span>
-                                </div>
-                                <div class="breakdown-item">
-                                    <span class="breakdown-label">Standard Room</span>
-                                    <div class="breakdown-bar">
-                                        <div class="breakdown-fill" style="width: 92%;"></div>
-                                    </div>
-                                    <span class="breakdown-value">55/60 (91.7%)</span>
-                                </div>
-                                <div class="breakdown-item">
-                                    <span class="breakdown-label">Premium Deluxe</span>
-                                    <div class="breakdown-bar">
-                                        <div class="breakdown-fill" style="width: 80%;"></div>
-                                    </div>
-                                    <span class="breakdown-value">24/30 (80%)</span>
-                                </div>
-                                <div class="breakdown-item">
-                                    <span class="breakdown-label">Family Room</span>
-                                    <div class="breakdown-bar">
-                                        <div class="breakdown-fill" style="width: 53%;"></div>
-                                    </div>
-                                    <span class="breakdown-value">8/15 (53.3%)</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-xl-6 mb-4">
-                            <div class="weekly-trend-section">
-                                <h3 class="section-title">Weekly Occupancy Trend</h3>
-                                <div class="trend-item">
-                                    <span class="trend-date">Mon</span>
-                                    <div class="trend-bar">
-                                        <div class="trend-fill" style="width: 65%;"></div>
-                                    </div>
-                                    <span class="trend-value">65%</span>
-                                </div>
-                                <div class="trend-item">
-                                    <span class="trend-date">Tue</span>
-                                    <div class="trend-bar">
-                                        <div class="trend-fill" style="width: 55%;"></div>
-                                    </div>
-                                    <span class="trend-value">55%</span>
-                                </div>
-                                <div class="trend-item">
-                                    <span class="trend-date">Wed</span>
-                                    <div class="trend-bar">
-                                        <div class="trend-fill" style="width: 63%;"></div>
-                                    </div>
-                                    <span class="trend-value">63%</span>
-                                </div>
-                                <div class="trend-item">
-                                    <span class="trend-date">Thu</span>
-                                    <div class="trend-bar">
-                                        <div class="trend-fill" style="width: 64%;"></div>
-                                    </div>
-                                    <span class="trend-value">64%</span>
-                                </div>
-                                <div class="trend-item">
-                                    <span class="trend-date">Fri</span>
-                                    <div class="trend-bar">
-                                        <div class="trend-fill" style="width: 57%;"></div>
-                                    </div>
-                                    <span class="trend-value">57%</span>
-                                </div>
-                                <div class="trend-item">
-                                    <span class="trend-date">Sat</span>
-                                    <div class="trend-bar">
-                                        <div class="trend-fill" style="width: 60%;"></div>
-                                    </div>
-                                    <span class="trend-value">60%</span>
-                                </div>
-                                <div class="trend-item">
-                                    <span class="trend-date">Sun</span>
-                                    <div class="trend-bar">
-                                        <div class="trend-fill" style="width: 65%;"></div>
-                                    </div>
-                                    <span class="trend-value">65%</span>
+                                <div id="roomTypeContainer">
+                                    <!-- Dynamically populated -->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Export Reports Section -->
-                <div class="reports-section">
-                    <h2 class="section-title">Export Reports</h2>
-                    <div class="row">
-                        <div class="col-xl-4 col-md-6 mb-3">
-                            <div class="report-card export-pdf">
-                                <div class="report-icon export-pdf">
-                                    <i class="fas fa-file-pdf"></i>
-                                </div>
-                                <h3 class="report-title">PDF Report</h3>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 mb-3">
-                            <div class="report-card export-excel">
-                                <div class="report-icon export-excel">
-                                    <i class="fas fa-file-excel"></i>
-                                </div>
-                                <h3 class="report-title">Excel Report</h3>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 mb-3">
-                            <div class="report-card export-email">
-                                <div class="report-icon export-email">
-                                    <i class="fas fa-envelope"></i>
-                                </div>
-                                <h3 class="report-title">Email Report</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </main>
         </div>
     </div>
@@ -800,17 +656,112 @@
        <script src="../js/script.js"></script>
     <script src="../js/auth.js"></script>
     <script>
-        // Animate progress bars on load
-        window.addEventListener('load', function() {
-            const progressBars = document.querySelectorAll('.breakdown-fill, .trend-fill');
-            progressBars.forEach(bar => {
-                const width = bar.style.width;
-                bar.style.width = '0%';
-                setTimeout(() => {
-                    bar.style.width = width;
-                }, 500);
-            });
-        });
+
+            function formatPercent(num) {
+            const sign = num >= 0 ? '+' : '';
+            return sign + num?.toFixed(1) + '%';
+        }
+
+
+        function populateOccupancy(data) {
+            const container = document.getElementById('occupancyMetricsContainer');
+            if (!data || !data.occupancy) {
+                container.innerHTML = '<p>No data available</p>';
+                return;
+            }
+
+            const occupancy = data.occupancy;
+         const metrics = [
+                {
+                    title: 'Overall Occupancy',
+                    value: occupancy.overall_occupancy + '%',
+                    change: formatPercent(occupancy.change_percent),
+                    classType: 'occupancy-rate'
+                },
+                {
+                    title: 'Total Rooms',
+                    value: occupancy.total_rooms,
+                    change: 'Rooms available',
+                    classType: 'total-rooms'
+                },
+                {
+                    title: 'Booked Nights',
+                    value: occupancy.booked_nights?.toLocaleString('en-US'),
+                    change: `Total available: ${occupancy.total_available_nights?.toLocaleString('en-US')}`,
+                    classType: 'occupied'
+                }
+            ];
+
+
+            container.innerHTML = metrics.map(metric => `
+                <div class="col-xl-4 col-md-6 mb-3">
+                    <div class="metric-card ${metric.classType}">
+                        <div class="metric-value ${metric.classType}">${metric.value}</div>
+                        <div class="metric-label">${metric.title}</div>
+                        <div style="font-size: 12px; margin-top: 8px; color: #666;">${metric.change}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function populateRoomTypes(data) {
+            const container = document.getElementById('roomTypeContainer');
+            if (!data || !data.occupancy || !data.occupancy.by_room_type) {
+                container.innerHTML = '<p>No data available</p>';
+                return;
+            }
+
+            const roomTypes = data.occupancy.by_room_type;
+            const html = roomTypes.map(room => `
+                <div class="breakdown-item">
+                    <span class="breakdown-label">${room.room_type}</span>
+                    <div class="breakdown-bar">
+                        <div class="breakdown-fill" style="width: ${room.occupancy}%;"></div>
+                    </div>
+                    <span class="breakdown-value">${room.booked_nights}/${room.total_nights} (${room.occupancy}%)</span>
+                </div>
+            `).join('');
+
+            container.innerHTML = html;
+
+            // Animate bars
+            setTimeout(() => {
+                const fills = container.querySelectorAll('.breakdown-fill');
+                fills.forEach(fill => {
+                    const width = fill.style.width;
+                    fill.style.width = '0%';
+                    setTimeout(() => {
+                        fill.style.width = width;
+                    }, 50);
+                });
+            }, 100);
+        }
+
+        async function loadOccupancyData() {
+            try {
+                const token = localStorage.getItem('auth_token');
+                const response = await fetch('/api/admin/reports/dashboard', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                populateOccupancy(data);
+                populateRoomTypes(data);
+            } catch (error) {
+                console.error('Error loading occupancy data:', error);
+                document.getElementById('occupancyMetricsContainer').innerHTML = '<p class="text-danger">Error loading data</p>';
+                document.getElementById('roomTypeContainer').innerHTML = '<p class="text-danger">Error loading data</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadOccupancyData);
     </script>
 </body>
 </html>

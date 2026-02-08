@@ -10,6 +10,7 @@ use App\Http\Controllers\Guest\BookingController as GuestBookingController;
 use App\Http\Controllers\Receptionist\ReservationController as ReservationController;
 use App\Http\Controllers\Receptionist\PaymentController as ReceptionistPaymentController;
 use App\Http\Controllers\Receptionist\CheckOutController as ReceptionistCheckOutController;
+use App\Http\Controllers\Admin\ReportsController;
 
 Route::middleware('web')->group(function () {
     Route::post('/login', [AuthenticationController::class, 'login']);
@@ -40,11 +41,20 @@ Route::prefix('receptionist')->middleware('api')->group(function () {
     Route::post('/payments/{id}/status', [ReceptionistPaymentController::class, 'updateStatus']);
     Route::post('/checkouts/{reference}', [ReceptionistCheckOutController::class, 'complete']);
     Route::get('/checkouts/{reference}', [ReceptionistCheckOutController::class, 'show']);
-    });
-
-
+});
 
 //ADMIN ROUTES
+Route::prefix('admin')->middleware('api')->group(function () {
+    // Reports
+    Route::get('/reports/revenue', [ReportsController::class, 'revenueReport']);
+    Route::get('/reports/breakdown', [ReportsController::class, 'revenueBreakdown']);
+    Route::get('/reports/trends', [ReportsController::class, 'dailyTrend']);
+    Route::get('/reports/occupancy', [ReportsController::class, 'occupancyReport']);
+    Route::get('/reports/reservations', [ReportsController::class, 'reservationReport']);
+    Route::get('/reports/feedback', [ReportsController::class, 'feedbackReport']);
+    Route::get('/reports/dashboard', [ReportsController::class, 'dashboard']);
+});
+
 //USER MANAGEMENTT
 Route::get('/users', [UserManagementController::class, 'index']);
 Route::get('/users/{id}', [UserManagementController::class, 'show']);

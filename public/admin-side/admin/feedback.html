@@ -578,18 +578,7 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="reservations.html" data-tooltip="Reservations">
-                            <i class="fas fa-calendar"></i>
-                            <span>Reservations</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="payment.html" data-tooltip="Payments">
-                            <i class="fas fa-credit-card"></i>
-                            <span>Payments</span>
-                        </a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="usermanagement.html" data-tooltip="User Management">
                             <i class="fas fa-users"></i>
@@ -715,157 +704,17 @@
                     <h2 class="section-title">Feedback Report</h2>
                     
                     <!-- Feedback Metrics -->
-                    <div class="row mb-4">
-                        <div class="col-xl-3 col-md-6 mb-3">
-                            <div class="metric-card average-rating">
-                                <div class="metric-value average-rating">4.7</div>
-                                <div class="stars">
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star-half-alt star"></i>
-                                </div>
-                                <div class="metric-label">Average Rating</div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-md-6 mb-3">
-                            <div class="metric-card total-reviews">
-                                <div class="metric-value total-reviews">25</div>
-                                <div class="metric-label">Total Reviews</div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-md-6 mb-3">
-                            <div class="metric-card response-rate">
-                                <div class="metric-value response-rate">75%</div>
-                                <div class="metric-label">Response Rate</div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-md-6 mb-3">
-                            <div class="metric-card recommendations">
-                                <div class="metric-value recommendations">75%</div>
-                                <div class="metric-label">Recommendations</div>
-                            </div>
-                        </div>
+                    <div class="row mb-4" id="feedbackMetricsContainer">
+                        <!-- Dynamically populated -->
                     </div>
 
                 </div>
 
-                <!-- Rating by Category and Recent Reviews Side by Side -->
-                <div class="row">
-                    <div class="col-xl-6 mb-4">
-                        <div class="rating-category-section">
-                            <h2 class="section-title">Rating by Category</h2>
-                            <div class="rating-item">
-                                <span class="rating-label">Cleanliness</span>
-                                <div class="rating-stars">
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star-half-alt star"></i>
-                                    <i class="far fa-star star empty"></i>
-                                </div>
-                                <span class="rating-value">3.3</span>
-                            </div>
-                            <div class="rating-item">
-                                <span class="rating-label">Staff Service</span>
-                                <div class="rating-stars">
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="far fa-star star empty"></i>
-                                </div>
-                                <span class="rating-value">4.1</span>
-                            </div>
-                            <div class="rating-item">
-                                <span class="rating-label">Facilities</span>
-                                <div class="rating-stars">
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star-half-alt star"></i>
-                                    <i class="far fa-star star empty"></i>
-                                </div>
-                                <span class="rating-value">3.5</span>
-                            </div>
-                            <div class="rating-item">
-                                <span class="rating-label">Food & Dining</span>
-                                <div class="rating-stars">
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="far fa-star star empty"></i>
-                                </div>
-                                <span class="rating-value">4.1</span>
-                            </div>
-                            <div class="rating-item">
-                                <span class="rating-label">Value for Money</span>
-                                <div class="rating-stars">
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="fas fa-star star"></i>
-                                    <i class="far fa-star star empty"></i>
-                                </div>
-                                <span class="rating-value">4.2</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-xl-6 mb-4">
-                        <div class="recent-reviews-section">
-                            <h2 class="section-title">Recent Reviews</h2>
-                            <div class="review-item">
-                                <div class="review-content">
-                                    <div class="review-name">Prince Gallardo</div>
-                                    <div class="review-stars">
-                                        <i class="fas fa-star star"></i>
-                                        <i class="fas fa-star star"></i>
-                                        <i class="fas fa-star star"></i>
-                                        <i class="fas fa-star star"></i>
-                                        <i class="far fa-star star empty"></i>
-                                    </div>
-                                    <div class="review-text">Exceptional service and beautiful rooms!</div>
-                                </div>
-                                <div class="review-action">
-                                    <button class="btn-view">View</button>
-                                </div>
-                            </div>
-                            <div class="review-item">
-                                <div class="review-content">
-                                    <div class="review-name">Prince Gallardo</div>
-                                    <div class="review-stars">
-                                        <i class="fas fa-star star"></i>
-                                        <i class="fas fa-star star"></i>
-                                        <i class="fas fa-star star"></i>
-                                        <i class="fas fa-star star"></i>
-                                        <i class="far fa-star star empty"></i>
-                                    </div>
-                                    <div class="review-text">Great location and friendly staff!</div>
-                                </div>
-                                <div class="review-action">
-                                    <button class="btn-view">View</button>
-                                </div>
-                            </div>
-                            <div class="review-item">
-                                <div class="review-content">
-                                    <div class="review-name">Prince Gallardo</div>
-                                    <div class="review-stars">
-                                        <i class="fas fa-star star"></i>
-                                        <i class="fas fa-star star"></i>
-                                        <i class="fas fa-star star"></i>
-                                        <i class="fas fa-star star"></i>
-                                        <i class="far fa-star star empty"></i>
-                                    </div>
-                                    <div class="review-text">Perfect for business trips!</div>
-                                </div>
-                                <div class="review-action">
-                                    <button class="btn-view">View</button>
-                                </div>
-                            </div>
-                        </div>
+                <!-- Rating Distribution -->
+                <div class="reports-section">
+                    <h2 class="section-title">Rating Distribution</h2>
+                    <div id="feedbackBreakdownContainer">
+                        <!-- Dynamically populated -->
                     </div>
                 </div>
 
@@ -906,153 +755,111 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../script.js"></script>
-    
-    <!-- Feedback View Modal -->
-    <div class="modal fade" id="viewFeedbackModal" tabindex="-1" aria-labelledby="viewFeedbackLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header justify-content-center">
-                    <div class="text-center w-100">
-                        <h5 class="modal-title mb-0" id="viewFeedbackLabel">Share Your Experience</h5>
-                        <div class="text-muted" style="font-size: 12px; line-height: 1.2;">Your feedback helps us improve our service and hospitality</div>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <div class="card mb-3 p-3">
-                        <h6 class="mb-3">Rate Your Experience</h6>
-                        <div class="container-fluid px-0">
-                            <div class="row g-2 align-items-center mb-2">
-                                <div class="col-6">Overall Experience</div>
-                                <div class="col-6 text-end" data-rating-group="overall">
-                                    <i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i>
-                                </div>
-                            </div>
-                            <div class="row g-2 align-items-center mb-2">
-                                <div class="col-6">Cleanliness</div>
-                                <div class="col-6 text-end" data-rating-group="clean">
-                                    <i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i>
-                                </div>
-                            </div>
-                            <div class="row g-2 align-items-center mb-2">
-                                <div class="col-6">Staff Service</div>
-                                <div class="col-6 text-end" data-rating-group="staff">
-                                    <i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i>
-                                </div>
-                            </div>
-                            <div class="row g-2 align-items-center mb-2">
-                                <div class="col-6">Facilities</div>
-                                <div class="col-6 text-end" data-rating-group="facilities">
-                                    <i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i>
-                                </div>
-                            </div>
-                            <div class="row g-2 align-items-center mb-2">
-                                <div class="col-6">Food & Dining</div>
-                                <div class="col-6 text-end" data-rating-group="food">
-                                    <i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i>
-                                </div>
-                            </div>
-                            <div class="row g-2 align-items-center">
-                                <div class="col-6">Value for Money</div>
-                                <div class="col-6 text-end" data-rating-group="value">
-                                    <i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i><i class="far fa-star mx-1"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="card p-3">
-                        <h6 class="mb-3">Additional Comments</h6>
-                        <label class="form-label">Tell us more about your experience</label>
-                        <textarea class="form-control mb-1" id="feedbackText" rows="3" placeholder="What did you enjoy most? How can we improve?" readonly></textarea>
-                        <small class="text-muted d-block mb-3">Max 500 characters</small>
-                        <label class="form-label">Share Photos (optional)</label>
-                        <div class="border rounded-3 p-4 text-center mb-2" style="border-style:dashed !important;">
-                            <div class="mb-2"><i class="fas fa-camera text-muted" style="font-size: 1.5rem;"></i></div>
-                            <div class="text-muted">Upload photos from your stay</div>
-                            <small class="text-muted d-block">PNG, JPG up to 10MB each</small>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-       <script src="../js/script.js"></script>
-        <script src="../js/auth.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/auth.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const openCard = document.getElementById('openFeedbackModal');
-            if (openCard) {
-                openCard.addEventListener('click', function(){
-                    const modalEl = document.getElementById('viewFeedbackModal');
-                    const modal = new bootstrap.Modal(modalEl);
-                    // Prefill default sample ratings and text on open
-                    const sample = { overall: 4, clean: 5, staff: 5, facilities: 4, food: 4, value: 5, text: 'Exceptional service and beautiful rooms!' };
-                    const setStars = (groupKey, count) => {
-                        const group = modalEl.querySelector(`[data-rating-group="${groupKey}"]`);
-                        if (!group) return;
-                        const stars = Array.from(group.querySelectorAll('i'));
-                        stars.forEach((s, i) => {
-                            s.classList.toggle('fas', i < count);
-                            s.classList.toggle('far', i >= count);
-                        });
-                    };
-                    setStars('overall', sample.overall);
-                    setStars('clean', sample.clean);
-                    setStars('staff', sample.staff);
-                    setStars('facilities', sample.facilities);
-                    setStars('food', sample.food);
-                    setStars('value', sample.value);
-                    const txt = modalEl.querySelector('#feedbackText');
-                    if (txt) txt.value = sample.text;
-                    modal.show();
-                });
-            }
-            const samples = [
+        function formatPercent(value) {
+            return parseFloat(value).toFixed(1) + '%';
+        }
+
+        function formatRating(value) {
+            return parseFloat(value).toFixed(1);
+        }
+
+        function populateFeedback(data) {
+            if (!data || !data.feedback) return;
+            
+            const feedback = data.feedback;
+            const container = document.getElementById('feedbackMetricsContainer');
+            
+            const metrics = [
                 {
-                    overall: 4, clean: 5, staff: 5, facilities: 4, food: 4, value: 5,
-                    text: 'Exceptional service and beautiful rooms!'
+                    title: 'Average Rating',
+                    value: formatRating(feedback.overall_rating) + '/5',
+                    change: feedback.change_percent,
+                    classType: 'average-rating'
                 },
                 {
-                    overall: 4, clean: 4, staff: 5, facilities: 4, food: 4, value: 4,
-                    text: 'Great location and friendly staff!'
+                    title: 'Total Feedback',
+                    value: feedback.total_feedback,
+                    change: 0,
+                    classType: 'total-reviews'
                 },
                 {
-                    overall: 4, clean: 4, staff: 4, facilities: 4, food: 4, value: 4,
-                    text: 'Perfect for business trips!'
+                    title: 'Positive Reviews',
+                    value: feedback.sentiment.positive,
+                    change: 0,
+                    classType: 'response-rate'
                 }
             ];
-            document.querySelectorAll('.btn-view').forEach((btn, idx) => {
-                btn.addEventListener('click', function () {
-                    const modalEl = document.getElementById('viewFeedbackModal');
-                    const sample = samples[idx] || samples[0];
-                    const setStars = (groupKey, count) => {
-                        const group = modalEl.querySelector(`[data-rating-group="${groupKey}"]`);
-                        if (!group) return;
-                        const stars = Array.from(group.querySelectorAll('i'));
-                        stars.forEach((s, i) => {
-                            s.classList.toggle('fas', i < count);
-                            s.classList.toggle('far', i >= count);
-                        });
-                    };
-                    setStars('overall', sample.overall);
-                    setStars('clean', sample.clean);
-                    setStars('staff', sample.staff);
-                    setStars('facilities', sample.facilities);
-                    setStars('food', sample.food);
-                    setStars('value', sample.value);
-                    const txt = modalEl.querySelector('#feedbackText');
-                    if (txt) txt.value = sample.text;
-                    const modal = new bootstrap.Modal(modalEl);
-                    modal.show();
-                });
+            
+            let html = '';
+            metrics.forEach(metric => {
+                const changeClass = metric.change >= 0 ? 'positive' : 'negative';
+                const changeSymbol = metric.change >= 0 ? '+' : '';
+                html += `
+                    <div class="col-xl-4 col-md-6 mb-3">
+                        <div class="metric-card ${metric.classType}">
+                            <div class="metric-value ${metric.classType}">${metric.value}</div>
+                            ${metric.change !== 0 ? `<div class="metric-change ${changeClass}">${changeSymbol}${metric.change.toFixed(1)}%</div>` : ''}
+                            <div class="metric-label">${metric.title}</div>
+                        </div>
+                    </div>
+                `;
             });
-            // Remove editability: no click handlers attached to stars
-        });
+            
+            container.innerHTML = html;
+        }
+
+        function populateFeedbackBreakdown(data) {
+            if (!data || !data.feedback || !data.feedback.breakdown) return;
+            
+            const container = document.getElementById('feedbackBreakdownContainer');
+            const breakdown = data.feedback.breakdown;
+            
+            let html = '';
+            breakdown.forEach(item => {
+                const percentage = item.percentage || 0;
+                html += `
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">
+                            <span>${item.category || item.rating + ' Star'}</span>
+                            <span class="breakdown-percent">${percentage.toFixed(1)}%</span>
+                        </div>
+                        <div class="breakdown-bar">
+                            <div class="breakdown-fill" style="width: ${percentage}%;"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        async function loadFeedbackData() {
+            try {
+                const token = localStorage.getItem('auth_token');
+                const response = await fetch('/api/admin/reports/dashboard', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    console.error('Failed to fetch feedback data');
+                    return;
+                }
+                
+                const data = await response.json();
+                populateFeedback(data);
+                populateFeedbackBreakdown(data);
+            } catch (error) {
+                console.error('Error loading feedback data:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadFeedbackData);
     </script>
     <script>
         // Animate progress bars on load

@@ -72,7 +72,7 @@ class BookingController extends Controller
         $nights = $checkIn->diffInDays($checkOut);
 
         $booking = Booking::create([
-            'reference_number' => strtoupper(Str::random(8)),
+            'reference_number' => strtoupper(Str::random(10)),
             'check_in' => $request->check_in,
             'check_out' => $request->check_out,
             'number_of_guests' => $request->number_of_guests,

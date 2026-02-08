@@ -527,18 +527,7 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="reservations.html" data-tooltip="Reservations">
-                            <i class="fas fa-calendar"></i>
-                            <span>Reservations</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="payment.html" data-tooltip="Payments">
-                            <i class="fas fa-credit-card"></i>
-                            <span>Payments</span>
-                        </a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="usermanagement.html" data-tooltip="User Management">
                             <i class="fas fa-users"></i>
@@ -664,28 +653,8 @@
                     <h2 class="section-title">Revenue Report</h2>
                     
                     <!-- Revenue Metrics -->
-                    <div class="row mb-4">
-                        <div class="col-xl-4 col-md-6 mb-3">
-                            <div class="metric-card total-revenue">
-                                <div class="metric-value total-revenue">₱3,310,000</div>
-                                <div class="metric-label">Total Revenue</div>
-                                <div class="metric-change positive">15.3% from last month</div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 mb-3">
-                            <div class="metric-card avg-rate">
-                                <div class="metric-value avg-rate">₱3,500</div>
-                                <div class="metric-label">Average Daily Rate</div>
-                                <div class="metric-change positive">8.1% from last month</div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 mb-3">
-                            <div class="metric-card revpar">
-                                <div class="metric-value revpar">₱3,310</div>
-                                <div class="metric-label">RevPAR</div>
-                                <div class="metric-change positive">12.3% from last month</div>
-                            </div>
-                        </div>
+                    <div class="row mb-4" id="metricsContainer">
+                        <!-- Dynamically populated -->
                     </div>
 
                 </div>
@@ -695,26 +664,8 @@
                     <div class="col-xl-6 mb-4">
                         <div class="revenue-breakdown-section">
                             <h2 class="section-title">Revenue Breakdown</h2>
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">Room Revenue</span>
-                                <div class="breakdown-bar">
-                                    <div class="breakdown-fill" style="width: 85%;"></div>
-                                </div>
-                                <span class="breakdown-value">₱265k</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">Food & Beverage</span>
-                                <div class="breakdown-bar">
-                                    <div class="breakdown-fill" style="width: 30%;"></div>
-                                </div>
-                                <span class="breakdown-value">₱100k</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <span class="breakdown-label">Other Services</span>
-                                <div class="breakdown-bar">
-                                    <div class="breakdown-fill" style="width: 10%;"></div>
-                                </div>
-                                <span class="breakdown-value">₱10k</span>
+                            <div id="breakdownContainer">
+                                <!-- Dynamically populated -->
                             </div>
                         </div>
                     </div>
@@ -722,54 +673,8 @@
                     <div class="col-xl-6 mb-4">
                         <div class="daily-trend-section">
                             <h2 class="section-title">Daily Revenue Trend</h2>
-                            <div class="trend-item">
-                                <span class="trend-date">Sept 15</span>
-                                <div class="trend-bar">
-                                    <div class="trend-fill" style="width: 100%;"></div>
-                                </div>
-                                <span class="trend-value">₱65k</span>
-                            </div>
-                            <div class="trend-item">
-                                <span class="trend-date">Sept 16</span>
-                                <div class="trend-bar">
-                                    <div class="trend-fill" style="width: 85%;"></div>
-                                </div>
-                                <span class="trend-value">₱55k</span>
-                            </div>
-                            <div class="trend-item">
-                                <span class="trend-date">Sept 17</span>
-                                <div class="trend-bar">
-                                    <div class="trend-fill" style="width: 95%;"></div>
-                                </div>
-                                <span class="trend-value">₱63k</span>
-                            </div>
-                            <div class="trend-item">
-                                <span class="trend-date">Sept 18</span>
-                                <div class="trend-bar">
-                                    <div class="trend-fill" style="width: 98%;"></div>
-                                </div>
-                                <span class="trend-value">₱64k</span>
-                            </div>
-                            <div class="trend-item">
-                                <span class="trend-date">Sept 19</span>
-                                <div class="trend-bar">
-                                    <div class="trend-fill" style="width: 88%;"></div>
-                                </div>
-                                <span class="trend-value">₱57k</span>
-                            </div>
-                            <div class="trend-item">
-                                <span class="trend-date">Sept 20</span>
-                                <div class="trend-bar">
-                                    <div class="trend-fill" style="width: 92%;"></div>
-                                </div>
-                                <span class="trend-value">₱60k</span>
-                            </div>
-                            <div class="trend-item">
-                                <span class="trend-date">Sept 21</span>
-                                <div class="trend-bar">
-                                    <div class="trend-fill" style="width: 100%;"></div>
-                                </div>
-                                <span class="trend-value">₱65k</span>
+                            <div id="trendContainer">
+                                <!-- Dynamically populated -->
                             </div>
                         </div>
                     </div>
@@ -815,17 +720,151 @@
     <script src="../js/auth.js"></script>
 
     <script>
-        // Animate progress bars on load
-        window.addEventListener('load', function() {
-            const progressBars = document.querySelectorAll('.breakdown-fill, .trend-fill');
-            progressBars.forEach(bar => {
-                const width = bar.style.width;
-                bar.style.width = '0%';
-                setTimeout(() => {
-                    bar.style.width = width;
-                }, 500);
-            });
-        });
+        // Format currency for display
+        function formatCurrency(amount) {
+            return '₱' + Math.round(amount).toLocaleString('en-US');
+        }
+
+        // Format percentage
+        function formatPercent(num) {
+            const sign = num >= 0 ? '+' : '';
+            return sign + num(1) + '%';
+        }
+
+        // Populate metrics section
+      function populateMetrics(data) {
+            const container = document.getElementById('metricsContainer');
+            const metrics = data?.revenue?.metrics;
+
+            if (!metrics) {
+                container.innerHTML = '<p>No data available</p>';
+                return;
+            }
+
+            const cards = [
+                {
+                    title: 'Total Revenue',
+                    value: formatCurrency(metrics.total_revenue.value),
+                    change: `${metrics.total_revenue.change}% vs last month`,
+                    classType: 'total-revenue'
+                },
+                {
+                    title: 'Avg Daily Rate',
+                    value: formatCurrency(metrics.avg_daily_rate.value),
+                    change: `${metrics.avg_daily_rate.change}% vs last month`,
+                    classType: 'avg-rate'
+                },
+                {
+                    title: 'RevPAR',
+                    value: formatCurrency(metrics.revpar.value),
+                    change: `${metrics.revpar.change}% vs last month`,
+                    classType: 'revpar'
+                }
+            ];
+
+            container.innerHTML = cards.map(card => `
+                <div class="col-md-4 mb-3">
+                    <div class="metric-card ${card.classType}">
+                        <p class="metric-label">${card.title}</p>
+                        <p class="metric-value ${card.classType}">${card.value}</p>
+                        <p class="metric-change positive">${card.change}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+
+        // Populate breakdown section
+        function populateBreakdown(data) {
+                const container = document.getElementById('breakdownContainer');
+                const items = data?.breakdown?.breakdown;
+
+                if (!items || !items.length) {
+                    container.innerHTML = '<p>No data available</p>';
+                    return;
+                }
+
+                container.innerHTML = items.map(item => `
+                    <div class="breakdown-item">
+                        <div>
+                            <span class="breakdown-label">${item.label}</span>
+                            <span style="margin-left: 10px; font-size: 0.9em; color: #666;">
+                                ${item.percentage}%
+                            </span>
+                        </div>
+                        <div class="breakdown-bar">
+                            <div class="breakdown-fill" style="width: ${item.percentage}%;"></div>
+                        </div>
+                        <span class="breakdown-value">${formatCurrency(item.value)}</span>
+                    </div>
+                `).join('');
+            
+
+
+            // Animate bars
+            setTimeout(() => {
+                const fills = container.querySelectorAll('.breakdown-fill');
+                fills.forEach(fill => {
+                    const width = fill.style.width;
+                    fill.style.width = '0%';
+                    setTimeout(() => {
+                        fill.style.width = width;
+                    }, 50);
+                });
+            }, 100);
+        }
+
+        // Populate daily trends section
+       function populateTrends(data) {
+            const container = document.getElementById('trendContainer');
+            const trends = data?.trends;
+
+            if (!trends || !trends.length) {
+                container.innerHTML = '<p>No data available</p>';
+                return;
+            }
+
+            container.innerHTML = trends.map(item => `
+                <div class="trend-item">
+                    <span class="trend-date">${item.date}</span>
+                    <div class="trend-bar">
+                        <div class="trend-fill" style="width: ${item.percentage}%;"></div>
+                    </div>
+                    <span class="trend-value">${formatCurrency(item.value)}</span>
+                </div>
+            `).join('');
+        }
+
+
+        // Fetch and populate all data
+        async function loadReportData() {
+            try {
+                const token = localStorage.getItem('auth_token');
+                const response = await fetch('/api/admin/reports/dashboard', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                populateMetrics(data);
+                populateBreakdown(data);
+                populateTrends(data);
+            } catch (error) {
+                console.error('Error loading report data:', error);
+                document.getElementById('metricsContainer').innerHTML = '<p class="text-danger">Error loading metrics</p>';
+                document.getElementById('breakdownContainer').innerHTML = '<p class="text-danger">Error loading breakdown</p>';
+                document.getElementById('trendContainer').innerHTML = '<p class="text-danger">Error loading trends</p>';
+            }
+        }
+
+        // Load data when page is ready
+        document.addEventListener('DOMContentLoaded', loadReportData);
     </script>
 </body>
 </html>

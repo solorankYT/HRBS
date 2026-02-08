@@ -93,6 +93,24 @@ public function show($id)
 }
 
 
+public function lookupByReference(Request $request)
+{
+    $request->validate([
+        'reference' => 'required|string|size:10'
+    ]);
+
+    $booking = Booking::where('reference_number', $request->reference)->first();
+
+    if (!$booking) {
+        return response()->json(['message' => 'Reservation not found'], 404);
+    }
+
+    return response()->json([
+        'booking_id' => $booking->id,
+        'status' => $booking->status,
+    ]);
+}
+
 public function checkIn(string $id)
 {
     $booking = Booking::findOrFail($id);

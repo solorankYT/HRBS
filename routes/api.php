@@ -41,6 +41,7 @@ Route::prefix('receptionist')->middleware('api')->group(function () {
     Route::post('/payments/{id}/status', [ReceptionistPaymentController::class, 'updateStatus']);
     Route::post('/checkouts/{reference}', [ReceptionistCheckOutController::class, 'complete']);
     Route::get('/checkouts/{reference}', [ReceptionistCheckOutController::class, 'show']);
+    Route::get('/reservation/lookup', [ReservationController::class, 'lookupByReference']);
 });
 
 //ADMIN ROUTES

@@ -417,18 +417,29 @@
                 idInput.addEventListener('input', updateContinueState);
             }
             triggerCards.forEach(card => {
-                card.addEventListener('click', function () {
-                    // Route based on which card is clicked
-                    const isCheckout = this.classList.contains('checkout-card');
-                    if (continueBtn) {
-                        continueBtn.setAttribute('href', isCheckout ? 'checkoutdetails.html' : 'reservationdetails.html');
-                    }
-                    // Reset state each time modal opens
-                    if (idInput) { idInput.value = ''; }
-                    updateContinueState();
-                    modal.show();
-                });
-            });
+    card.addEventListener('click', function () {
+        const isCheckout = this.classList.contains('checkout-card');
+
+        // Reset input and error messages
+        idInput.value = '';
+        errorEl.style.display = 'none';
+        idInput.classList.remove('is-invalid');
+        continueBtn.classList.add('disabled');
+        continueBtn.setAttribute('aria-disabled', 'true');
+
+        if (!isCheckout) {
+            // Check-In card → always go to reservationdetails.html
+            continueBtn.setAttribute('href', 'reservationdetails.html');
+        } else {
+            // Checkout card → already working
+            continueBtn.setAttribute('href', 'checkoutdetails.html');
+        }
+
+        modal.show();
+    });
+});
+
+
 
             // Walk-In should go directly to walk-in booking page
             if (walkInCard) {
@@ -438,19 +449,38 @@
             }
 
             // Gate the Continue action on valid ID (10 characters)
-            if (continueBtn) {
-                continueBtn.addEventListener('click', function (e) {
-                    const ok = (idInput?.value || '').trim().length === 10;
-                    if (!ok) {
+           if (continueBtn) {
+                continueBtn.addEventListener('click', async function (e) {
+                    const reservationRef = (idInput?.value || '').trim();
+
+                    if (reservationRef.length !== 10) {
                         e.preventDefault();
-                        if (errorEl) errorEl.style.display = '';
-                        if (idInput) {
-                            idInput.classList.add('is-invalid');
-                            idInput.focus();
-                        }
+                        errorEl.style.display = '';
+                        idInput.classList.add('is-invalid');
+                        idInput.focus();
+                        return;
+                    }
+
+                    try {
+
+                        const res = await fetch(`/api/receptionist/reservation/lookup?reference=${reservationRef}`);
+                        if (!res.ok) throw new Error('Reservation not found');
+
+                        const data = await res.json();
+                        const bookingId = data.booking_id;
+
+                        window.location.href = `reservationdetails.html?id=${bookingId}`;
+                    } catch (err) {
+                        e.preventDefault();
+                        errorEl.textContent = 'Reservation not found';
+                        errorEl.style.display = '';
+                        idInput.classList.add('is-invalid');
+                        idInput.focus();
                     }
                 });
-            }
+
+}
+
         });
     </script>
     <script>

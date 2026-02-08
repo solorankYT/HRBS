@@ -245,11 +245,11 @@
                 <div class="row g-1 mb-2">
                     <div class="col-md-6">
                         <label class="form-label small mb-1">Reservation ID</label>
-                        <input id="reservationId" type="text" class="form-control form-control-sm">
+                        <input id="reservationId" type="text" class="form-control form-control-sm"  readonly>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small mb-1">Status</label>
-                       <select id="reservationStatus" class="form-select form-select-sm" disabled>
+                       <select id="reservationStatus" class="form-select form-select-sm" readonly>
                             <option value="confirmed">Confirmed</option>
                             <option value="checked_in">Checked In</option>
                             <option value="checked_out">Checked Out</option>
@@ -259,7 +259,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small mb-1">Room Type</label>
-                        <input id="roomType" type="text" class="form-control form-control-sm">
+                        <input id="roomType" type="text" class="form-control form-control-sm" readonly>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label small mb-1">Proof of Payment</label>
@@ -275,43 +275,43 @@
                     <div class="col-md-4">
                         <label class="form-label small mb-1">Check-in</label>
                         
-                        <input id="checkIn" type="date" class="form-control form-control-sm">
+                        <input id="checkIn" type="date" class="form-control form-control-sm" readonly>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label small mb-1">Check-out</label>
-                        <input id="checkOut" type="date" class="form-control form-control-sm">
+                        <input id="checkOut" type="date" class="form-control form-control-sm" readonly>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label small mb-1">Date Booked</label>
-                        <input id="dateBooked" type="date" class="form-control form-control-sm" value="2024-09-03">
+                        <input id="dateBooked" type="date" class="form-control form-control-sm" value="2024-09-03" readonly>
                     </div>
                 </div>
 
                 <h6 class="mb-1">Guest Information</h6>
                 <div class="row g-1 mb-2">
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <label class="form-label small mb-1">First Name</label>
-                        <input id="guestFirstName" type="text" class="form-control form-control-sm">
+                        <input id="guestFirstName" type="text" class="form-control form-control-sm" readonly>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <label class="form-label small mb-1">Last Name</label>
-                        <input id="guestLastName" type="text" class="form-control form-control-sm">
+                        <input id="guestLastName" type="text" class="form-control form-control-sm" readonly>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <label class="form-label small mb-1">Contact Number</label>
-                        <input id="guestPhone" type="text" class="form-control form-control-sm">
+                        <input id="guestPhone" type="text" class="form-control form-control-sm" readonly>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <label class="form-label small mb-1">E-mail Address</label>
-                        <input id="guestEmail" type="email" class="form-control form-control-sm">
+                        <input id="guestEmail" type="email" class="form-control form-control-sm" readonly>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <label class="form-label small mb-1">Count of guests</label>
-                        <input id="numberGuest" type="number" class="form-control form-control-sm" min="0">
+                        <input id="numberGuest" type="number" class="form-control form-control-sm" min="0" readonly>
                     </div>
                     <div class="col-12">
                         <label class="form-label small mb-1">Special Request/s</label>
-                        <textarea id="specialRequest" class="form-control form-control-sm"></textarea>
+                        <textarea id="specialRequest" class="form-control form-control-sm" readonly></textarea >
                     </div>
                 </div>
 

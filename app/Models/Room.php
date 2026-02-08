@@ -22,6 +22,15 @@ class Room extends Model
         'image_urls' => 'array',
     ];
 
+        public function getImageUrlAttribute()
+    {
+        if (!$this->image_urls || count($this->image_urls) === 0) {
+            return null;
+        }
+
+        return asset('storage/' . $this->image_urls[0]);
+    }
+    
  public function bookingRooms()
 {
     return $this->hasMany(BookingRoom::class);

@@ -521,6 +521,23 @@ document.addEventListener('DOMContentLoaded', loadRooms);
                                     <div class="form-check"><input class="form-check-input" type="checkbox" name="amenities[]" value="ac"><label class="form-check-label" for="addAmenAc">Ac</label></div>
                                 </div>
                             </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label">Upload image</label>
+                                <input 
+                                    type="file"
+                                    class="form-control"
+                                    name="image_urls"
+                                    accept="image/*"
+                                    required
+                                    onchange="previewRoomImage(event)"
+                                >
+                                <img 
+                                    id="roomImagePreview"
+                                    class="mt-3 rounded d-none"
+                                    style="max-height: 200px;"
+                                />
+                            </div>
                         </div>
                  
                 </div>
@@ -584,6 +601,24 @@ document.addEventListener('DOMContentLoaded', loadRooms);
                                     </div>
                                 </div>
                             </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label">Upload image</label>
+                                        <input 
+                                            type="file"
+                                            class="form-control"
+                                            name="image_urls"
+                                            accept="image/*"
+                                            required
+                                            onchange="previewRoomImage(event)"
+                                        >
+                                        <img 
+                                            id="roomImagePreview"
+                                            class="mt-3 rounded d-none"
+                                            style="max-height: 200px;"
+                                        />
+                                    </div>
+
                         </div>
                   
                 </div>
@@ -595,6 +630,17 @@ document.addEventListener('DOMContentLoaded', loadRooms);
             </div>
         </div>
     </div>
+
+        <script>
+    function previewRoomImage(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const preview = document.getElementById("roomImagePreview");
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove("d-none");
+    }
+    </script>
 
 
     <!-- CREATE ROOMMMMMMMMMM -->

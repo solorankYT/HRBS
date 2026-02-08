@@ -23,16 +23,22 @@ class RoomManagementController extends Controller
 
     public function create(Request $request): JsonResponse
     {
+
+   
         $validated = $request->validate([
             'room_number' => 'required|string|max:50|unique:rooms,room_number',
             'type'        => 'required|string|max:255',
+            'image_urls'   => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
             'capacity'    => 'required|integer|min:1',
             'price'       => 'required|numeric|min:0',
             'amenities'   => 'array',
             'amenities.*' => 'string',
             'status'      => 'required|in:available,maintenance',
         ]);
+        
+        $path = $request->file('image_urls')->store('rooms', 'public');
 
+        $validated['image_urls'] = $path;
         $room = Room::create($validated);
 
         return response()->json([

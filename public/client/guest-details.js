@@ -28,13 +28,23 @@ function renderCart() {
     total += roomTotal;
 
     const div = document.createElement('div');
-    div.className = 'cart-item';
+    div.className = 'cart-item p-3 mb-2 rounded shadow-sm';
+    div.style.display = 'flex';
+    div.style.justifyContent = 'space-between';
+    div.style.alignItems = 'center';
+    div.style.background = '#fafafa';
+    div.style.border = '1px solid #e0e0e0';
+    
     div.innerHTML = `
       <div class="cart-item-info">
-       <div class="cart-item-name">${room.type}</div>
-      <div class="cart-item-specs">${room.type} • ${nights} night${nights > 1 ? 's' : ''}</div>
+        <div class="cart-item-name" style="font-weight:600; font-size:0.95rem;">${room.type}</div>
+        <div class="cart-item-specs" style="font-size:0.8rem; color:#555;">
+          ${room.capacity} Guests • ${nights} night${nights > 1 ? 's' : ''}
+        </div>
       </div>
-      <div class="cart-item-price">₱${roomTotal.toLocaleString()}</div>
+      <div class="cart-item-price" style="font-weight:700; font-size:0.95rem; color:#d32f2f;">
+        ₱${roomTotal.toLocaleString()}
+      </div>
     `;
     container.appendChild(div);
   });
@@ -42,6 +52,62 @@ function renderCart() {
   document.getElementById('itemCount').textContent = `${booking.rooms.length} Room${booking.rooms.length > 1 ? 's' : ''}`;
   document.getElementById('finalTotal').textContent = `₱${total.toLocaleString()}`;
 }
+
+
+
+function isValidEmail(email) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+}
+
+function isValidPhone(phone) {
+  const regex = /^09\d{9}$/;
+  return regex.test(phone);
+}
+
+function liveValidation() {
+
+   document.querySelectorAll('.guest-phone').forEach(input => {
+    let msg = document.createElement('div');
+    msg.className = 'invalid-feedback';
+    msg.textContent = 'Phone number must start with 09 and be 11 digits.';
+    input.parentNode.appendChild(msg);
+
+    input.addEventListener('input', () => {
+      input.value = input.value.replace(/\D/g, '');
+
+      if (!input.value) {
+        input.classList.remove('is-invalid');
+      } else if (!isValidPhone(input.value)) {
+        input.classList.add('is-invalid');
+      } else {
+        input.classList.remove('is-invalid');
+      }
+    });
+  });
+
+  document.querySelectorAll('.guest-email').forEach(input => {
+    let msg = document.createElement('div');
+    msg.className = 'invalid-feedback';
+    msg.style.display = 'none';
+    msg.textContent = 'Please enter a valid email.';
+    input.parentNode.appendChild(msg);
+
+    input.addEventListener('input', () => {
+      if (!input.value.trim()) {
+        input.classList.remove('is-invalid');
+        msg.style.display = 'none';
+      } else if (!isValidEmail(input.value.trim())) {
+        input.classList.add('is-invalid');
+        msg.style.display = 'block';
+      } else {
+        input.classList.remove('is-invalid');
+        msg.style.display = 'none';
+      }
+    });
+  });
+}
+
 
 // ---------------- Render Guest Accordion ----------------
 function renderGuestAccordion() {
@@ -56,44 +122,46 @@ function renderGuestAccordion() {
     div.innerHTML = `
       <h2 class="accordion-header" id="heading${index}">
         <button class="accordion-button ${index !== 0 ? 'collapsed' : ''}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}">
-          Room ${index + 1} — ${room.type} (₱${room.price} x ${nights} nights)
+          <div style="display:flex; justify-content:space-between; width:100%;">
+            <span>Room ${index + 1} — ${room.type}</span>
+            <span style="font-weight:600; color:#d32f2f;">₱${room.price} x ${nights} night${nights>1?'s':''}</span>
+          </div>
         </button>
       </h2>
       <div id="collapse${index}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" data-bs-parent="#roomsAccordion">
         <div class="accordion-body">
-          <div class="mb-3">
+          <div class="guest-info mb-3">
             <label class="form-label">Full Name</label>
             <input type="text" class="form-control guest-name" placeholder="Enter full name">
           </div>
-          <div class="mb-3">
+          <div class="guest-info mb-3">
             <label class="form-label">Email</label>
-            <input type="email" class="form-control guest-email" placeholder="Enter email">
+            <input type="email" class="form-control guest-email" placeholder="example@gmail.com">
           </div>
-          <div class="mb-3">
+          <div class="guest-info mb-3">
             <label class="form-label">Phone</label>
-            <input type="tel" class="form-control guest-phone" placeholder="Enter phone">
+            <input type="tel" class="form-control guest-phone" placeholder="09XXXXXXXXX">
           </div>
-          <div class="mb-3">
+          <div class="guest-info mb-3">
             <label class="form-label">Special Requests</label>
             <textarea class="form-control guest-requests" rows="2" placeholder="Optional"></textarea>
           </div>
 
-          <div class="mb-3">
-            <h6>Payment Method</h6>
-            <label class="payment-option">
-              <input type="radio" name="paymentMethodRoom${index}" value="paypal"> PayPal
-            </label>
-            <label class="payment-option ms-3">
-              <input type="radio" name="paymentMethodRoom${index}" value="gcash"> GCash
-            </label>
+          <div class="payment-section mb-3">
+            <h6 class="mb-2">Payment Method</h6>
+            <div style="display:flex; gap:1rem;">
+              <label class="payment-option card p-2 flex-grow-1 text-center cursor-pointer">
+                <input type="radio" name="paymentMethodRoom${index}" value="bank-transfer">
+                Bank Transfer
+              </label>
+              <label class="payment-option card p-2 flex-grow-1 text-center cursor-pointer">
+                <input type="radio" name="paymentMethodRoom${index}" value="gcash">
+                GCash
+              </label>
+            </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label">Upload Proof of Payment</label>
-            <input type="file" class="form-control proof-of-payment" accept="image/*,.pdf">
-          </div>
-
-          <button type="button" class="btn btn-sm btn-link autoFill">Use this info for all rooms</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm autoFill">Use this info for all rooms</button>
         </div>
       </div>
     `;
@@ -102,7 +170,9 @@ function renderGuestAccordion() {
 
   setupPaymentSelection();
   setupAutoFill();
+  liveValidation();
 }
+
 
 // ---------------- Payment Selection Highlight ----------------
 function setupPaymentSelection() {
@@ -126,6 +196,11 @@ function setupAutoFill() {
       const selectedPayment = firstBody.querySelector('input[type="radio"]:checked')?.value;
 
       if (!selectedPayment) return alert('Please select a payment method first.');
+
+      if (!selectedPayment) return alert('Please select a payment method first.');
+      if (!fullName) return alert('Full Name cannot be empty.');
+      if (!email) return alert('Email cannot be empty.');
+      if (!isValidEmail(email)) return alert('Please enter a valid email address.');
 
       document.querySelectorAll('#roomsAccordion .accordion-item').forEach(acc => {
         const body = acc.querySelector('.accordion-body');

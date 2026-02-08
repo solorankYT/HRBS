@@ -200,10 +200,8 @@ class BookingController extends Controller
             return response()->json(['message' => 'Booking not found'], 404);
         }
 
-        // Store the image
         $path = $request->file('proof_image')->store('payment-proofs', 'public');
 
-        // Create payment record (status: pending for admin verification)
         $payment = $booking->payments()->create([
             'amount' => $booking->total_amount,
             'method' => $request->payment_method,
@@ -212,7 +210,7 @@ class BookingController extends Controller
             'proof_image' => $path,
             'paid_at' => now(),
         ]);
-        // mark booking as submitted
+
         $booking->update(['payment_status' => 'submitted']);
 
         return response()->json([

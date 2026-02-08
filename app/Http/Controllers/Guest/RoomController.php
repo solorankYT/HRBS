@@ -49,6 +49,7 @@ class RoomController extends Controller
             return [
                 'id' => $group->first()->id,
                 'type' => $group->first()->type,
+                'image_urls' => $group->first()->image_urls,
                 'capacity' => $group->first()->capacity,
                 'price' => $group->first()->price,
                 'available_count' => $group->count(),

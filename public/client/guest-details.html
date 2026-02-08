@@ -313,77 +313,88 @@
 
   <!-- Guest Details & Cart -->
 <section class="container mb-5" id="guest">
-    <div class="row gy-4">
-      <!-- Guest Form -->
-<div class="col-lg-7">
-  <div class="bg-white p-4 rounded shadow-sm unified-section">
-    <!-- Guest Details -->
-    <div class="section-block">
-      <h5 class="mb-3" style="color: #8B5A3C;">Guest Details</h5>
-     <div class="accordion" id="roomsAccordion">
+  <div class="row gy-4">
+    
+    <!-- Guest Form -->
+    <div class="col-lg-7">
+      <div class="bg-white p-4 rounded shadow-sm unified-section">
+
+        <!-- Guest Details -->
+        <div class="section-block">
+          <h5 class="section-title">Guest Details</h5>
+          <div class="accordion" id="roomsAccordion"></div>
         </div>
+
+        <!-- Policies -->
+        <div class="bg-white p-4 rounded shadow-sm unified-section mt-3">
+          <h5 class="section-title">Policies</h5>
+          <ul class="policies-list mb-0">
+            <li>Check-in: 2:00 PM | Check-out: 12:00 PM</li>
+            <li>Remaining balance must be completed upon arrival.</li>
+            <li>Cancellations within 24 hours may incur a fee.</li>
+            <li>Pets are not allowed in rooms.</li>
+          </ul>
         </div>
+
+        <!-- Acknowledgment -->
+        <div class="bg-white p-4 rounded shadow-sm unified-section mt-3">
+          <h5 class="section-title">Acknowledgment</h5>
+          <div class="acknowledgment">
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="privacyTerms">
+              <label class="form-check-label" for="privacyTerms">
+                I agree with the <span class="acknowledgmentTerms">Privacy Terms</span>
+              </label>
+            </div>
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" id="bookingConditions">
+              <label class="form-check-label" for="bookingConditions">
+                I agree with the <span class="acknowledgmentTerms">Booking Conditions</span>
+              </label>
+            </div>
           </div>
         </div>
       </div>
-     <!-- Policies -->
-    <div class="bg-white p-4 rounded shadow-sm unified-section mt-3">
-      <h5 style="color: #8B5A3C;">Policies</h5>
-      <ul class="policies-list mb-0">
-        <li>Check-in time is from 2:00 PM and check-out is by 12:00 PM.</li>
-        <li>Remaining balance must be completed upon arrival.</li>
-        <li>Cancellations within 24 hours of check-in may incur a fee.</li>
-        <li>Pets are not allowed inside the rooms.</li>
-      </ul>
     </div>
 
-  <!-- Acknowledgment -->
-    <div class="bg-white p-4 rounded shadow-sm unified-section mt-3">
-        <h5 style="color: #8B5A3C;">Acknowledgment</h5>
-        <div class="acknowledgment">
-          <div class="form-check mb-0">
-            <input class="form-check-input" type="checkbox" id="privacyTerms">
-            <label class="form-check-label" for="privacyTerms">
-              I agree with the <span class="acknowledgmentTerms">Privacy Terms.</span>
-            </label>
-          </div>
-          <div class="form-form-check">
-            <input class="form-check-input" type="checkbox" id="bookingConditions">
-            <label class="form-check-label" for="bookingConditions">
-              I agree with the <span class="acknowledgmentTerms"> Booking Conditions.</span>
-            </label>
+    <!-- Cart Section -->
+    <aside class="col-lg-5 cart-section sticky-top">
+      <div class="booking-summary-container p-4 rounded shadow-sm">
+
+        <div class="cart-header mb-3">
+          <h2 class="cart-title">Your Cart</h2>
+          <div class="cart-subtitle">Including taxes and fees</div>
+        </div>
+
+        <div class="cart-totals mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span>Total Rooms:</span>
+            <span id="itemCount">0</span>
           </div>
         </div>
+
+        <!-- Rooms in Cart -->
+        <div id="roomsContainer"></div>
+
+        <!-- Highlighted Total -->
+        <div class="total-highlight mt-3 p-3 rounded shadow-sm">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="total-label">Total</span>
+            <span class="total-amount" id="finalTotal">₱0.00</span>
+          </div>
+          <small class="text-muted">Including taxes and fees</small>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-grid gap-2 mt-3">
+          <button class="btn btn-outline-dark btn-add-room" onclick="openRoomModal()">Add a Room</button>
+          <button class="btn btn-danger btn-proceed" onclick="proceedToConfirmation()">Proceed to Confirmation</button>
+        </div>
       </div>
+    </aside>
   </div>
+</section>
 
-   
-
-      <!-- Cart -->
-      <aside class="cart-section">
-        <div class="booking-summary-container">
-          <div class="cart-header">
-            <h2 class="cart-title">Your Cart: <span id="itemCount">0 Rooms</span></h2>
-            <div class="cart-total">Total <span id="totalAmount">₱0.00</span></div>
-            <div class="cart-subtitle">Including taxes and fees</div>
-          </div>
-
-
-          <div id="roomsContainer"></div>
-
-          <div class="total-section total-highlight">
-            <div class="total-label">Total</div>
-            <div class="total-amount" id="finalTotal">₱0.00</div>
-            <div class="total-subtitle">Including taxes and fees</div>
-          </div>
-
-          <button class="btn-add-room" onclick="openRoomModal()">ADD A ROOM</button>
-          <button class="btn-add-room" onclick="proceedToConfirmation()">Proceed to Confirmation</button>
-
-        </div>
-      </aside>
-    </div>
-  </section>
 
 
   

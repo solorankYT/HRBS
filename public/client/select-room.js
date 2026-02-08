@@ -5,37 +5,83 @@ function renderRooms(rooms) {
   const container = document.getElementById('roomsContainer');
   container.innerHTML = '';
 
-  if (rooms.length === 0) {
-    container.innerHTML = '<p class="no-rooms">No rooms available for selected dates.</p>';
+  if (!rooms.length) {
+    container.innerHTML = `<p class="no-rooms">No rooms available for selected dates.</p>`;
     return;
   }
 
   rooms.forEach(room => {
-    const div = document.createElement('div');
-    div.className = 'room-card';
-    div.dataset.type = room.type.toLowerCase().replace(/\s/g, '-');
+    const card = document.createElement('div');
+    const roomTypeSlug = room.type.toLowerCase().replace(/\s+/g, '-');
 
-    div.innerHTML = `
-      <div class="room-image">
-        <img src="https://via.placeholder.com/320x180?text=${encodeURIComponent(room.type)}" alt="${room.type}">
-      </div>
-      <div class="room-info">
-        <div class="room-header">
-          <h3>${room.type}</h3>
-          <span class="room-price">₱${room.price}</span>
+    card.className = 'room-card';
+    card.dataset.roomType = roomTypeSlug;
+
+let imageSrc = '/assets/images/room-placeholder.jpg'; // fallback
+
+if (typeof room.image_urls === 'string' && room.image_urls.length > 0) {
+    imageSrc = `http://localhost:8000/storage/${room.image_urls}`;
+}
+
+
+    card.innerHTML = `
+      <div class="room-card-grid">
+        <!-- Image -->
+        <div class="room-image-container">
+        <img 
+            src="${imageSrc}" 
+            alt="${room.type}" 
+            class="room-image"
+        />
+
+          <div class="room-image-overlay"></div>
         </div>
+
+        <!-- Details -->
         <div class="room-details">
-          <p>Capacity: <strong>${room.capacity} guests</strong></p>
-          <p>Available: <strong>${room.available_count}</strong></p>
+          <div class="room-info">
+            <div class="room-header">
+              <h3 class="room-name">${room.type}</h3>
+
+              <div class="room-specs">
+                <div class="room-spec">•<span>${room.capacity} Guests</span></div>
+              </div>
+            </div>
+
+            <p class="room-description">
+              ${room.description ?? 'Comfortable and well-appointed room designed for a relaxing stay.'}
+            </p>
+
+          </div>
+
+          <!-- Pricing -->
+          <div class="room-pricing">
+            <div class="pricing-info">
+              <div>
+                <div class="price-label">From</div>
+                <div class="price-value">
+                  ₱${room.price.toLocaleString()}
+                  <span class="price-period">/ night</span>
+                </div>
+              </div>
+
+
+            <button 
+              class="btn-show-rates"
+              ${room.available_count === 0 ? 'disabled' : ''}
+              onclick="addRoomToCart(${room.id}, '${room.type}', ${room.price}, ${room.capacity})"
+            >
+              ${room.available_count === 0 ? 'Sold Out' : 'Select Room'}
+            </button>
+          </div>
         </div>
-        <button class="select-room-btn" onclick="addRoomToCart(${room.id}, '${room.type}', ${room.price}, ${room.capacity})">
-          Select Room
-        </button>
       </div>
     `;
-    container.appendChild(div);
+
+    container.appendChild(card);
   });
 }
+
 
 
 document.addEventListener('DOMContentLoaded', fetchAvailability);
@@ -67,6 +113,9 @@ function fetchAvailability() {
       console.error(err);
       alert('Error loading room availability');
     });
+
+    console.log('Rooms API response:', params);
+
 }
 
 

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('reference_number')->unique();
             $table->date('check_in');
             $table->date('check_out');
-
+        
             $table->unsignedTinyInteger('number_of_guests')->default(1);
             $table->text('special_requests')->nullable();
 
@@ -26,14 +26,29 @@ return new class extends Migration
                 'confirmed',
                 'checked_in',
                 'checked_out',
-                'cancelled'
+                'cancelled',
+                'no_show',
             ])->default('pending');
+             $table->enum('payment_status', [
+                'pending', 
+                'submitted', 
+                'verified', 
+                'failed'
+                ])->default('pending');
+
+            //rebooking
+            $table->timestamp('rebooked_at')->nullable();
+            $table->string('rebooked_by')->nullable();
+            
+            //cancellation
+             $table->timestamp('cancelled_at')->nullable();
+             $table->string('cancelled_by')->nullable();
+             $table->string('cancellation_reason')->nullable();
+
 
             $table->decimal('total_amount', 10, 2)->default(0);
-
             $table->timestamps();
             
-
             // Index for faster lookups
             $table->index([ 'check_in', 'check_out']);
         });

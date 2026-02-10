@@ -15,6 +15,11 @@ class Booking extends Model
         'booking_status',
         'payment_status',
         'total_amount',
+        'rebooked_at',
+        'rebooked_by',
+        'cancelled_at',
+        'cancelled_by',
+        'cancelled_reason',
     ];
 
     public function rooms()

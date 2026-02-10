@@ -193,23 +193,15 @@ textarea.form-control {
           <div class="tab-pane fade" id="cancellation">
             <h3 class="mb-4 section-title">Cancellation</h3>
             <div class="booking-box">
-              <form>
+              <form id="cancelForm">
                 <div class="row mb-3">
                   <div class="col-md-6 mb-2">
                     <label class="form-label fw-semibold">Reservation ID:</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" id="cancelRef" readonly>
                   </div>
                   <div class="col-md-6 mb-2">
                     <label class="form-label fw-semibold">Room Type:</label>
-                    <input type="text" class="form-control">
-                  </div>
-                  <div class="col-md-6 mb-2">
-                    <label class="form-label fw-semibold">Payment Method:</label>
-                    <input type="text" class="form-control">
-                  </div>
-                  <div class="col-md-6 mb-2">
-                    <label class="form-label fw-semibold">E-Wallet Number:</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" id="cancelRoom" readonly>
                   </div>
                 </div>
 
@@ -218,18 +210,18 @@ textarea.form-control {
                   <div class="row">
                     <div class="col-md-6 mb-2">
                       <label class="small text-muted">Check-In:</label>
-                      <input type="date" class="form-control">
+                      <input type="date" class="form-control" id="cancelCheckIn" readonly>
                     </div>
                     <div class="col-md-6 mb-2">
                       <label class="small text-muted">Check-Out:</label>
-                      <input type="date" class="form-control">
+                      <input type="date" class="form-control" id="cancelCheckOut" readonly>
                     </div>
                   </div>
                 </div>
 
                 <div class="mb-3">
                   <label class="form-label fw-semibold">Reason for Cancellation:</label>
-                  <textarea class="form-control" rows="4"></textarea>
+                  <textarea class="form-control" rows="4" id="cancelReason"></textarea>
                 </div>
 
                 <div class="form-check mb-2">
@@ -296,5 +288,68 @@ textarea.form-control {
     </script>
 
 </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get('ref');
+
+  if (!ref) {
+    alert('No booking reference found');
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/guest/bookings/${ref}`);
+    if (!res.ok) throw new Error();
+
+    const booking = await res.json();
+
+    document.getElementById('cancelRef').value = booking.reference;
+    document.getElementById('cancelRoom').value = booking.rooms?.[0]?.room?.room_type ?? '—';
+    document.getElementById('cancelCheckIn').value = booking.check_in;
+    document.getElementById('cancelCheckOut').value = booking.check_out;
+
+  } catch {
+    alert('Unable to load booking details');
+  }
+});
+</script>
+
+
+<script>
+document.getElementById('cancelForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get('ref');
+
+  if (!document.getElementById('terms').checked) {
+    alert('You must accept the cancellation terms');
+    return;
+  }
+
+  const reason = document.getElementById('cancelReason').value;
+
+  const res = await fetch(`/api/guest/bookings/${ref}/cancel`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      cancellation_reason: reason
+    })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.message || 'Cancellation failed');
+    return;
+  }
+
+  alert('Booking cancelled successfully');
+  window.location.href = 'manage-booking.html';
+});
+</script>
+
 </body>
 </html>

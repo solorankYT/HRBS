@@ -112,79 +112,135 @@ class BookingController extends Controller
         return response()->json($booking->load('rooms.room', 'guests'), 201);
     }
 
+    
 
-        public function show(Request $request, $reference)
-        {
-            $request->validate([
-                'email' => 'nullable|email',
-                'phone' => 'nullable|string'
-            ]);
 
-            if (!$request->email && !$request->phone) {
-                return response()->json(['message' => 'Email or phone is required'], 422);
-            }
+        // public function show(Request $request, $reference)
+        // {
+        //     $request->validate([
+        //         'email' => 'nullable|email',
+        //         'phone' => 'nullable|string'
+        //     ]);
 
-            $booking = Booking::with(['rooms.room', 'guests'])
-                ->where('reference_number', $reference)
-                ->first();
+        //     if (!$request->email && !$request->phone) {
+        //         return response()->json(['message' => 'Email or phone is required'], 422);
+        //     }
 
-            if (!$booking) {
-                return response()->json(['message' => 'Booking not found'], 404);
-            }
+        //     $booking = Booking::with(['rooms.room', 'guests'])
+        //         ->where('reference_number', $reference)
+        //         ->first();
 
-            $guestMatch = $booking->guests->filter(function ($guest) use ($request) {
-                return ($request->email && $guest->email === $request->email)
-                    || ($request->phone && $guest->phone === $request->phone);
-            });
+        //     if (!$booking) {
+        //         return response()->json(['message' => 'Booking not found'], 404);
+        //     }
 
-            if ($guestMatch->isEmpty()) {
-                return response()->json(['message' => 'Guest not found for this booking'], 404);
-            }
+        //     $guestMatch = $booking->guests->filter(function ($guest) use ($request) {
+        //         return ($request->email && $guest->email === $request->email)
+        //             || ($request->phone && $guest->phone === $request->phone);
+        //     });
 
-            $primaryGuest = $guestMatch->first();
+        //     if ($guestMatch->isEmpty()) {
+        //         return response()->json(['message' => 'Guest not found for this booking'], 404);
+        //     }
 
-            return response()->json([
-                'reference' => $booking->reference_number,
-                'status' => $booking->booking_status,
-                'check_in' => $booking->check_in,
-                'check_out' => $booking->check_out,
-                'guests_count' => $booking->number_of_guests,
-                'total' => $booking->total_amount,
-                'payment_status' => $booking->payment_status ?? 'pending',
+        //     $primaryGuest = $guestMatch->first();
 
-                'primary_guest' => [
-                    'name' => $primaryGuest->name,
-                    'email' => $primaryGuest->email,
-                ],
+        //     return response()->json([
+        //         'reference' => $booking->reference_number,
+        //         'status' => $booking->booking_status,
+        //         'check_in' => $booking->check_in,
+        //         'check_out' => $booking->check_out,
+        //         'guests_count' => $booking->number_of_guests,
+        //         'total' => $booking->total_amount,
+        //         'payment_status' => $booking->payment_status ?? 'pending',
 
-                'rooms' => $booking->rooms->map(function ($br) {
-                    return [
-                        'room_number' => $br->room->room_number,
-                        'type' => $br->room->type,
-                        'price_per_night' => $br->price_per_night,
-                        'nights' => $br->nights,
-                        'subtotal' => $br->subtotal,
-                        'payment_method' => $br->payment_method,
-                    ];
-                }),
-            ]);
-        }
+        //         'primary_guest' => [
+        //             'name' => $primaryGuest->name,
+        //             'email' => $primaryGuest->email,
+        //         ],
+
+        //         'rooms' => $booking->rooms->map(function ($br) {
+        //             return [
+        //                 'room_number' => $br->room->room_number,
+        //                 'type' => $br->room->type,
+        //                 'price_per_night' => $br->price_per_night,
+        //                 'nights' => $br->nights,
+        //                 'subtotal' => $br->subtotal,
+        //                 'payment_method' => $br->payment_method,
+        //             ];
+        //         }),
+        //     ]);
+        // }
 
         
-
-
-    public function cancel($reference)
+        public function show(Request $request, $reference)
 {
+    // Skip email/phone validation for internal fetch
+    $booking = Booking::with(['rooms.room', 'guests'])
+        ->where('reference_number', $reference)
+        ->firstOrFail();
+
+    return response()->json([
+        'reference' => $booking->reference_number,
+        'status' => $booking->booking_status,
+        'check_in' => $booking->check_in,
+        'check_out' => $booking->check_out,
+        'guests_count' => $booking->number_of_guests,
+        'total' => $booking->total_amount,
+        'payment_status' => $booking->payment_status ?? 'pending',
+        'primary_guest' => $booking->guests->first() ? [
+            'name' => $booking->guests->first()->name,
+            'email' => $booking->guests->first()->email,
+        ] : null,
+        'rooms' => $booking->rooms->map(fn($br) => [
+            'room_number' => $br->room->room_number,
+            'type' => $br->room->type,
+            'price_per_night' => $br->price_per_night,
+            'nights' => $br->nights,
+            'subtotal' => $br->subtotal,
+        ]),
+    ]);
+}
+
+
+public function cancel(Request $request, $reference)
+{
+    $validated = $request->validate([
+        'cancellation_reason' => 'nullable|string|max:100',
+    ]);
+
     $booking = Booking::where('reference_number', $reference)->firstOrFail();
 
     if ($booking->booking_status === 'cancelled') {
-        return response()->json(['message' => 'Already cancelled'], 400);
+        return response()->json([
+            'message' => 'Booking is already cancelled'
+        ], 400);
     }
 
-    $booking->update(['booking_status' => 'cancelled']);
+    if (in_array($booking->booking_status, ['checked_in', 'checked_out'])) {
+        return response()->json([
+            'message' => 'Cannot cancel after check-in'
+        ], 400);
+    }
 
-    return response()->json(['message' => 'Booking cancelled']);
+    // 24-hour rule
+    if (now()->diffInHours($booking->check_in, false) < 24) {
+        return response()->json([
+            'message' => 'Cancellation is only allowed 24 hours before check-in'
+        ], 400);
+    }
+
+    $booking->update([
+        'booking_status' => 'cancelled',
+        'cancelled_at' => now(),
+        'cancellation_reason' => $validated['cancellation_reason'] ?? null,
+    ]);
+
+    return response()->json([
+        'message' => 'Booking cancelled successfully'
+    ]);
 }
+
 
     public function submitPaymentProof(Request $request, $reference)
     {

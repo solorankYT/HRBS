@@ -146,20 +146,8 @@ textarea.form-control {
             <div class="booking-box">
               <form>
               <div class="mb-3 position-relative">
-                <label class="form-label fw-semibold">New Room Type:</label>
-                    <div class="dropdown">
-                        <button class="form-control d-flex justify-content-between align-items-center room-dropdown-btn" 
-                                type="button" id="roomTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span id="selectedRoom">Basic Studio Room</span>
-                        <i class="fas fa-caret-down ms-2"></i>
-                        </button>
-                        <ul class="dropdown-menu w-100" aria-labelledby="roomTypeDropdown">
-                        <li><a class="dropdown-item" href="#" onclick="selectRoom('Basic Studio Room')">Basic Studio Room</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="selectRoom('Standard Room')">Standard Room</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="selectRoom('Family Room')">Family Room</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="selectRoom('Premium Room')">Premium Room</a></li>
-                        </ul>
-                    </div>
+                <label class="form-label fw-semibold">Reservation ID:</label>
+                <input type="name" class="form-control" id="cancelRef" readonly>
                 </div>
 
 
@@ -168,11 +156,11 @@ textarea.form-control {
                   <div class="row">
                     <div class="col-md-6 mb-2">
                       <label class="small text-muted">Check-In:</label>
-                      <input type="date" class="form-control">
+                      <input type="date" class="form-control" id="cancelCheckIn">
                     </div>
                     <div class="col-md-6 mb-2">
                       <label class="small text-muted">Check-Out:</label>
-                      <input type="date" class="form-control">
+                      <input type="date" class="form-control" id="cancelCheckOut">
                     </div>
                   </div>
                 </div>
@@ -300,7 +288,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   try {
-    const res = await fetch(`/api/guest/bookings/${ref}`);
+    const res = await fetch(`/api/guest/bookings/${ref}/showCancel`);
     if (!res.ok) throw new Error();
 
     const booking = await res.json();
@@ -315,6 +303,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 </script>
+
+
 
 
 <script>
@@ -350,6 +340,10 @@ document.getElementById('cancelForm').addEventListener('submit', async (e) => {
   window.location.href = 'manage-booking.html';
 });
 </script>
+
+
+
+
 
 </body>
 </html>

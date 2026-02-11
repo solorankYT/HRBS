@@ -19,7 +19,7 @@ class Booking extends Model
         'rebooked_by',
         'cancelled_at',
         'cancelled_by',
-        'cancelled_reason',
+        'cancellation_reason',
     ];
 
     public function rooms()

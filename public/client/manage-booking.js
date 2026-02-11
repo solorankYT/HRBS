@@ -144,6 +144,7 @@ function renderPaymentSection(booking) {
       '<i class="fas fa-times-circle me-2"></i>Payment verification failed. Please resubmit.';
     statusBox.classList.remove('d-none');
   }
+
 }
 
 /* ===============================
@@ -158,6 +159,9 @@ async function submitPaymentProof(e) {
   try {
     const res = await fetch(`/api/guest/bookings/${foundBooking.reference}/payment-proof`, {
       method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+        },
       body: formData
     });
 

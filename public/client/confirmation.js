@@ -92,8 +92,17 @@ booking.rooms.forEach(room => {
   paymentSummary.appendChild(div);
 });
 
+
 // ---------------- Final Booking (API call) ----------------
-async function finalizeBooking() {
+async function finalizeBooking(e) {
+
+   e.preventDefault();
+    const btn = document.getElementById('confirmBookingBtn');
+    btn.style.pointerEvents = 'none';
+    const originalText = btn.textContent;
+    btn.textContent = 'Processing...';
+
+
   try {
     const res = await fetch('http://localhost:8000/api/guest/bookings', {
       method: 'POST',
@@ -114,5 +123,9 @@ async function finalizeBooking() {
   } catch (err) {
     console.error(err);
     alert('Booking failed. Please try again.');
+  }finally {
+    btn.style.pointerEvents = '';
+    btn.textContent = originalText;
   }
 }
+

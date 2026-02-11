@@ -115,92 +115,92 @@ class BookingController extends Controller
     
 
 
-        // public function show(Request $request, $reference)
-        // {
-        //     $request->validate([
-        //         'email' => 'nullable|email',
-        //         'phone' => 'nullable|string'
-        //     ]);
+        public function show(Request $request, $reference)
+        {
+            $request->validate([
+                'email' => 'nullable|email',
+                'phone' => 'nullable|string'
+            ]);
 
-        //     if (!$request->email && !$request->phone) {
-        //         return response()->json(['message' => 'Email or phone is required'], 422);
-        //     }
+            if (!$request->email && !$request->phone) {
+                return response()->json(['message' => 'Email or phone is required'], 422);
+            }
 
-        //     $booking = Booking::with(['rooms.room', 'guests'])
-        //         ->where('reference_number', $reference)
-        //         ->first();
+            $booking = Booking::with(['rooms.room', 'guests'])
+                ->where('reference_number', $reference)
+                ->first();
 
-        //     if (!$booking) {
-        //         return response()->json(['message' => 'Booking not found'], 404);
-        //     }
+            if (!$booking) {
+                return response()->json(['message' => 'Booking not found'], 404);
+            }
 
-        //     $guestMatch = $booking->guests->filter(function ($guest) use ($request) {
-        //         return ($request->email && $guest->email === $request->email)
-        //             || ($request->phone && $guest->phone === $request->phone);
-        //     });
+            $guestMatch = $booking->guests->filter(function ($guest) use ($request) {
+                return ($request->email && $guest->email === $request->email)
+                    || ($request->phone && $guest->phone === $request->phone);
+            });
 
-        //     if ($guestMatch->isEmpty()) {
-        //         return response()->json(['message' => 'Guest not found for this booking'], 404);
-        //     }
+            if ($guestMatch->isEmpty()) {
+                return response()->json(['message' => 'Guest not found for this booking'], 404);
+            }
 
-        //     $primaryGuest = $guestMatch->first();
+            $primaryGuest = $guestMatch->first();
 
-        //     return response()->json([
-        //         'reference' => $booking->reference_number,
-        //         'status' => $booking->booking_status,
-        //         'check_in' => $booking->check_in,
-        //         'check_out' => $booking->check_out,
-        //         'guests_count' => $booking->number_of_guests,
-        //         'total' => $booking->total_amount,
-        //         'payment_status' => $booking->payment_status ?? 'pending',
+            return response()->json([
+                'reference' => $booking->reference_number,
+                'status' => $booking->booking_status,
+                'check_in' => $booking->check_in,
+                'check_out' => $booking->check_out,
+                'guests_count' => $booking->number_of_guests,
+                'total' => $booking->total_amount,
+                'payment_status' => $booking->payment_status ?? 'pending',
 
-        //         'primary_guest' => [
-        //             'name' => $primaryGuest->name,
-        //             'email' => $primaryGuest->email,
-        //         ],
+                'primary_guest' => [
+                    'name' => $primaryGuest->name,
+                    'email' => $primaryGuest->email,
+                ],
 
-        //         'rooms' => $booking->rooms->map(function ($br) {
-        //             return [
-        //                 'room_number' => $br->room->room_number,
-        //                 'type' => $br->room->type,
-        //                 'price_per_night' => $br->price_per_night,
-        //                 'nights' => $br->nights,
-        //                 'subtotal' => $br->subtotal,
-        //                 'payment_method' => $br->payment_method,
-        //             ];
-        //         }),
-        //     ]);
-        // }
+                'rooms' => $booking->rooms->map(function ($br) {
+                    return [
+                        'room_number' => $br->room->room_number,
+                        'type' => $br->room->type,
+                        'price_per_night' => $br->price_per_night,
+                        'nights' => $br->nights,
+                        'subtotal' => $br->subtotal,
+                        'payment_method' => $br->payment_method,
+                    ];
+                }),
+            ]);
+        }
 
         
-        public function show(Request $request, $reference)
-{
-    // Skip email/phone validation for internal fetch
-    $booking = Booking::with(['rooms.room', 'guests'])
-        ->where('reference_number', $reference)
-        ->firstOrFail();
+        public function showCancel(Request $request, $reference)
+        {
+            // Skip email/phone validation for internal fetch
+            $booking = Booking::with(['rooms.room', 'guests'])
+                ->where('reference_number', $reference)
+                ->firstOrFail();
 
-    return response()->json([
-        'reference' => $booking->reference_number,
-        'status' => $booking->booking_status,
-        'check_in' => $booking->check_in,
-        'check_out' => $booking->check_out,
-        'guests_count' => $booking->number_of_guests,
-        'total' => $booking->total_amount,
-        'payment_status' => $booking->payment_status ?? 'pending',
-        'primary_guest' => $booking->guests->first() ? [
-            'name' => $booking->guests->first()->name,
-            'email' => $booking->guests->first()->email,
-        ] : null,
-        'rooms' => $booking->rooms->map(fn($br) => [
-            'room_number' => $br->room->room_number,
-            'type' => $br->room->type,
-            'price_per_night' => $br->price_per_night,
-            'nights' => $br->nights,
-            'subtotal' => $br->subtotal,
-        ]),
-    ]);
-}
+            return response()->json([
+                'reference' => $booking->reference_number,
+                'status' => $booking->booking_status,
+                'check_in' => $booking->check_in,
+                'check_out' => $booking->check_out,
+                'guests_count' => $booking->number_of_guests,
+                'total' => $booking->total_amount,
+                'payment_status' => $booking->payment_status ?? 'pending',
+                'primary_guest' => $booking->guests->first() ? [
+                    'name' => $booking->guests->first()->name,
+                    'email' => $booking->guests->first()->email,
+                ] : null,
+                'rooms' => $booking->rooms->map(fn($br) => [
+                    'room_number' => $br->room->room_number,
+                    'type' => $br->room->type,
+                    'price_per_night' => $br->price_per_night,
+                    'nights' => $br->nights,
+                    'subtotal' => $br->subtotal,
+                ]),
+            ]);
+        }
 
 
 public function cancel(Request $request, $reference)
@@ -233,6 +233,7 @@ public function cancel(Request $request, $reference)
     $booking->update([
         'booking_status' => 'cancelled',
         'cancelled_at' => now(),
+        'cancalled_by' => 'guest',
         'cancellation_reason' => $validated['cancellation_reason'] ?? null,
     ]);
 
@@ -250,11 +251,19 @@ public function cancel(Request $request, $reference)
             'transaction_id' => 'nullable|string|max:100',
         ]);
 
-        $booking = Booking::where('reference_number', $reference)->first();
+        $booking = Booking::where('reference_number', $reference)->firstOrFail();
 
-        if (!$booking) {
-            return response()->json(['message' => 'Booking not found'], 404);
+        if($booking->booking_status === 'cancelled'){
+            return response()->json(['message' => 'Booking is already cancelled'], 400);
         }
+
+        if ($booking->payments()->where('status', 'pending')->exists()) {
+            return response()->json([
+                'message' => 'A payment proof is already submitted and awaiting verification.'
+            ], 400);
+        }
+
+
 
         $path = $request->file('proof_image')->store('payment-proofs', 'public');
 

@@ -123,7 +123,6 @@
     <button class="btn btn-teal w-100 btn-sm" id="retrieveBtn">
       <i class="fas fa-search me-1"></i>Search
     </button>
-    <div class="text-center mt-1 text-muted small">Use booking ref: <span class="font-mono">RES-001</span></div>
   </div>
 
  <!-- Booking Details -->
@@ -253,7 +252,7 @@
           <form id="paymentProofForm" enctype="multipart/form-data">
             <div class="mb-3">
               <label class="form-label">Payment Method *</label>
-              <select class="form-select" id="paymentMethod" required>
+              <select name="payment_method" id="payment_method" class="form-select" required>
                 <option value="">-- Select Payment Method --</option>
                 <option value="bank_transfer">Bank Transfer</option>
                 <option value="gcash">GCash</option>
@@ -262,28 +261,36 @@
                 <option value="other">Other</option>
               </select>
             </div>
+
             <div class="mb-3">
               <label class="form-label">Proof of Payment (Image) *</label>
-              <input type="file" class="form-control" id="paymentProof" accept="image/*" required>
-              <small class="text-muted">Accepted formats: JPG, PNG, GIF (Max 5MB)</small>
+              <input type="file" name="proof_image" id="proof_image"
+                    class="form-control" accept="image/*" required>
+              <small class="text-muted">
+                Accepted formats: JPG, PNG, GIF (Max 5MB)
+              </small>
             </div>
+
             <div class="mb-3">
               <label class="form-label">Reference/Transaction ID</label>
-              <input type="text" class="form-control" id="transactionId" placeholder="e.g., TXN-123456">
+              <input type="text" name="transaction_id" id="transactionId"
+                    class="form-control" placeholder="e.g., TXN-123456">
             </div>
+
             <button type="submit" class="btn btn-success w-100">
               <i class="fas fa-upload me-2"></i>Submit Payment Proof
             </button>
           </form>
+
           <div id="paymentStatus" class="mt-3 d-none"></div>
         </div>
 
         <!-- Action Buttons -->
         <div class="d-flex justify-content-end gap-3 mt-4">
-          <a href="cancel-page.html"><button class="request-rebook-btn">Request Rebook</button></a>
-          
+          <!-- <a href="cancel-page.html"><button class="request-rebook-btn">Request Rebook</button></a>
+           -->
           <button class="request-cancel-btn" id="requestCancelBtn">
-            Request Cancel
+            Request Cancel/Rebook
           </button>
 
         </div>
@@ -296,8 +303,7 @@
 </div>
 
 
-  <!-- Action Buttons -->
-  <!-- <div class="d-flex justify-content-center gap-3 my-3 container-wide mx-auto d-none" id="actionButtons">
+   <div class="d-flex justify-content-center gap-3 my-3 container-wide mx-auto d-none" id="actionButtons">
     <button class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#changeDatesModal">
       <i class="fas fa-calendar me-1"></i>Change Dates
     </button>
@@ -307,7 +313,7 @@
     <button class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#invoiceModal">
       <i class="fas fa-credit-card me-1"></i>View Invoice
     </button>
-  </div> -->
+  </div>
 
 </div>
 

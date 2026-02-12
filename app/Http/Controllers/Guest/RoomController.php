@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Guest;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Room;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -61,4 +62,17 @@ class RoomController extends Controller
 }
 
 
+public function bookedDates($roomId)
+{
+    $bookings = Booking::whereHas('rooms', function ($q) use ($roomId) {
+        $q->where('room_id', $roomId);
+    })
+    ->whereIn('booking_status', ['confirmed', 'checked_in'])
+    ->get(['check_in', 'check_out']);
+
+    return response()->json($bookings);
 }
+
+}
+
+

@@ -284,4 +284,108 @@ public function cancel(Request $request, $reference)
         ], 201);
     }
 
+
+
+
+
+public function rebook(Request $request, $reference)
+{
+    $request->validate([
+        'new_check_in' => 'required|date|after:today',
+        'new_check_out' => 'required|date|after:new_check_in',
+    ]);
+
+    $booking = Booking::with('rooms')
+        ->where('reference_number', $reference)
+        ->firstOrFail();
+
+
+    if ($booking->booking_status === 'checked_in') {
+        return response()->json([
+            'message' => 'Cannot rebook after check-in.'
+        ], 400);
+    }
+
+    if ($booking->rebooked_at) {
+        return response()->json([
+            'message' => 'Only one rebooking is allowed'
+        ], 400);
+    }
+
+    if ($booking->created_at->diffInHours(now()) > 24) {
+        return response()->json([
+            'message' => 'Rebooking is only allowed within 24 hours of booking'
+        ], 400);
+    }
+
+    if (now()->toDateString() === $booking->check_in) {
+        return response()->json([
+            'message' => 'Same-day bookings cannot be rebooked'
+        ], 400);
+    }
+
+    $newCheckIn = Carbon::parse($request->new_check_in);
+    $newCheckOut = Carbon::parse($request->new_check_out);
+    $newNights = $newCheckIn->diffInDays($newCheckOut);
+    $today = now()->startOfDay();
+    
+    if ($newCheckIn->lt($today)) {
+        return response()->json([
+            'message' => 'Cannot rebook to a past date.'
+        ], 400);
+    }
+
+    // 🔍 CHECK AVAILABILITY FOR EACH ROOM
+    foreach ($booking->rooms as $bookingRoom) {
+
+        $roomId = $bookingRoom->room_id;
+
+        $conflict = BookingRoom::where('room_id', $roomId)
+            ->whereHas('booking', function ($query) use ($booking, $newCheckIn, $newCheckOut) {
+                $query->where('id', '!=', $booking->id) // ignore current booking
+                      ->whereNotIn('booking_status', ['cancelled'])
+                      ->where(function ($q) use ($newCheckIn, $newCheckOut) {
+                          $q->where('check_in', '<', $newCheckOut)
+                            ->where('check_out', '>', $newCheckIn);
+                      });
+            })
+            ->exists();
+
+        if ($conflict) {
+            return response()->json([
+                'message' => 'Selected dates are not available for one or more rooms'
+            ], 400);
+        }
+    }
+
+    // ✅ UPDATE BOOKING DATES
+    $booking->update([
+        'check_in' => $newCheckIn,
+        'check_out' => $newCheckOut,
+        // 'has_rebooked' => true,
+        'rebooked_at' => now(),
+    ]);
+
+    $total = 0;
+
+    foreach ($booking->rooms as $bookingRoom) {
+        $subtotal = $bookingRoom->price_per_night * $newNights;
+
+        $bookingRoom->update([
+            'nights' => $newNights,
+            'subtotal' => $subtotal,
+        ]);
+
+        $total += $subtotal;
+    }
+
+    $booking->update([
+        'total_amount' => $total
+    ]);
+
+    return response()->json([
+        'message' => 'Booking rebooked successfully'
+    ]);
+}
+
 }

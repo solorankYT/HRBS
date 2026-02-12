@@ -141,41 +141,53 @@ textarea.form-control {
       <div class="col-md-9">
         <div class="tab-content">
           <!-- Rebooking Tab -->
-          <div class="tab-pane fade show active" id="rebooking">
-            <h3 class="mb-4 section-title">Rebooking</h3>
-            <div class="booking-box">
-              <form>
-              <div class="mb-3 position-relative">
-                <label class="form-label fw-semibold">Reservation ID:</label>
-                <input type="name" class="form-control" id="cancelRef" readonly>
-                </div>
+        <div class="tab-pane fade show active" id="rebooking">
+              <h3 class="mb-4 section-title">Rebooking</h3>
+              <div class="booking-box">
+                <form id="rebookForm">
+                  <div class="mb-3">
+                    <label class="form-label fw-semibold">Reservation ID:</label>
+                    <input type="text" class="form-control" id="rebookRef" readonly>
+                  </div>
 
-
-                <div class="mb-3">
-                  <label class="form-label fw-semibold">New Schedule:</label>
-                  <div class="row">
-                    <div class="col-md-6 mb-2">
-                      <label class="small text-muted">Check-In:</label>
-                      <input type="date" class="form-control" id="cancelCheckIn">
-                    </div>
-                    <div class="col-md-6 mb-2">
-                      <label class="small text-muted">Check-Out:</label>
-                      <input type="date" class="form-control" id="cancelCheckOut">
+                  <!-- Current Schedule -->
+                  <div class="mb-3">
+                    <label class="form-label fw-semibold">Current Schedule:</label>
+                    <div class="row">
+                      <div class="col-md-6 mb-2">
+                        <label class="small text-muted">Check-In:</label>
+                        <input type="date" class="form-control" id="currentCheckIn" readonly>
+                      </div>
+                      <div class="col-md-6 mb-2">
+                        <label class="small text-muted">Check-Out:</label>
+                        <input type="date" class="form-control" id="currentCheckOut" readonly>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div class="mb-3">
-                  <label class="form-label fw-semibold">Reason for Rebooking:</label>
-                  <textarea class="form-control" rows="4"></textarea>
-                </div>
+                  <!-- New Schedule -->
+                  <div class="mb-3">
+                    <label class="form-label fw-semibold">New Schedule:</label>
+                    <div class="row">
+                      <div class="col-md-6 mb-2">
+                        <label class="small text-muted">Check-In:</label>
+                        <input type="date" class="form-control" id="rebookCheckIn" required>
+                      </div>
+                      <div class="col-md-6 mb-2">
+                        <label class="small text-muted">Check-Out:</label>
+                        <input type="date" class="form-control" id="rebookCheckOut" required>
+                      </div>
+                    </div>
+                  </div>
 
-                <div class="text-end">
-                  <button type="submit" class="btn request-btn">Request</button>
-                </div>
-              </form>
+                  <div class="text-end">
+                    <button type="submit" class="btn request-btn" id="rebookBtn">Request Rebook</button>
+                  </div>
+                </form>
+              </div>
             </div>
-          </div>
+
+
 
           <!-- Cancellation Tab -->
           <div class="tab-pane fade" id="cancellation">
@@ -281,30 +293,37 @@ textarea.form-control {
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   const ref = params.get('ref');
-
-  if (!ref) {
-    alert('No booking reference found');
-    return;
-  }
+  if (!ref) return alert('No booking reference found');
 
   try {
     const res = await fetch(`/api/guest/bookings/${ref}/showCancel`);
     if (!res.ok) throw new Error();
-
     const booking = await res.json();
 
+    // Fill cancellation fields
     document.getElementById('cancelRef').value = booking.reference;
     document.getElementById('cancelRoom').value = booking.rooms?.[0]?.room?.room_type ?? '—';
     document.getElementById('cancelCheckIn').value = booking.check_in;
     document.getElementById('cancelCheckOut').value = booking.check_out;
+
+    // Fill rebooking fields
+    document.getElementById('rebookRef').value = booking.reference;
+    document.getElementById('currentCheckIn').value = booking.check_in;
+    document.getElementById('currentCheckOut').value = booking.check_out;
+
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('rebookCheckIn').min = today;
+    document.getElementById('rebookCheckOut').min = today;
+
+    document.getElementById('rebookCheckIn').addEventListener('change', e => {
+      document.getElementById('rebookCheckOut').min = e.target.value;
+    });
 
   } catch {
     alert('Unable to load booking details');
   }
 });
 </script>
-
-
 
 
 <script>
@@ -341,6 +360,76 @@ document.getElementById('cancelForm').addEventListener('submit', async (e) => {
 });
 </script>
 
+
+
+
+<!-- rebook -->
+<script>
+
+document.getElementById('rebookForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const btn = document.getElementById('rebookBtn');
+  btn.disabled = true;
+  btn.textContent = 'Processing...';
+
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get('ref');
+
+  const newCheckIn = document.getElementById('rebookCheckIn').value;
+  const newCheckOut = document.getElementById('rebookCheckOut').value;
+
+  if (!newCheckIn || !newCheckOut) {
+    alert('Please select new dates');
+    btn.disabled = false;
+    btn.textContent = 'Request Rebook';
+    return;
+  }
+
+  if (newCheckOut <= newCheckIn) {
+    alert('Check-out must be after check-in');
+    btn.disabled = false;
+    btn.textContent = 'Request Rebook';
+    return;
+  }
+  
+  if (newCheckIn < new Date().toISOString().split('T')[0]) {
+    alert('Check-in cannot be in the past');
+    btn.disabled = false;
+    btn.textContent = 'Request Rebook';
+    return;
+  }
+  
+  try {
+    const res = await fetch(`/api/guest/bookings/${ref}/rebook`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        new_check_in: newCheckIn,
+        new_check_out: newCheckOut,
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || 'Rebooking failed');
+      btn.disabled = false;
+      btn.textContent = 'Request Rebook';
+      return;
+    }
+
+    alert('Booking rebooked successfully!');
+    window.location.href = 'manage-booking.html';
+
+  } catch (error) {
+    alert('Something went wrong.');
+    btn.disabled = false;
+    btn.textContent = 'Request Rebook';
+  }
+});
+
+</script>
 
 
 

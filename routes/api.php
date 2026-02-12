@@ -26,15 +26,18 @@ Route::prefix('guest')->middleware('api')->group(function () {
     Route::get('/rooms', [GuestRoomController::class, 'index']);
     Route::get('/rooms/availability', [GuestRoomController::class, 'availability']);
     Route::get('/rooms/{room}', [GuestRoomController::class, 'show']);
+    Route::get('/rooms/{room}/booked-dates', [GuestRoomController::class, 'bookedDates']);
 
     // Bookings
     Route::post('/bookings', [GuestBookingController::class, 'store']);
     Route::get('/bookings/{reference}', [GuestBookingController::class, 'show']);
     Route::get('/bookings/{reference}/showCancel', [GuestBookingController::class, 'showCancel']);
     Route::post('/bookings/{reference}/cancel', [GuestBookingController::class, 'cancel']);
+    Route::post('/bookings/{reference}/rebook', [GuestBookingController::class, 'rebook']);
     Route::post('/bookings/{reference}/payment-proof', [GuestBookingController::class, 'submitPaymentProof']);
     Route::get('/bookings/success/{reference}', [GuestBookingController::class, 'bookingSuccess']);
-});
+    
+    });
 
 Route::prefix('receptionist')->middleware('api')->group(function () {
     Route::get('/payments', [ReceptionistPaymentController::class, 'index']);

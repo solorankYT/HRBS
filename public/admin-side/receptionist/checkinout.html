@@ -440,15 +440,12 @@
 });
 
 
-
-            // Walk-In should go directly to walk-in booking page
             if (walkInCard) {
                 walkInCard.addEventListener('click', function () {
                     window.location.href = 'walkinbooking.html';
                 });
             }
 
-            // Gate the Continue action on valid ID (10 characters)
            if (continueBtn) {
                 continueBtn.addEventListener('click', async function (e) {
                     const reservationRef = (idInput?.value || '').trim();

@@ -27,18 +27,31 @@ public function show(string $id): JsonResponse
     public function create(Request $request )
     {
         $validate = $request->validate([
-            'name' => "required|string|max:255",
-            'email' => "required|string|max:255",
-            'password' => 'required|string|min:8',
+            'name' => "required|string|max:255|min:2",
+            'email' => "required|string|email|max:255|unique:users,email",
+            'password' => 'required|string|min:8|confirmed',
+            'phone_number' => 'required|string|min:10|max:20',
             'role' => 'required|in:admin,receptionist'
+        ], [
+            'name.required' => 'Name is required',
+            'name.min' => 'Name must be at least 2 characters',
+            'email.required' => 'Email is required',
+            'email.email' => 'Email must be a valid email address',
+            'email.unique' => 'Email already exists',
+            'password.required' => 'Password is required',
+            'password.min' => 'Password must be at least 8 characters',
+            'password.confirmed' => 'Passwords do not match',
+            'phone_number.required' => 'Contact number is required',
+            'phone_number.min' => 'Contact number must be at least 10 digits',
+            'role.required' => 'Role is required',
+            'role.in' => 'Invalid role selected'
         ]);
 
         $validate['password'] = Hash::make($validate['password']);
 
-
         User::create($validate);
 
-         return response()->json(['message' => 'User Added']);
+         return response()->json(['message' => 'User Added successfully'], 201);
     }
 
 public function update(Request $request, $userid)
@@ -49,6 +62,8 @@ public function update(Request $request, $userid)
         'name' => 'sometimes|string|max:255',
         'email' => 'sometimes|string|max:255|email|unique:users,email,' . $user->id,
         'role' => 'sometimes|in:admin,receptionist',
+        'status' => 'sometimes|in:active,inactive',
+        'phone_number' => 'sometimes|string|min:10|max:20',
     ]);
 
     if (!empty($validated['password'])) {

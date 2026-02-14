@@ -15,13 +15,21 @@ function renderRooms(rooms) {
     const roomTypeSlug = room.type.toLowerCase().replace(/\s+/g, '-');
 
     card.className = 'room-card';
-    card.dataset.roomType = roomTypeSlug;
+    // use `data-type` so filtering logic (which reads `dataset.type`) works
+    card.dataset.type = roomTypeSlug;
 
-let imageSrc = '/assets/images/room-placeholder.jpg'; // fallback
+    let imageSrc = '/assets/images/room-placeholder.jpg';
 
-if (typeof room.image_urls === 'string' && room.image_urls.length > 0) {
-    imageSrc = `http://localhost:8000/storage/${room.image_urls}`;
-}
+    // server stores `image_urls` as an array; handle array or legacy string
+    if (room.image_urls) {
+      if (Array.isArray(room.image_urls) && room.image_urls.length > 0) {
+        const p = room.image_urls[0];
+        imageSrc = (p.startsWith && p.startsWith('http')) ? p : `http://localhost:8000/storage/${p}`;
+      } else if (typeof room.image_urls === 'string' && room.image_urls.length > 0) {
+        const p = room.image_urls;
+        imageSrc = (p.startsWith && p.startsWith('http')) ? p : `http://localhost:8000/storage/${p}`;
+      }
+    }
 
 
     card.innerHTML = `

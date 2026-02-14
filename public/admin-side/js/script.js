@@ -1,9 +1,9 @@
 async function login() {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
-  const errorEl = document.getElementById("loginError");
+   const errorEl = document.getElementById("loginError");
 
-  errorEl.style.display = "none";
+  if (errorEl) errorEl.style.display = "none";
 
   try {
     await fetch("http://localhost:8000/sanctum/csrf-cookie", {
@@ -27,9 +27,20 @@ async function login() {
       body: JSON.stringify({ email, password })
     });
 
-    if (!res.ok) throw new Error("Invalid credentials");
+        const data = await res.json();
 
-    const data = await res.json();
+        if (!res.ok) {
+        throw new Error(data.message || "Login failed");
+        }
+
+        
+   
+
+    // if (data.user.status === "invalid") {
+    //     alert("This user is invalid. Please contact admin.");
+    //     return; 
+    // }
+
 
     if (data.user.role === "receptionist") {
       window.location.href = "admin-side/receptionist/receptionistdashboard.html";
@@ -39,10 +50,12 @@ async function login() {
 
   } catch (err) {
     console.error("Login failed:", err);
-    errorEl.style.display = "block";
-  }
+    if (errorEl) {
+      errorEl.textContent = err.message;
+      errorEl.style.display = "block";
+    }
 }
-
+}
 
 
 async function logout() {

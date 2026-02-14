@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class RoomManagementController extends Controller
 {
@@ -38,7 +39,8 @@ class RoomManagementController extends Controller
         
         $path = $request->file('image_urls')->store('rooms', 'public');
 
-        $validated['image_urls'] = $path;
+        // store image paths as an array to match model casting
+        $validated['image_urls'] = [$path];
         $room = Room::create($validated);
 
         return response()->json([
@@ -60,7 +62,29 @@ class RoomManagementController extends Controller
             'amenities'   => 'sometimes|required|array',
             'amenities.*' => 'string',
             'status'      => 'sometimes|required|in:available,maintenance',
+            'image_urls' => 'sometimes|file|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+
         ]);
+
+        // Handle uploaded image: store and remove old file(s)
+        if ($request->hasFile('image_urls')) {
+            $newPath = $request->file('image_urls')->store('rooms', 'public');
+
+            // delete old files if present
+            $oldImages = $room->image_urls;
+            if ($oldImages) {
+                // ensure it's an array
+                $oldList = is_array($oldImages) ? $oldImages : [$oldImages];
+                foreach ($oldList as $old) {
+                    if ($old && Storage::disk('public')->exists($old)) {
+                        Storage::disk('public')->delete($old);
+                    }
+                }
+            }
+
+            // set new image array
+            $validated['image_urls'] = [$newPath];
+        }
 
         $room->update($validated);
 
@@ -84,6 +108,26 @@ class RoomManagementController extends Controller
         return response()->json([
             'message' => 'Room status updated',
             'status'  => $room->status
+        ]);
+    }
+
+    public function destroy(string $id): JsonResponse
+    {
+        $room = Room::findOrFail($id);
+        
+        if ($room->image_urls) {
+            $oldList = is_array($room->image_urls) ? $room->image_urls : [$room->image_urls];
+            foreach ($oldList as $old) {
+                if ($old && Storage::disk('public')->exists($old)) {
+                    Storage::disk('public')->delete($old);
+                }
+            }
+        }
+
+        $room->delete();
+
+        return response()->json([
+            'message' => 'Room deleted successfully'
         ]);
     }
 

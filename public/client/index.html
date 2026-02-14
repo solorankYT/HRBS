@@ -240,7 +240,7 @@
               </label>
                 <div class="counter-box">
                   <button type="button" class="counter-btn" onclick="updateCounter('guestCount', -1)">−</button>
-                  <input type="text" id="guestCount" class="counter-input" style="font-family: poppins, sans-serif;" value="2" readonly>
+                  <input type="text" id="guestCount" class="counter-input" style="font-family: poppins, sans-serif;" value="2" maxlength="5" readonly>
                   <button type="button" class="counter-btn" onclick="updateCounter('guestCount', 1)">+</button>
                 </div>
               </div>
@@ -253,6 +253,11 @@
                   <input type="text" id="childCount" class="counter-input" style="font-family: poppins, sans-serif;" value="0" readonly>
                   <button type="button" class="counter-btn" onclick="updateCounter('childCount', 1)">+</button>
                 </div> 
+
+                <div id="guestWarning" class="warning-message" style="display:none; color: red; font-size: 13px; margin-top:5px;">
+                  Maximum 10 guests allowed.
+                </div>
+
                 
               </div>
               <button class="btn-check-rates" style="font-family: poppins, sans-serif;" id="checkRatesBtn" onclick="proceedToRoomSelection()" disabled >

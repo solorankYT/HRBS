@@ -32,7 +32,7 @@ json.data.forEach(r => {
             <td>
                 <a href="reservationdetails.html?id=${r.id}"
                    class="btn btn-sm btn-outline-primary">
-                   View
+                   <i class="fas fa-edit"></i>
                 </a>
             </td>
         </tr>

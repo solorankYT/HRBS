@@ -45,6 +45,7 @@ Route::prefix('receptionist')->middleware('api')->group(function () {
     Route::post('/payments/{id}/status', [ReceptionistPaymentController::class, 'updateStatus']);
     Route::post('/checkouts/{reference}', [ReceptionistCheckOutController::class, 'complete']);
     Route::get('/checkouts/{reference}', [ReceptionistCheckOutController::class, 'show']);
+    Route::post('/walkin-bookings', [ReservationController::class, 'storeWalkin']);
     Route::get('/reservation/lookup', [ReservationController::class, 'lookupByReference']);
 });
 
@@ -73,6 +74,7 @@ Route::get('/rooms', [RoomManagementController::class, 'index']);
 Route::post('/rooms', [RoomManagementController::class, 'create']);
 Route::put('/rooms/{id}', [RoomManagementController::class, 'update']);
 Route::get('/rooms/{id}', [RoomManagementController::class, 'show']);
+Route::delete('/rooms/{id}', [RoomManagementController::class, 'destroy']);
 
 
 

@@ -18,6 +18,11 @@ class AuthenticationController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
+        if(Auth::user()->status === 'inactive') {
+            Auth::logout();
+            return response()->json(['message' => 'Account is inactive. Please contact support.'], 403);
+        }
+
         $request->session()->regenerate();
 
         return response()->json([

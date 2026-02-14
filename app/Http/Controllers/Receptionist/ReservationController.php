@@ -6,7 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\BookingGuest;
 use App\Models\BookingRoom;
+use App\Models\Room;
+use App\Models\Payment;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
+use Illuminate\Http\JsonResponse;
 
 class ReservationController extends Controller
 {
@@ -145,5 +150,83 @@ public function checkIn(string $id)
             'status'  => $booking->booking_status
         ]);
  }
+
+
+
+
+    /*
+     * Create a walk-in booking (receptionist).
+     */
+    public function storeWalkin(Request $request): JsonResponse
+    {
+        $request->validate([
+            'check_in' => 'required|date',
+            'check_out' => 'required|date|after:check_in',
+            'number_of_guests' => 'required|integer|min:1',
+            'rooms' => 'required|array|min:1',
+            'rooms.*.id' => 'required|exists:rooms,id',
+            'rooms.*.guest.name' => 'required|string|max:255',
+            'rooms.*.guest.email' => 'required|email|max:255',
+            'rooms.*.guest.phone' => 'required|string|max:20',
+            'payment_method' => 'required|string',
+            'payment_amount' => 'required|numeric|min:0',
+        ]);
+
+        $checkIn = Carbon::parse($request->check_in);
+        $checkOut = Carbon::parse($request->check_out);
+        $nights = $checkIn->diffInDays($checkOut);
+
+        $booking = Booking::create([
+            'reference_number' => strtoupper(Str::random(10)),
+            'check_in' => $request->check_in,
+            'check_out' => $request->check_out,
+            'number_of_guests' => $request->number_of_guests,
+            'special_requests' => $request->special_requests ?? null,
+            'booking_status' => 'confirmed',
+            'total_amount' => 0,
+        ]);
+
+        $totalAmount = 0;
+
+        foreach ($request->rooms as $roomData) {
+            $room = Room::findOrFail($roomData['id']);
+
+            $subtotal = $room->price * $nights;
+            $totalAmount += $subtotal;
+
+            BookingRoom::create([
+                'booking_id' => $booking->id,
+                'room_id' => $room->id,
+                'price_per_night' => $room->price,
+                'nights' => $nights,
+                'subtotal' => $subtotal,
+            ]);
+
+            $guestData = $roomData['guest'];
+            BookingGuest::create([
+                'booking_id' => $booking->id,
+                'name' => $guestData['name'],
+                'email' => $guestData['email'],
+                'phone' => $guestData['phone'],
+                'special_requests' => $guestData['special_requests'] ?? null,
+            ]);
+        }
+
+        $booking->update(['total_amount' => $totalAmount]);
+
+        // create immediate payment record
+        $payment = Payment::create([
+            'booking_id' => $booking->id,
+            'amount' => $request->payment_amount,
+            'reference' => strtoupper(Str::random(8)),
+            'method' => $request->payment_method,
+            'status' => 'paid',
+            'paid_at' => now(),
+        ]);
+
+        $booking->update(['payment_status' => 'paid']);
+
+        return response()->json($booking->load('rooms.room', 'guests', 'payments'), 201);
+    }
 
 }

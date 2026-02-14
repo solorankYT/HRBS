@@ -18,6 +18,101 @@
             } catch (e) {}
         })();
     </script>
+    <script>
+        // Receptionist dashboard dynamic loader
+        async function populateReceptionistDashboard(payload) {
+            const today = new Date().toISOString().slice(0,10);
+            const occupancy = payload?.occupancy || {};
+            const reservations = payload?.reservations || payload?.reservations === undefined ? payload.reservations || payload : payload.reservations;
+
+            // KPIs
+            const arrivingEl = document.getElementById('recGuestsArrivingCount');
+            const departingEl = document.getElementById('recGuestsDepartingCount');
+            const occupancyEl = document.getElementById('recOccupancyRate');
+            const pendingEl = document.getElementById('recPendingCheckinsCount');
+
+            if (occupancyEl && occupancy.overall_occupancy !== undefined) {
+                occupancyEl.textContent = occupancy.overall_occupancy + '%';
+            }
+
+            const upcoming = (reservations && reservations.upcoming) ? reservations.upcoming : [];
+
+            const arrivalsToday = upcoming.filter(r => r.check_in === today);
+            const departuresToday = upcoming.filter(r => r.check_out === today);
+
+            if (arrivingEl) arrivingEl.textContent = arrivalsToday.length.toString();
+            if (departingEl) departingEl.textContent = departuresToday.length.toString();
+            if (pendingEl) pendingEl.textContent = (reservations?.metrics?.pending ?? 0).toString();
+
+            // Render lists
+            const arrivalsList = document.getElementById('recArrivalsList');
+            if (arrivalsList) {
+                if (arrivalsToday.length === 0) {
+                    arrivalsList.innerHTML = '<div class="guest-card"><div class="guest-info"><div class="guest-name">No arrivals today</div></div></div>';
+                } else {
+                    arrivalsList.innerHTML = arrivalsToday.map(a => `
+                        <div class="guest-card">
+                            <div class="guest-info">
+                                <div class="guest-name">${a.reference}</div>
+                                <div class="guest-details">Guests: ${a.guests} • ${a.check_in}</div>
+                            </div>
+                            <span class="status-badge confirmed"><i class="fas fa-check-circle"></i>${a.status}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            const departuresList = document.getElementById('recDeparturesList');
+            if (departuresList) {
+                if (departuresToday.length === 0) {
+                    departuresList.innerHTML = '<div class="guest-card"><div class="guest-info"><div class="guest-name">No departures today</div></div></div>';
+                } else {
+                    departuresList.innerHTML = departuresToday.map(d => `
+                        <div class="guest-card">
+                            <div class="guest-info">
+                                <div class="guest-name">${d.reference}</div>
+                                <div class="guest-details">Guests: ${d.guests} • ${d.check_out}</div>
+                            </div>
+                            <span class="status-badge checked-out"><i class="fas fa-check-circle"></i>${d.status}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        async function loadReceptionistDashboard() {
+            try {
+                const token = localStorage.getItem('auth_token');
+                const res = await fetch('/api/admin/reports/dashboard', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!res.ok) throw new Error('Dashboard fetch failed: ' + res.status);
+                const payload = await res.json();
+
+                if (!payload.reservations) {
+                    try {
+                        const res2 = await fetch('/api/admin/reports/reservations', { headers: { 'Authorization': `Bearer ${token}` } });
+                        if (res2.ok) payload.reservations = await res2.json();
+                    } catch (e) {}
+                }
+                if (!payload.occupancy) {
+                    try {
+                        const res3 = await fetch('/api/admin/reports/occupancy', { headers: { 'Authorization': `Bearer ${token}` } });
+                        if (res3.ok) payload.occupancy = await res3.json().then(j => j.occupancy ?? j);
+                    } catch (e) {}
+                }
+
+                populateReceptionistDashboard(payload);
+            } catch (e) {
+                console.error('Error loading receptionist dashboard data', e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadReceptionistDashboard);
+    </script>
     <style>
         /* Font Family Declarations */
         body {
@@ -370,7 +465,7 @@
                 </div>
 
                 <div class="welcome-banner mb-4">
-                    <h1>Welcome back, Prince Gallardo</h1>
+                    <h1>Welcome back</h1>
                     <p>Manage your hotel operations from this dashboard</p>
                 </div>
 
@@ -382,7 +477,7 @@
                                     <i class="fas fa-users"></i>
                                 </div>
                                 <div class="kpi-content">
-                                    <h3 class="kpi-number">2</h3>
+                                    <h3 id="recGuestsArrivingCount" class="kpi-number">2</h3>
                                     <p class="kpi-label">Guests Arriving Today</p>
                                     <span class="kpi-trend positive">+1 from yesterday</span>
                                 </div>
@@ -398,7 +493,7 @@
                                     <i class="fas fa-calendar"></i>
                                 </div>
                                 <div class="kpi-content">
-                                    <h3 class="kpi-number">1</h3>
+                                    <h3 id="recGuestsDepartingCount" class="kpi-number">1</h3>
                                     <p class="kpi-label">Guests Departing Today</p>
                                     <span class="kpi-trend neutral">No change</span>
                                 </div>
@@ -414,7 +509,7 @@
                                     <i class="fas fa-bed"></i>
                                 </div>
                                 <div class="kpi-content">
-                                    <h3 class="kpi-number">85%</h3>
+                                    <h3 id="recOccupancyRate" class="kpi-number">85%</h3>
                                     <p class="kpi-label">Occupancy Rate</p>
                                     <span class="kpi-trend positive">+5% from last week</span>
                                 </div>
@@ -430,7 +525,7 @@
                                     <i class="fas fa-clock"></i>
                                 </div>
                                 <div class="kpi-content">
-                                    <h3 class="kpi-number">1</h3>
+                                    <h3 id="recPendingCheckinsCount" class="kpi-number">1</h3>
                                     <p class="kpi-label">Pending Check-ins</p>
                                     <span class="kpi-trend neutral">No change</span>
                                 </div>
@@ -449,7 +544,7 @@
                                     <p>Guests checking in today.</p>
                                 </div>
                                 <div class="card-body">
-                                    <div class="guest-cards-container arrivals-list">
+                                    <div id="recArrivalsList" class="guest-cards-container arrivals-list">
                                         <div class="guest-card">
                                             <div class="guest-info">
                                                 <div class="guest-name">Lance Prima</div>
@@ -476,7 +571,7 @@
                                     <p>Guests checking out today.</p>
                                 </div>
                                 <div class="card-body">
-                                    <div class="guest-cards-container arrivals-list">
+                                    <div id="recDeparturesList" class="guest-cards-container arrivals-list">
                                         <div class="guest-card">
                                             <div class="guest-info">
                                                 <div class="guest-name">Franz Siochi</div>

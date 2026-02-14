@@ -13,6 +13,108 @@
             } catch (e) {}
         })();
     </script>
+    <script>
+        // Dashboard dynamic loader
+        async function populateDashboard(payload) {
+            const token = localStorage.getItem('auth_token');
+            const today = new Date().toISOString().slice(0,10);
+
+            const occupancy = payload?.occupancy || {};
+            const reservations = payload?.reservations || payload?.reservations === undefined ? payload.reservations || payload : payload.reservations;
+
+            // KPIs
+            const arrivingEl = document.getElementById('guestsArrivingCount');
+            const departingEl = document.getElementById('guestsDepartingCount');
+            const occupancyEl = document.getElementById('occupancyRate');
+            const pendingEl = document.getElementById('pendingCheckinsCount');
+
+            if (occupancyEl && occupancy.overall_occupancy !== undefined) {
+                occupancyEl.textContent = occupancy.overall_occupancy + '%';
+            }
+
+            const upcoming = (reservations && reservations.upcoming) ? reservations.upcoming : [];
+
+            // Arrivals today
+            const arrivalsToday = upcoming.filter(r => r.check_in === today);
+            if (arrivingEl) arrivingEl.textContent = arrivalsToday.length.toString();
+
+            // Departures today (from upcoming list where check_out == today)
+            const departuresToday = upcoming.filter(r => r.check_out === today);
+            if (departingEl) departingEl.textContent = departuresToday.length.toString();
+
+            if (pendingEl) pendingEl.textContent = (reservations?.metrics?.pending ?? 0).toString();
+
+            // Render arrivals list
+            const arrivalsList = document.getElementById('arrivalsList');
+            if (arrivalsList) {
+                if (arrivalsToday.length === 0) {
+                    arrivalsList.innerHTML = '<div class="guest-card"><div class="guest-info"><div class="guest-name">No arrivals today</div></div></div>';
+                } else {
+                    arrivalsList.innerHTML = arrivalsToday.map(a => `
+                        <div class="guest-card">
+                            <div class="guest-info">
+                                <div class="guest-name">${a.reference}</div>
+                                <div class="guest-details">Guests: ${a.guests} • ${a.check_in}</div>
+                            </div>
+                            <span class="status-badge confirmed"><i class="fas fa-check-circle"></i>${a.status}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            // Render departures list
+            const departuresList = document.getElementById('departuresList');
+            if (departuresList) {
+                if (departuresToday.length === 0) {
+                    departuresList.innerHTML = '<div class="guest-card"><div class="guest-info"><div class="guest-name">No departures today</div></div></div>';
+                } else {
+                    departuresList.innerHTML = departuresToday.map(d => `
+                        <div class="guest-card">
+                            <div class="guest-info">
+                                <div class="guest-name">${d.reference}</div>
+                                <div class="guest-details">Guests: ${d.guests} • ${d.check_out}</div>
+                            </div>
+                            <span class="status-badge checked-out"><i class="fas fa-check-circle"></i>${d.status}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        async function loadDashboardData() {
+            try {
+                const token = localStorage.getItem('auth_token');
+                const res = await fetch('/api/admin/reports/dashboard', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!res.ok) throw new Error('Dashboard fetch failed: ' + res.status);
+                const payload = await res.json();
+
+                // If dashboard doesn't include reservations/occupancy, fetch them directly
+                if (!payload.reservations) {
+                    try {
+                        const res2 = await fetch('/api/admin/reports/reservations', { headers: { 'Authorization': `Bearer ${token}` } });
+                        if (res2.ok) payload.reservations = await res2.json();
+                    } catch (e) { /* ignore */ }
+                }
+                if (!payload.occupancy) {
+                    try {
+                        const res3 = await fetch('/api/admin/reports/occupancy', { headers: { 'Authorization': `Bearer ${token}` } });
+                        if (res3.ok) payload.occupancy = await res3.json().then(j => j.occupancy ?? j);
+                    } catch (e) { /* ignore */ }
+                }
+
+                await populateDashboard(payload);
+            } catch (e) {
+                console.error('Error loading dashboard data', e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadDashboardData);
+    </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -241,10 +343,7 @@
                         <span class="admin-label">Admin</span>
                     </div>
                     <div class="d-flex align-items-center">
-                        <div class="search-container me-4">
-                            <input type="text" class="form-control search-input" placeholder="Search...">
-                            <i class="fas fa-search search-icon"></i>
-                        </div>
+                    
                         <div class="notification-icon me-3">
                             <i class="fas fa-bell"></i>
                         </div>
@@ -268,7 +367,7 @@
                                     <i class="fas fa-users"></i>
                                 </div>
                                 <div class="kpi-content">
-                                    <h3 class="kpi-number">2</h3>
+                                    <h3 id="guestsArrivingCount" class="kpi-number">2</h3>
                                     <p class="kpi-label">Guests Arriving Today</p>
                                     <span class="kpi-trend positive">+1 from yesterday</span>
                                 </div>
@@ -284,7 +383,7 @@
                                     <i class="fas fa-calendar"></i>
                                 </div>
                                 <div class="kpi-content">
-                                    <h3 class="kpi-number">1</h3>
+                                    <h3 id="guestsDepartingCount" class="kpi-number">1</h3>
                                     <p class="kpi-label">Guests Departing Today</p>
                                     <span class="kpi-trend neutral">No change</span>
                                 </div>
@@ -300,7 +399,7 @@
                                     <i class="fas fa-bed"></i>
                                 </div>
                                 <div class="kpi-content">
-                                    <h3 class="kpi-number">85%</h3>
+                                    <h3 id="occupancyRate" class="kpi-number">85%</h3>
                                     <p class="kpi-label">Occupancy Rate</p>
                                     <span class="kpi-trend positive">+5% from last week</span>
                                 </div>
@@ -316,7 +415,7 @@
                                     <i class="fas fa-clock"></i>
                                 </div>
                                 <div class="kpi-content">
-                                    <h3 class="kpi-number">1</h3>
+                                    <h3 id="pendingCheckinsCount" class="kpi-number">1</h3>
                                     <p class="kpi-label">Pending Check-ins</p>
                                     <span class="kpi-trend neutral">No change</span>
                                 </div>
@@ -335,7 +434,7 @@
                                     <p>Guests checking in today.</p>
                                 </div>
                                 <div class="card-body">
-                                    <div class="guest-cards-container arrivals-list">
+                                    <div id="arrivalsList" class="guest-cards-container arrivals-list">
                                         <div class="guest-card">
                                             <div class="guest-info">
                                                 <div class="guest-name">Lance Prima</div>
@@ -362,7 +461,7 @@
                                     <p>Guests checking out today.</p>
                                 </div>
                                 <div class="card-body">
-                                    <div class="guest-cards-container arrivals-list">
+                                    <div id="departuresList" class="guest-cards-container arrivals-list">
                                         <div class="guest-card">
                                             <div class="guest-info">
                                                 <div class="guest-name">Franz Siochi</div>

@@ -9,15 +9,26 @@ let selectedCheckOut = null;
 // ==========================
 function updateCounter(id, change) {
   const input = document.getElementById(id);
+  const warning = document.getElementById('guestWarning');
+
   let value = parseInt(input.value) || 0;
 
-  let min =(id ==="childCount") ? 0: 1;
-  let max = (id === "guestCount") ? 10 : (id === "childCount" ? 5: 5 );
+  let min = (id === "childCount") ? 0 : 1;
+  let max = (id === "guestCount") ? 10 : 5;
 
-  value = Math.max(min, Math.min(max, value + change));
-  input.value = value;
+  let newValue = value + change;
 
+  if (id === "guestCount" && newValue > max) {
+    warning.style.display = "block";
+    return;
+  } else {
+    warning.style.display = "none";
+  }
+
+  newValue = Math.max(min, Math.min(max, newValue));
+  input.value = newValue;
 }
+
 
 
 // ==========================
@@ -153,14 +164,21 @@ function updateDateDisplay() {
 
     const options = { month: 'short', day: 'numeric', year: 'numeric' };
 
+    function toLocalYMD(d) {
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+    }
+
     if (selectedCheckIn) {
         checkInDisplay.textContent = selectedCheckIn.toLocaleDateString('en-US', options);
-        checkInDisplay.dataset.value = selectedCheckIn.toISOString().split('T')[0];
+        checkInDisplay.dataset.value = toLocalYMD(selectedCheckIn);
     }
 
     if (selectedCheckOut) {
         checkOutDisplay.textContent = selectedCheckOut.toLocaleDateString('en-US', options);
-        checkOutDisplay.dataset.value = selectedCheckOut.toISOString().split('T')[0];
+        checkOutDisplay.dataset.value = toLocalYMD(selectedCheckOut);
     } else {
         checkOutDisplay.textContent = 'Select date';
         delete checkOutDisplay.dataset.value;

@@ -1,3 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Walk-in Booking</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;padding:20px}
+    label{display:block;margin-top:10px}
+    input,select,button{padding:8px;margin-top:4px;width:100%;max-width:400px}
+    .inline{display:inline-block;width:48%;}
+  </style>
+</head>
+<body>
+  <h2>Walk-in Booking (Receptionist)</h2>
+
+  <form id="walkin-form">
+    <label>Guest name
+      <input type="text" id="guest-name" required>
+    </label>
+
+    <label>Guest email
+      <input type="email" id="guest-email" required>
+    </label>
+
+    <label>Guest phone
+      <input type="text" id="guest-phone" required>
+    </label>
+
+    <div style="display:flex;gap:8px">
+      <div class="inline">
+        <label>Check-in
+          <input type="date" id="check-in" required>
+        </label>
+      </div>
+      <div class="inline">
+        <label>Check-out
+          <input type="date" id="check-out" required>
+        </label>
+      </div>
+    </div>
+
+    <label>Number of guests
+      <input type="number" id="num-guests" value="1" min="1" required>
+    </label>
+
+    <label>Room
+      <select id="room-select"></select>
+    </label>
+
+    <button type="button" id="add-room">Add Room</button>
+
+    <div id="rooms-list" style="margin-top:12px"></div>
+
+    <label>Payment method
+      <select id="payment-method">
+        <option value="cash">Cash</option>
+        <option value="card">Card</option>
+        <option value="gcash">Gcash</option>
+      </select>
+    </label>
+
+    <label>Total amount
+      <input type="number" id="payment-amount" step="0.01" required>
+    </label>
+
+    <button type="submit">Create Walk-in Booking</button>
+  </form>
+
+  <script>
+    const roomSelect = document.getElementById('room-select');
+    const addRoomBtn = document.getElementById('add-room');
+    const roomsList = document.getElementById('rooms-list');
+    const checkIn = document.getElementById('check-in');
+    const checkOut = document.getElementById('check-out');
+    const paymentAmount = document.getElementById('payment-amount');
+
+    let rooms = [];
+    let selectedRooms = [];
+
+    async function loadRooms(){
+      const res = await fetch('/api/rooms');
+      const data = await res.json();
+      rooms = data.data || data;
+      roomSelect.innerHTML = rooms.map(r=>`<option value="${r.id}" data-price="${r.price}">${r.room_name} — ${r.room_number} — $${r.price}</option>`).join('');
+    }
+
+    function addRoom(){
+      const opt = roomSelect.options[roomSelect.selectedIndex];
+      const id = parseInt(opt.value);
+      const price = parseFloat(opt.dataset.price || 0);
+      if(selectedRooms.find(r=>r.id===id)) return alert('Room already added');
+
+      selectedRooms.push({id,price});
+      renderRooms();
+    }
+
+    function renderRooms(){
+      roomsList.innerHTML = '';
+      selectedRooms.forEach((r,idx)=>{
+        const div = document.createElement('div');
+        div.style.marginTop='8px';
+        div.innerHTML = `Room ID: ${r.id} — Price: $${r.price.toFixed(2)} <button data-idx="${idx}">Remove</button>`;
+        div.querySelector('button').addEventListener('click', (e)=>{ selectedRooms.splice(idx,1); renderRooms(); });
+        roomsList.appendChild(div);
+      });
+      // auto compute amount if dates provided
+      computeAmount();
+    }
+
+    function computeAmount(){
+      if(!checkIn.value || !checkOut.value) return;
+      const d1 = new Date(checkIn.value);
+      const d2 = new Date(checkOut.value);
+      const nights = Math.max(0, Math.floor((d2-d1)/(1000*60*60*24)));
+      let total = selectedRooms.reduce((s,r)=>s + r.price * nights,0);
+      paymentAmount.value = total.toFixed(2);
+    }
+
+    addRoomBtn.addEventListener('click', addRoom);
+    checkIn.addEventListener('change', computeAmount);
+    checkOut.addEventListener('change', computeAmount);
+
+    document.getElementById('walkin-form').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      if(selectedRooms.length===0) return alert('Add at least one room');
+
+      const payload = {
+        check_in: checkIn.value,
+        check_out: checkOut.value,
+        number_of_guests: parseInt(document.getElementById('num-guests').value,10),
+        rooms: selectedRooms.map(r=>({ id: r.id, guest: { name: document.getElementById('guest-name').value, email: document.getElementById('guest-email').value, phone: document.getElementById('guest-phone').value } })),
+        payment_method: document.getElementById('payment-method').value,
+        payment_amount: parseFloat(paymentAmount.value) || 0,
+        special_requests: null
+      };
+
+      try{
+        const res = await fetch('/api/receptionist/walkin-bookings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const json = await res.json();
+        if(!res.ok) throw new Error(json.message || 'Failed');
+        alert('Walk-in booking created: ' + (json.reference_number || json.reference));
+        // reset
+        selectedRooms = [];
+        renderRooms();
+        document.getElementById('walkin-form').reset();
+      } catch(err){
+        alert('Error: ' + err.message);
+      }
+    });
+
+    loadRooms();
+  </script>
+</body>
+</html>
 <!DOCTYPE html>
 <html lang="en">
 <head>

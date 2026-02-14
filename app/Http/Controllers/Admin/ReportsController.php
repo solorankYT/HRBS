@@ -184,7 +184,9 @@ class ReportsController extends Controller
         $revenueReport = json_decode($this->revenueReport()->getContent(), true);
         $breakdown = json_decode($this->revenueBreakdown()->getContent(), true);
         $trends = json_decode($this->dailyTrend()->getContent(), true);
-        $occupancy = json_decode($this->occupancyReport()->getContent(), true);
+        $occupancyPayload = json_decode($this->occupancyReport()->getContent(), true);
+        // occupancyReport returns ['occupancy' => [...] ] — unwrap so dashboard returns occupancy directly
+        $occupancy = $occupancyPayload['occupancy'] ?? $occupancyPayload;
         $reservations = json_decode($this->reservationReport()->getContent(), true);
         $feedback = json_decode($this->feedbackReport()->getContent(), true);
 
@@ -209,8 +211,9 @@ class ReportsController extends Controller
         $totalRooms = Room::count();
         
         // Total room nights available in the month
-        $daysInMonth = $endOfMonth->diffInDays($startOfMonth) + 1;
-        $totalRoomNights = $totalRooms * $daysInMonth;
+        // Use Carbon's daysInMonth to avoid any edge cases from multiple now() calls
+        $daysInMonth = (int) $startOfMonth->daysInMonth;
+        $totalRoomNights = max(0, $totalRooms * $daysInMonth);
 
         // Booked room nights
         $bookedNights = Booking::where('booking_status', '!=', 'cancelled')
@@ -236,8 +239,8 @@ class ReportsController extends Controller
         // Compare with previous month
         $prevStart = $startOfMonth->copy()->subMonth();
         $prevEnd = $prevStart->copy()->endOfMonth();
-        $prevDaysInMonth = $prevEnd->diffInDays($prevStart) + 1;
-        $prevTotalRoomNights = $totalRooms * $prevDaysInMonth;
+        $prevDaysInMonth = (int) $prevStart->daysInMonth;
+        $prevTotalRoomNights = max(0, $totalRooms * $prevDaysInMonth);
         
         $prevBookedNights = Booking::whereBetween('created_at', [$prevStart, $prevEnd])
             ->where('booking_status', '!=', 'cancelled')
@@ -309,8 +312,7 @@ class ReportsController extends Controller
     {
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
-
-        // Reservation counts
+        // Reservation counts (by created_at for the month)
         $totalReservations = Booking::whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
         $confirmedReservations = Booking::where('booking_status', 'confirmed')
             ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
@@ -322,55 +324,73 @@ class ReportsController extends Controller
             ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
             ->count();
 
-        // Previous month comparison
+        // Previous month comparison (totals by created_at)
         $prevStart = $startOfMonth->copy()->subMonth();
         $prevEnd = $prevStart->copy()->endOfMonth();
         $prevTotalReservations = Booking::whereBetween('created_at', [$prevStart, $prevEnd])->count();
 
         $changePercent = $prevTotalReservations > 0
-            ? (($totalReservations - $prevTotalReservations) / $prevTotalReservations) * 100
+            ? round((($totalReservations - $prevTotalReservations) / $prevTotalReservations) * 100, 1)
             : 0;
 
-        // Average booking value
+        // Average booking value for the month
         $avgBookingValue = Booking::whereBetween('created_at', [$startOfMonth, $endOfMonth])
             ->avg('total_amount') ?? 0;
 
-        // Reservation breakdown by status
+        // Breakdown by status (safe division)
+        $safeTotal = max(1, $totalReservations); // avoid div by zero
         $breakdown = [
             [
                 'status' => 'Confirmed',
                 'count' => $confirmedReservations,
-                'percentage' => $totalReservations > 0 
-                    ? round(($confirmedReservations / $totalReservations) * 100, 1)
-                    : 0
+                'percentage' => round(($confirmedReservations / $safeTotal) * 100, 1)
             ],
             [
                 'status' => 'Pending',
                 'count' => $pendingReservations,
-                'percentage' => $totalReservations > 0
-                    ? round(($pendingReservations / $totalReservations) * 100, 1)
-                    : 0
+                'percentage' => round(($pendingReservations / $safeTotal) * 100, 1)
             ],
             [
                 'status' => 'Cancelled',
                 'count' => $cancelledReservations,
-                'percentage' => $totalReservations > 0
-                    ? round(($cancelledReservations / $totalReservations) * 100, 1)
-                    : 0
+                'percentage' => round(($cancelledReservations / $safeTotal) * 100, 1)
             ]
         ];
+
+        // Upcoming reservations (next 7 days)
+        $now = Carbon::now();
+        $upcomingWindowEnd = $now->copy()->addDays(7)->endOfDay();
+        $upcoming = Booking::whereBetween('check_in', [$now->startOfDay(), $upcomingWindowEnd])
+            ->where('booking_status', '!=', 'cancelled')
+            ->with(['rooms.room', 'guests'])
+            ->orderBy('check_in')
+            ->take(10)
+            ->get()
+            ->map(function ($b) {
+                return [
+                    'reference' => $b->reference_number,
+                    'check_in' => optional($b->check_in)->toDateString(),
+                    'check_out' => optional($b->check_out)->toDateString(),
+                    'guests' => $b->number_of_guests,
+                    'status' => $b->booking_status,
+                    'rooms' => $b->rooms->map(function ($br) {
+                        return optional($br->room)->room_number;
+                    })->filter()->values()->all()
+                ];
+            })->all();
 
         return response()->json([
             'period' => now()->format('F Y'),
             'total_reservations' => $totalReservations,
-            'change_percent' => round($changePercent, 1),
+            'change_percent' => $changePercent,
             'avg_booking_value' => round($avgBookingValue, 2),
             'metrics' => [
                 'confirmed' => $confirmedReservations,
                 'pending' => $pendingReservations,
                 'cancelled' => $cancelledReservations
             ],
-            'breakdown' => $breakdown
+            'breakdown' => $breakdown,
+            'upcoming' => $upcoming
         ]);
     }
 

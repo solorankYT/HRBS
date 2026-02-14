@@ -662,12 +662,14 @@
             const metricsContainer = document.getElementById('reservationMetricsContainer');
             const breakdownContainer = document.getElementById('reservationBreakdownContainer');
             
-            if (!data || !data.reservations) {
+            if (!data) {
                 metricsContainer.innerHTML = '<p>No data available</p>';
                 return;
             }
 
-            const reservations = data.reservations;
+            // Support either dashboard payload ({ reservations: {...} })
+            // or direct reservation payload ({ total_reservations, metrics, breakdown, ... })
+            const reservations = data.reservations ? data.reservations : data;
             const metrics = [
                 {
                     title: 'Total Reservations',
@@ -752,6 +754,25 @@
                 }
 
                 const data = await response.json();
+                // If dashboard doesn't include reservations, fetch reservations endpoint directly
+                if (!data || !data.reservations) {
+                    try {
+                        const res2 = await fetch('/api/admin/reports/reservations', {
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        if (res2.ok) {
+                            const reservationsPayload = await res2.json();
+                            populateReservations(reservationsPayload);
+                            return;
+                        }
+                    } catch (e) {
+                        console.warn('Fallback reservations fetch failed', e);
+                    }
+                }
+
                 populateReservations(data);
             } catch (error) {
                 console.error('Error loading reservation data:', error);

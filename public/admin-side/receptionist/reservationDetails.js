@@ -39,8 +39,13 @@ async function loadReservationDetails() {
 
     /* ---------- Payment ---------- */
     if (data.payment?.proof_image) {
-        document.getElementById('modalRoomImage').src =
-            `/storage/${data.payment.proof_image}`;
+        const url = `/storage/${data.payment.proof_image}`;
+        const proofInput = document.getElementById('paymentProofInput');
+        const hiddenImg = document.getElementById('proofImage');
+        const modalImg = document.getElementById('modalRoomImage');
+        if (proofInput) proofInput.value = data.payment.proof_image;
+        if (hiddenImg) hiddenImg.src = url;
+        if (modalImg) modalImg.src = url;
     }
 
    renderCheckInButton(data.status);

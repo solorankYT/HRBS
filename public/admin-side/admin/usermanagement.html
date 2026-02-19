@@ -340,7 +340,7 @@
                              name="name" 
                              placeholder="Full Name" 
                              minlength="2" 
-                            pattern="[A-Za-z\s]+"
+                            pattern="^[A-Za-z\s'-]+$"
                             title="Name should contain only letters"
                              required>
                              <small class="form-text text-muted">At least 2 characters</small>
@@ -402,7 +402,7 @@
                                 class="form-control"
                                 id="editUserName"
                                 name="name"
-                                pattern="[A-Za-z\s]+"
+                                pattern="^[A-Za-z\s'-]+$"
                                 title="Name should contain only letters"
                                 required
                                 >
@@ -507,8 +507,11 @@ async function loadUsers() {
                 </td>
 
                 <td>
+                ${user.role === 'admin' ? '' : `
+              
                  <div class="action-buttons">
-                    <button class="btn btn-sm btn-action" 
+                    <button 
+                        class="btn btn-sm btn-action"
                         onclick="editUser(${user.id})">
                         <i class="fas fa-edit"></i>
                     </button>
@@ -517,6 +520,8 @@ async function loadUsers() {
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
+                `
+                  }
 
                 </td>
             `;

@@ -476,7 +476,7 @@ document.addEventListener('DOMContentLoaded', loadRooms);
 
                             <div class="col-md-6">
                                 <label class="form-label">Room number</label>
-                                <input type="text" class="form-control" name="room_number">
+                                <input type="number" class="form-control" name="room_number">
                             </div>
 
                             <div class="col-md-6">
@@ -496,7 +496,7 @@ document.addEventListener('DOMContentLoaded', loadRooms);
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Default Capacity</label>
-                                <input type="number" class="form-control" name="capacity" id="capacity" min="1" step="1" placeholder="2">
+                                <input type="number" class="form-control" name="capacity" id="capacity" min="1" step="1" placeholder="2" readonly>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Status</label>
@@ -555,11 +555,11 @@ document.addEventListener('DOMContentLoaded', loadRooms);
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Room Number</label>
-                                <input type="text" class="form-control" id="editRoomNumber">
+                                <input type="number" class="form-control" id="editRoomNumber">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Type</label>
-                                <input type="text" class="form-control" id="editRoomType">
+                                <input type="text" class="form-control" id="editRoomType" readonly>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Rate per night</label>

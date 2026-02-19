@@ -7,9 +7,11 @@ use App\Models\Booking;
 use App\Models\BookingRoom;
 use App\Models\BookingGuest;
 use App\Models\Room;
+use App\Services\BookingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Str;
 
 class BookingController extends Controller
@@ -203,44 +205,31 @@ class BookingController extends Controller
         }
 
 
-public function cancel(Request $request, $reference)
-{
-    $validated = $request->validate([
-        'cancellation_reason' => 'nullable|string|max:100',
-    ]);
+    public function cancel(Request $request, $reference, BookingService $bookingService)
+    {
+        $validated = $request->validate([
+            'cancellation_reason' => 'nullable|string|max:100',
+        ]);
 
-    $booking = Booking::where('reference_number', $reference)->firstOrFail();
+        $booking = Booking::where('reference_number', $reference)->firstOrFail();
 
-    if ($booking->booking_status === 'cancelled') {
-        return response()->json([
-            'message' => 'Booking is already cancelled'
-        ], 400);
+        try {
+            $bookingService->cancel(
+                $booking,
+                $validated['cancellation_reason'] ?? null
+            );
+
+            return response()->json([
+                'message' => 'Booking cancelled successfully'
+            ]);
+
+        } catch (Exception $e) {
+
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 400);
+        }
     }
-
-    if (in_array($booking->booking_status, ['checked_in', 'checked_out'])) {
-        return response()->json([
-            'message' => 'Cannot cancel after check-in'
-        ], 400);
-    }
-
-    // 24-hour rule
-    if (now()->diffInHours($booking->check_in, false) < 24) {
-        return response()->json([
-            'message' => 'Cancellation is only allowed 24 hours before check-in'
-        ], 400);
-    }
-
-    $booking->update([
-        'booking_status' => 'cancelled',
-        'cancelled_at' => now(),
-        'cancalled_by' => 'guest',
-        'cancellation_reason' => $validated['cancellation_reason'] ?? null,
-    ]);
-
-    return response()->json([
-        'message' => 'Booking cancelled successfully'
-    ]);
-}
 
 
     public function submitPaymentProof(Request $request, $reference)

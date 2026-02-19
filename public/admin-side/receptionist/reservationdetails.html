@@ -264,9 +264,10 @@
                     <div class="col-md-6">
                         <label class="form-label small mb-1">Proof of Payment</label>
                         <div class="input-group input-group-sm">
-                            <input type="text" class="form-control" value="Image2349230..." readonly>
+                            <input id="paymentProofInput" type="text" class="form-control" readonly>
                             <button id="btnViewImage" class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#paymentImageModal">View</button>
                         </div>
+                        <img id="proofImage" src="" alt="proof image" class="d-none">
                     </div>
                 </div>
 
@@ -335,7 +336,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <img id="modalRoomImage" src="https://i.pinimg.com/736x/c3/b3/ef/c3b3ef3d94cddaf939d67ae0f9126927.jpg" class="img-fluid rounded" alt="Room image preview" referrerpolicy="no-referrer">
+                    <img id="modalRoomImage"
+                     src="" 
+                     class="img-fluid rounded" 
+                     alt="Proof image preview" 
+                     referrerpolicy="no-referrer">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -348,20 +353,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="receptionist.js"></script>
 
-
-    <script>
-        // Ensure the proof-of-payment "View image" button previews the room image in the modal
-        document.addEventListener('DOMContentLoaded', function () {
-            const btnView = document.getElementById('btnViewImage');
-            const roomImage = document.getElementById('roomImage');
-            const modalImg = document.getElementById('modalRoomImage');
-            if (btnView && roomImage && modalImg) {
-                btnView.addEventListener('click', function () {
-                    modalImg.src = roomImage.src;
-                });
-            }
-        });
-    </script>
    
     <script>
         // Sidebar toggle functionality

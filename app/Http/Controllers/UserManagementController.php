@@ -3,13 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserManagementController extends Controller
 {
+       protected $userService;
 
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
 
 public function show(string $id): JsonResponse
 {
@@ -27,7 +33,7 @@ public function show(string $id): JsonResponse
     public function create(Request $request )
     {
         $validate = $request->validate([
-            'name' => "required|string|max:255|min:2",
+            'name' => "required|string|max:255|min:2|regex:/^[A-Za-z\s]+$/",
             'email' => "required|string|email|max:255|unique:users,email",
             'password' => 'required|string|min:8|confirmed',
             'phone_number' => 'required|string|min:10|max:20',
@@ -35,6 +41,7 @@ public function show(string $id): JsonResponse
         ], [
             'name.required' => 'Name is required',
             'name.min' => 'Name must be at least 2 characters',
+            'name.regex' => 'Name must contain letters only and no numbers.',
             'email.required' => 'Email is required',
             'email.email' => 'Email must be a valid email address',
             'email.unique' => 'Email already exists',
@@ -59,45 +66,33 @@ public function update(Request $request, $userid)
     $user = User::findOrFail($userid);
 
     $validated = $request->validate([
-        'name' => 'sometimes|string|max:255',
+        'name' => 'sometimes|string|max:255|regex:/^[A-Za-z\s]+$/',
         'email' => 'sometimes|string|max:255|email|unique:users,email,' . $user->id,
         'role' => 'sometimes|in:admin,receptionist',
         'status' => 'sometimes|in:active,inactive',
         'phone_number' => 'sometimes|string|min:10|max:20',
     ]);
 
-    if (!empty($validated['password'])) {
-        $validated['password'] = Hash::make($validated['password']);
-    } else {
-        unset($validated['password']);
-    }
-
-    $user->update($validated);
+    $updatedUser = $this->userService->updateUser($user, $validated);
 
     return response()->json([
         'message' => 'User updated successfully',
-        'user' => $user
+        'user' => $updatedUser
     ]);
 }
 
 
-
     public function delete($id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
 
-        if (!$user) {
-            return response()->json([
-                'message' => 'User not found'
-            ], 404);
-        }
-
-        $user->delete();
+        $this->userService->deleteUser($user);
 
         return response()->json([
             'message' => 'User deleted successfully'
-        ], 200);
+        ]);
     }
+
 
 
 

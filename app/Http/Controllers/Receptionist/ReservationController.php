@@ -73,14 +73,13 @@ public function show($id)
         'date_booked' => $booking->created_at->toDateString(),
         'total_amount' => $booking->total_amount,
         'number_of_guests' =>$booking->number_of_guests,
-
+    
         'guest' => [
             'name' => optional($booking->guests->first())->name,
             'email' => optional($booking->guests->first())->email,
             'phone' => optional($booking->guests->first())->phone,
             'special_requests' => optional($booking->guests->first())->special_requests,
         ],
-
 
 
         'rooms' => $booking->rooms->map(function ($br) {
@@ -115,6 +114,9 @@ public function lookupByReference(Request $request)
         'status' => $booking->status,
     ]);
 }
+
+
+
 
 public function checkIn(string $id)
 {

@@ -31,14 +31,15 @@ class RoomController extends Controller
     ]);
 
     $availableRooms = Room::query()
-        ->where('status', 'available')
+        ->whereNotIn('status', ['occupied', 'maintenance', 'cleaning'])
         ->where('capacity', '>=', $request->number_of_guests)
         ->whereDoesntHave('bookingRooms.booking', function ($query) use ($request) {
             $query->whereIn('booking_status', [
                     'pending',
                     'confirmed',
                     'checked_in',
-                ])
+                ],
+                )
                 ->where('check_in', '<', $request->check_out)
                 ->where('check_out', '>', $request->check_in);
         })

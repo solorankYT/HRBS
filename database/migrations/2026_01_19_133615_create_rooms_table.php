@@ -19,9 +19,12 @@ return new class extends Migration
             $table->unsignedTinyInteger('capacity'); 
             $table->json('amenities')->nullable();
             $table->decimal('price', 10, 2);
-            $table->enum('status', ['available', 'maintenance'])->default('available');
-
-            // New fields
+            $table->enum('status', [
+                'available',      
+                'occupied',     
+                'cleaning',    
+                'maintenance'  
+            ])->default('available');
             $table->json('image_urls')->nullable();
 
             $table->timestamps();

@@ -274,7 +274,7 @@
 
                 <!-- Summary Cards -->
              <div class="row mb-4">
-                <div class="col-xl-3 col-md-6 mb-3">
+                <div class="col-xl-2 col-md-6 mb-3">
                     <div class="kpi-card">
                         <div class="kpi-icon light-blue">
                             <i class="fas fa-bed"></i>
@@ -286,7 +286,7 @@
                     </div>
                 </div>
 
-                <div class="col-xl-3 col-md-6 mb-3">
+                <div class="col-xl-2 col-md-6 mb-3">
                     <div class="kpi-card">
                         <div class="kpi-icon green">
                             <i class="fas fa-check-circle"></i>
@@ -298,7 +298,7 @@
                     </div>
                 </div>
 
-                <div class="col-xl-3 col-md-6 mb-3">
+                <div class="col-xl-2 col-md-6 mb-3">
                     <div class="kpi-card">
                         <div class="kpi-icon purple">
                             <i class="fas fa-tools"></i>
@@ -306,6 +306,30 @@
                         <div class="kpi-content">
                             <h3 class="kpi-number" id="kpiMaintenance">0</h3>
                             <p class="kpi-label">Maintenance</p>
+                        </div>
+                    </div>
+                </div>
+
+                  <div class="col-xl-2 col-md-6 mb-3">
+                    <div class="kpi-card">
+                        <div class="kpi-icon purple">
+                            <i class="fas fa-broom"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3 class="kpi-number" id="kpiCleaning">0</h3>
+                            <p class="kpi-label">Cleaning</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-2 col-md-6 mb-3">
+                    <div class="kpi-card">
+                        <div class="kpi-icon purple">
+                            <i class="fas fa-ban"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3 class="kpi-number" id="kpiOccupied">0</h3>
+                            <p class="kpi-label">Occupied</p>
                         </div>
                     </div>
                 </div>
@@ -366,12 +390,14 @@
                     const tbody = document.getElementById('roomsTableBody');
                     tbody.innerHTML = '';
 
-                    let available = 0, occupied = 0, maintenance = 0;
+                    let available = 0, occupied = 0, maintenance = 0, cleaning = 0;
 
                     rooms.forEach((room, index) => {
                         if (room.status === 'Available') available++;
                         if (room.status === 'Maintenance') maintenance++;
-
+                        if (room.status === 'Cleaning') occupied++;
+                        if (room.status === 'Occupied') cleaning++;
+                        
                         tbody.innerHTML += renderRoomRow(room, index + 1);
                     });
 
@@ -404,7 +430,10 @@
                 const badgeClass =
                     room.status === 'available' ? 'bg-success' :
                     room.status === 'maintenance' ? 'bg-danger' :
-                    'bg-warning text-dark';
+                    room.status === 'cleaning' ? 'bg-info' :
+                    room.status === 'occupied' ? 'bg-warning' :
+                    
+                    'bg-warning-subtle text-dark';
 
                 return `
                     <tr data-status="${room.status}" data-type="${room.type}">
@@ -422,13 +451,13 @@
                             ${room.amenities}
                         </td>
                         <td class="text-end">
-                            <button class="btn btn-sm btn-outline-primary"
-                                    onclick="editRoom(${room.id})">
-                                Edit
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger"
+                        <button class="btn btn-sm bg-amber-300"
+                                onclick="editRoom(${room.id})">
+                               <i class="fas fa-edit text-white bg-warning p-2 rounded"></i>
+                        </button>
+                            <button class="btn btn-sm"
                                     onclick="deleteRoom(${room.id})">
-                                Delete
+                                 <i class="fas fa-trash text-white bg-danger p-2 rounded"></i>
                             </button>
                         </td>
                     </tr>
@@ -443,15 +472,20 @@ function updateRoomKPIs(rooms) {
     let available = 0;
     let occupied = 0;
     let maintenance = 0;
+    let cleaning = 0;
 
     rooms.forEach(room => {
         if (room.status === 'available') available++;
+        else if (room.status === 'occupied') occupied++;
         else if (room.status === 'maintenance') maintenance++;
+        else if (room.status === 'cleaning') cleaning++;
     });
 
     document.getElementById('kpiTotalRooms').textContent = rooms.length;
     document.getElementById('kpiAvailable').textContent = available;
     document.getElementById('kpiMaintenance').textContent = maintenance;
+     document.getElementById('kpiCleaning').textContent = cleaning;
+     document.getElementById('kpiOccupied').textContent = occupied;
 }
 
 </script>
@@ -503,6 +537,8 @@ document.addEventListener('DOMContentLoaded', loadRooms);
                                 <select class="form-select" name="status">
                                     <option value="available" selected>Available</option>
                                     <option value="maintenance">Maintenance</option>
+                                    <option value="cleaning">Cleaning</option>
+                                    <option value="occupied">Occupied</option>
                                 </select>
                             </div>
                             <div class="col-12">
@@ -563,20 +599,22 @@ document.addEventListener('DOMContentLoaded', loadRooms);
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Rate per night</label>
-                                <input type="text" class="form-control" id="editRoomRate">
+                                <input type="text" class="form-control" id="editRoomRate" readonly>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Capacity</label>
-                                <input type="number" class="form-control" id="editRoomCapacity" min="1">
+                                <input type="number" class="form-control" id="editRoomCapacity" min="1" readonly>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Status</label>
                                 <select class="form-select" id="editRoomStatus">
                                     <option value="available">Available</option>
                                     <option value="maintenance">Maintenance</option>
+                                    <option value="cleaning">Cleaning</option>
+                                    <option value="occupied">Occupied</option>
                                 </select>
                             </div>
-                            <div class="col-12">
+                            <!-- <div class="col-12">
                                 <label class="form-label">Amenities</label>
                                 <div class="d-flex flex-wrap gap-3">
                                     <div class="form-check">
@@ -592,7 +630,7 @@ document.addEventListener('DOMContentLoaded', loadRooms);
                                         <label class="form-check-label" for="amenityAc">Ac</label>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                                     <div class="col-12">
                                         <label class="form-label">Upload image</label>
@@ -777,7 +815,6 @@ document.addEventListener('DOMContentLoaded', loadRooms);
                     formData.append('image_urls', fileInput.files[0]);
                 }
 
-                // Use POST with method override so PHP/Laravel correctly handles multipart data
                 formData.append('_method', 'PUT');
                 const res = await fetch(`http://localhost:8000/api/rooms/${editingRoomId}`, {
                     method: "POST",
@@ -804,7 +841,6 @@ document.addEventListener('DOMContentLoaded', loadRooms);
         </script>
 
 
-    <!-- DELETE ROOM -->
     <script>
         async function deleteRoom(id) {
             if (!confirm('Are you sure you want to delete this room? This action cannot be undone.')) {

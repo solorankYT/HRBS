@@ -34,12 +34,11 @@ class RoomManagementController extends Controller
             'price'       => 'required|numeric|min:0',
             'amenities'   => 'array',
             'amenities.*' => 'string',
-            'status'      => 'required|in:available,maintenance',
+            'status'      => 'required|in:available,maintenance,cleaning,occupied',
         ]);
         
         $path = $request->file('image_urls')->store('rooms', 'public');
 
-        // store image paths as an array to match model casting
         $validated['image_urls'] = [$path];
         $room = Room::create($validated);
 
@@ -61,19 +60,17 @@ class RoomManagementController extends Controller
             'price'       => 'sometimes|required|numeric|min:0',
             'amenities'   => 'sometimes|required|array',
             'amenities.*' => 'string',
-            'status'      => 'sometimes|required|in:available,maintenance',
+            'status'      => 'sometimes|required|in:available,maintenance,cleaning,occupied',
             'image_urls' => 'sometimes|file|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
 
         ]);
 
-        // Handle uploaded image: store and remove old file(s)
         if ($request->hasFile('image_urls')) {
             $newPath = $request->file('image_urls')->store('rooms', 'public');
 
-            // delete old files if present
             $oldImages = $room->image_urls;
             if ($oldImages) {
-                // ensure it's an array
+
                 $oldList = is_array($oldImages) ? $oldImages : [$oldImages];
                 foreach ($oldList as $old) {
                     if ($old && Storage::disk('public')->exists($old)) {
@@ -82,7 +79,6 @@ class RoomManagementController extends Controller
                 }
             }
 
-            // set new image array
             $validated['image_urls'] = [$newPath];
         }
 

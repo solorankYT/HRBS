@@ -6,7 +6,6 @@ if (!booking) {
   window.location.href = 'index.html';
 }
 
-// ---------------- Helpers ----------------
 function formatDate(dateStr) {
   return new Date(dateStr).toLocaleDateString('en-US', {
     weekday: 'long',
@@ -22,7 +21,6 @@ function calculateNights() {
   return Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
 }
 
-// ---------------- Populate Booking Details ----------------
 document.getElementById('confirmedCheckIn').textContent =
   formatDate(booking.check_in);
 
@@ -63,15 +61,10 @@ booking.rooms.forEach(room => {
   `;
 });
 
-// ---------------- Totals ----------------
-// const vat = subtotal * 0.12;
-// const total = subtotal + vat;
 
 document.getElementById('confirmedTotalAmount').textContent =
   `₱${subtotal.toLocaleString()}`;
 
-// document.getElementById('confirmedTaxes').textContent =
-//   `₱${vat.toLocaleString()}`;
 
 document.getElementById('confirmedRemainingBalance').textContent =
   `₱${subtotal.toLocaleString()}`;

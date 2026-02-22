@@ -111,6 +111,8 @@ class BookingController extends Controller
 
         $booking->update(['total_amount' => $totalAmount]);
 
+        $room -> update(['status' => 'occupied']);
+
         return response()->json($booking->load('rooms.room', 'guests'), 201);
     }
 
@@ -177,7 +179,6 @@ class BookingController extends Controller
         
         public function showCancel(Request $request, $reference)
         {
-            // Skip email/phone validation for internal fetch
             $booking = Booking::with(['rooms.room', 'guests'])
                 ->where('reference_number', $reference)
                 ->firstOrFail();

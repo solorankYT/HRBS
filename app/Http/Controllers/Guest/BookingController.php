@@ -220,6 +220,8 @@ class BookingController extends Controller
                 $validated['cancellation_reason'] ?? null
             );
 
+            
+
             return response()->json([
                 'message' => 'Booking cancelled successfully'
             ]);

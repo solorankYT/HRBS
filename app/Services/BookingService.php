@@ -27,5 +27,10 @@ class BookingService
             'cancelled_by' => 'guest',
             'cancellation_reason' => $reason,
         ]);
+
+        $rooms = $booking->rooms()->with('room')->get();
+        foreach ($rooms as $bookingRoom) {
+            $bookingRoom->room->update(['status' => 'available']);
+        }
     }
 }

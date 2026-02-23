@@ -147,19 +147,6 @@ function renderGuestAccordion() {
             <textarea class="form-control guest-requests" rows="2" placeholder="Optional"></textarea>
           </div>
 
-          <div class="payment-section mb-3">
-            <h6 class="mb-2">Payment Method</h6>
-            <div style="display:flex; gap:1rem;">
-              <label class="payment-option card p-2 flex-grow-1 text-center cursor-pointer">
-                <input type="radio" name="paymentMethodRoom${index}" value="bank-transfer">
-                Bank Transfer
-              </label>
-              <label class="payment-option card p-2 flex-grow-1 text-center cursor-pointer">
-                <input type="radio" name="paymentMethodRoom${index}" value="gcash">
-                GCash
-              </label>
-            </div>
-          </div>
 
           <button type="button" class="btn btn-outline-secondary btn-sm autoFill">Use this info for all rooms</button>
         </div>
@@ -174,15 +161,15 @@ function renderGuestAccordion() {
 }
 
 
-// ---------------- Payment Selection Highlight ----------------
-function setupPaymentSelection() {
-  document.querySelectorAll('.payment-option input[type="radio"]').forEach(radio => {
-    radio.addEventListener('change', function () {
-      this.closest('.accordion-body').querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
-      this.closest('.payment-option').classList.add('selected');
-    });
-  });
-}
+// // ---------------- Payment Selection Highlight ----------------
+// function setupPaymentSelection() {
+//   document.querySelectorAll('.payment-option input[type="radio"]').forEach(radio => {
+//     radio.addEventListener('change', function () {
+//       this.closest('.accordion-body').querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+//       this.closest('.payment-option').classList.add('selected');
+//     });
+//   });
+// }
 
 // ---------------- Autofill Guest Info ----------------
 function setupAutoFill() {
@@ -193,11 +180,11 @@ function setupAutoFill() {
       const email = firstBody.querySelector('.guest-email').value;
       const phone = firstBody.querySelector('.guest-phone').value;
       const requests = firstBody.querySelector('.guest-requests').value;
-      const selectedPayment = firstBody.querySelector('input[type="radio"]:checked')?.value;
+      // const selectedPayment = firstBody.querySelector('input[type="radio"]:checked')?.value;
 
-      if (!selectedPayment) return alert('Please select a payment method first.');
+      // if (!selectedPayment) return alert('Please select a payment method first.');
 
-      if (!selectedPayment) return alert('Please select a payment method first.');
+      // if (!selectedPayment) return alert('Please select a payment method first.');
       if (!fullName) return alert('Full Name cannot be empty.');
       if (!email) return alert('Email cannot be empty.');
       if (!isValidEmail(email)) return alert('Please enter a valid email address.');

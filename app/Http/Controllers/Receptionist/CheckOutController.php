@@ -19,6 +19,9 @@ class CheckOutController extends Controller
             $booking->booking_status = 'checked_out';
             $booking->save();
 
+            $room = $booking->rooms()->first()->room;
+            $room->update(['status' => 'available']);
+
             return response()->json(['message' => 'Checked out successfully', 'booking' => $booking]);
         } catch (\Exception $e) {
             \Log::error('Receptionist\CheckOutController::complete error: ' . $e->getMessage());
@@ -36,7 +39,6 @@ class CheckOutController extends Controller
                         return response()->json(['message' => 'Booking not found'], 404);
                     }
 
-                    // If email or phone provided, filter to that guest
                     if ($request->email || $request->phone) {
                         $guestMatch = $booking->guests->filter(function ($guest) use ($request) {
                             return ($request->email && $guest->email === $request->email)
@@ -49,7 +51,6 @@ class CheckOutController extends Controller
 
                         $primaryGuest = $guestMatch->first();
                     } else {
-                        // No verification provided, use first guest
                         $primaryGuest = $booking->guests->first();
                     }
 

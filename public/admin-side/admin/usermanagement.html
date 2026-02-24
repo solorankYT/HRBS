@@ -648,7 +648,7 @@ function editUser(id) {
 
     fetch(`http://localhost:8000/api/users/${id}`, {
         credentials: "include",
-        headers: { "Accept": "application/json" }
+        headers: { "Accept": "application/json"  }
     })
     .then(res => res.json())
     .then(user => {
@@ -706,14 +706,13 @@ document.getElementById("editUserForm").addEventListener("submit", async functio
 <!-- delete User -->
 <script>
 async function deleteUser(userId, userName, userRole) {
-    // Get logged-in user ID from local storage/session (or from your backend if available)
-    const loggedInUserId = parseInt(localStorage.getItem('userId')); // adjust accordingly
+   
+    const loggedInUserId = parseInt(localStorage.getItem('userId'));
 
     if (userId === loggedInUserId) {
         return alert("You cannot delete your own account.");
     }
-
-    // Warn if the user is an admin
+ 
     if (userRole === 'admin') {
         if (!confirm(`Warning: You are about to delete an Admin user "${userName}". Are you sure?`)) {
             return;
@@ -724,8 +723,8 @@ async function deleteUser(userId, userName, userRole) {
         }
     }
 
-    const typed = prompt(`Type DELETE to confirm deletion of "${userName}"`);
-    if (typed !== 'DELETE') {
+    const typed = prompt(`Type "${userName}" to confirm deletion of this user:`);
+    if (typed !== userName) {
         alert("Deletion cancelled.");
         return;
     }

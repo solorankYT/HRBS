@@ -11,7 +11,7 @@ class RoomSeeder extends Seeder
     {
         Room::create([
             'room_number' => '101',
-            'type' => 'Deluxe',
+            'type' => 'Basic Studio Room',
             'description' => 'Deluxe room with balcony',
             'capacity' => 2,
             'amenities' => ['WiFi', 'Aircon', 'TV'],
@@ -25,7 +25,7 @@ class RoomSeeder extends Seeder
 
         Room::create([
             'room_number' => '102',
-            'type' => 'Standard',
+            'type' => 'Standard Room',
             'description' => 'Standard room',
             'capacity' => 2,
             'amenities' => ['WiFi', 'TV'],
@@ -35,11 +35,21 @@ class RoomSeeder extends Seeder
 
         Room::create([
             'room_number' => '201',
-            'type' => 'Family',
+            'type' => 'Family Room',
             'description' => 'Family room good for 4',
             'capacity' => 4,
             'amenities' => ['WiFi', 'Aircon', 'TV', 'Mini Bar'],
             'price' => 3500,
+            'status' => 'available',
+        ]);
+
+        Room::create([
+            'room_number' => '202',
+            'type' => 'Premium Room',
+            'description' => 'Premium room with balcony',
+            'capacity' => 2,
+            'amenities' => ['WiFi', 'Aircon', 'TV', 'Mini Bar'],
+            'price' => 3000,
             'status' => 'available',
         ]);
     }

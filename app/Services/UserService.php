@@ -12,13 +12,7 @@ class UserService
 
     public function updateUser(User $targetUser, array $data)
     {
-        $currentUser = Auth::user();
 
-        if ($currentUser->id === $targetUser->id) {
-            throw ValidationException::withMessages([
-                'error' => 'You cannot edit your own account.'
-            ]);
-        }
 
         if ($targetUser->role === 'admin') {
             throw ValidationException::withMessages([
@@ -33,13 +27,7 @@ class UserService
 
     public function deleteUser(User $targetUser)
     {
-        $currentUser = Auth::user();
 
-        if ($currentUser->id === $targetUser->id) {
-            throw ValidationException::withMessages([
-                'error' => 'You cannot delete your own account.'
-            ]);
-        }
 
         if ($targetUser->role === 'admin') {
 

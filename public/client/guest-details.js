@@ -155,7 +155,6 @@ function renderGuestAccordion() {
     accordion.appendChild(div);
   });
 
-  setupPaymentSelection();
   setupAutoFill();
   liveValidation();
 }
@@ -196,8 +195,6 @@ function setupAutoFill() {
         body.querySelector('.guest-phone').value = phone;
         body.querySelector('.guest-requests').value = requests;
 
-        const radios = body.querySelectorAll('input[type="radio"]');
-        radios.forEach(r => r.checked = r.value === selectedPayment);
       });
     });
   });
@@ -221,14 +218,13 @@ async function confirmBooking() {
         phone: acc.querySelector('.guest-phone').value.trim(),
         special_requests: acc.querySelector('.guest-requests')?.value.trim() || ''
       },
-      payment_method: acc.querySelector('input[type="radio"]:checked')?.value || null
     };
   });
 
   for (let room of roomsPayload) {
     const g = room.guest;
-    if (!g.name || !g.email || !g.phone || !room.payment_method) {
-      return alert('Please complete all guest details and payment method for each room.');
+    if (!g.name || !g.email || !g.phone) {
+      return alert('Please complete all guest details for each room.');
     }
   }
 
@@ -361,13 +357,12 @@ function proceedToConfirmation() {
         phone: acc.querySelector('.guest-phone').value.trim(),
         special_requests: acc.querySelector('.guest-requests')?.value.trim() || ''
       },
-      payment_method: acc.querySelector('input[type="radio"]:checked')?.value || null
     };
   });
 
   for (let room of roomsPayload) {
-    if (!room.guest.name || !room.guest.email || !room.guest.phone || !room.payment_method) {
-      return alert('Please complete all guest details and payment method.');
+    if (!room.guest.name || !room.guest.email || !room.guest.phone) {
+      return alert('Please complete all guest details.');
     }
   }
 

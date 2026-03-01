@@ -40,51 +40,85 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await fetch(`/api/receptionist/payments/${id}`);
       const json = await res.json();
-      // populate modal fields
       document.getElementById('viewPayReservationId').value = json.reference ?? json.booking_id;
-      document.getElementById('viewPayGuestName').value = json.guest?.name ?? '';
+      
       document.getElementById('viewPayMethod').value = json.method;
       document.getElementById('viewPayAmountPaid').value = `₱${Number(json.amount).toLocaleString()}`;
       document.getElementById('viewPayBalance').value = `₱${Number(json.booking?.total - json.amount || 0).toLocaleString()}`;
       document.getElementById('viewPayDate').value = json.created_at;
 
-      // reservation details
       document.getElementById('viewResRoom').value = (json.booking.rooms[0]?.type ?? '') + ' ' + (json.booking.rooms[0]?.room_number ?? '');
       document.getElementById('viewResNights').value = json.booking.rooms[0]?.nights ?? '';
       document.getElementById('viewResGuests').value = json.guest?.phone ?? '';
 
       document.getElementById('viewBillRoomRate').value = json.booking.rooms[0]?.subtotal ?? '';
-      document.getElementById('viewBillTaxes').value = '';
-      document.getElementById('viewBillFees').value = '';
       document.getElementById('viewBillSubtotal').value = json.booking.rooms[0]?.subtotal ?? '';
       document.getElementById('viewBillTotal').value = json.booking?.total ?? '';
 
-      // show proof image if present
       const proofImageContainer = document.getElementById('proofImageContainer');
       proofImageContainer.innerHTML = '';
-      if (json.proof_image) {
-        const img = document.createElement('img');
-        img.src = `/storage/${json.proof_image}`;
-        img.alt = 'Proof of payment';
-        img.style.maxWidth = '100%';
-        proofImageContainer.appendChild(img);
-      }
+    if (json.proof_image) {
+      const img = document.createElement('img');
+      img.src = `/storage/${json.proof_image}`;
+      img.alt = 'Proof of payment';
+      img.className = 'img-fluid rounded shadow-sm';
+      img.style.maxHeight = '300px';
+      proofImageContainer.appendChild(img);
+    } else {
+      proofImageContainer.innerHTML =
+        '<span class="text-muted">No proof uploaded</span>';
+    }
+      renderPaymentActions(json.status, id);
 
-      // actions
-      const approveBtn = document.getElementById('approvePaymentBtn');
-      const rejectBtn = document.getElementById('rejectPaymentBtn');
-      // show status in modal
       const statusField = document.getElementById('viewPayStatus');
       if (statusField) statusField.value = (json.status || '').toUpperCase();
 
-      approveBtn.onclick = async () => await updatePaymentStatus(id, 'paid');
-      rejectBtn.onclick = async () => await updatePaymentStatus(id, 'failed');
-
+  
       viewModal.show();
     } catch (err) {
       console.error('Error loading payment details', err);
     }
   });
+
+   function renderPaymentActions(status, id) {
+    const actionsContainer = document.getElementById('paymentActionsContainer');
+    actionsContainer.innerHTML = '';
+
+    const normalizedStatus = (status || '').toLowerCase();
+
+    if (normalizedStatus === 'pending') {
+      const approveBtn = document.createElement('button');
+      approveBtn.className = 'btn btn-success me-2';
+      approveBtn.textContent = 'Approve';
+
+      const rejectBtn = document.createElement('button');
+      rejectBtn.className = 'btn btn-danger';
+      rejectBtn.textContent = 'Reject';
+
+      approveBtn.onclick = async () => await updatePaymentStatus(id, 'paid');
+      rejectBtn.onclick = async () => await updatePaymentStatus(id, 'failed');
+
+      actionsContainer.appendChild(approveBtn);
+      actionsContainer.appendChild(rejectBtn);
+    }
+    else if (normalizedStatus === 'paid') {
+      const badge = document.createElement('span');
+      badge.className = 'badge bg-success';
+      badge.textContent = 'Payment Approved';
+      actionsContainer.appendChild(badge);
+    }
+    else if (normalizedStatus === 'failed') {
+      const badge = document.createElement('span');
+      badge.className = 'badge bg-danger';
+      badge.textContent = 'Payment Rejected. Waiting for user to resubmit new payment.';
+      actionsContainer.appendChild(badge);
+    }
+  }
+
+
+
+
+
 
   async function updatePaymentStatus(id, status) {
     try {

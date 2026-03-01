@@ -358,10 +358,6 @@
                             <input type="text" class="form-control" id="viewPayReservationId" readonly>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label">Guest Name</label>
-                            <input type="text" class="form-control" id="viewPayGuestName" readonly>
-                        </div>
-                        <div class="col-md-4">
                             <label class="form-label">Method</label>
                             <input type="text" class="form-control" id="viewPayMethod" readonly>
                         </div>
@@ -378,7 +374,7 @@
                             <input type="text" class="form-control" id="viewPayBalance" readonly>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label">Date</label>
+                            <label class="form-label">Payment Submitted</label>
                             <input type="text" class="form-control" id="viewPayDate" readonly>
                         </div>
                     </div>
@@ -406,14 +402,6 @@
                             <input type="text" class="form-control" id="viewBillRoomRate" readonly>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label">Taxes</label>
-                            <input type="text" class="form-control" id="viewBillTaxes" readonly>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Fees</label>
-                            <input type="text" class="form-control" id="viewBillFees" readonly>
-                        </div>
-                        <div class="col-md-4">
                             <label class="form-label">Subtotal</label>
                             <input type="text" class="form-control" id="viewBillSubtotal" readonly>
                         </div>
@@ -423,13 +411,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <div id="proofImageContainer" style="flex:1;margin-right:12px"></div>
-                    <button type="button" id="rejectPaymentBtn" class="btn btn-danger">Reject</button>
-                    <button type="button" id="approvePaymentBtn" class="btn btn-success">Approve</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div id="proofImageContainer"
+                    class="d-flex justify-content-center align-items-center"
+                    style="flex:1; margin-right:12px; min-height:200px;">
                 </div>
-            </div>
+
+                <div class="modal-footer d-flex justify-content-between align-items-center">
+                    <div id="paymentActionsContainer"></div>
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
         </div>
     </div>
 
@@ -511,6 +506,7 @@
             // receptionist payments: no Add Promo for receptionist role
         });
     </script>
+
     
     <script>
         // Sidebar toggle functionality aligned to dashboard behavior
@@ -561,6 +557,8 @@
             </div>
         </div>
     </div>
+
+
 </body>
 </html>
 

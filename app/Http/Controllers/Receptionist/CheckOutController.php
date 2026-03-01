@@ -20,7 +20,7 @@ class CheckOutController extends Controller
             $booking->save();
 
             $room = $booking->rooms()->first()->room;
-            $room->update(['status' => 'available']);
+            $room->update(['status' => 'cleaning']);
 
             return response()->json(['message' => 'Checked out successfully', 'booking' => $booking]);
         } catch (\Exception $e) {

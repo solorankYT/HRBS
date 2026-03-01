@@ -255,8 +255,6 @@ class BookingController extends Controller
             ], 400);
         }
 
-
-
         $path = $request->file('proof_image')->store('payment-proofs', 'public');
 
         $payment = $booking->payments()->create([
@@ -268,7 +266,7 @@ class BookingController extends Controller
             'paid_at' => now(),
         ]);
 
-        $booking->update(['payment_status' => 'submitted']);
+        
 
         return response()->json([
             'message' => 'Payment proof submitted successfully. Waiting for verification.',

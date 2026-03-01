@@ -220,24 +220,7 @@
             </nav>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="top-bar-header d-flex justify-content-between align-items-center">
-                    <div class="left-section">
-                        <span class="admin-label">Receptionist</span>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <div class="search-container me-4">
-                            <input type="text" class="form-control search-input" placeholder="Search...">
-                            <i class="fas fa-search search-icon"></i>
-                        </div>
-                        <div class="notification-icon me-3">
-                            <i class="fas fa-bell"></i>
-                        </div>
-                        <div class="user-dropdown">
-                            <i class="fas fa-user-circle me-2"></i>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                    </div>
-                </div>
+              
 
                 <div class="reservation-header d-flex justify-content-between align-items-center mb-4">
                     <h1 class="reservation-title">Check-Out Details</h1>
@@ -317,7 +300,9 @@
 
                                 <div id="actionMessage" class="mb-3"></div>
                                 <div class="d-flex flex-column align-items-center gap-2 mt-4">
-                                    <button id="btnCheckOut" class="btn px-5 checkout-btn">Check-Out Guest</button>
+                                    <button id="btnCheckOut" class="btn px-5 checkout-btn" >Check-Out Guest</button>
+
+                                    <div id="checkOutContainer"></div>
                                     <a href="checkinout.html" class="btn btn-secondary px-5">Back</a>
                                 </div>
                             </div>
@@ -482,6 +467,8 @@
                 })
                 .catch(() => showMessage('danger', 'Server error'));
         });
+
+        renderCheckOutButton(currentBooking?.booking_status || 'pending');
     </script>
 
     <!-- Sidebar Toggle Functionality -->
@@ -524,6 +511,38 @@
             }
         });
     </script>
+
+
+    <!-- //render checkout button -->
+     <script>
+        function renderCheckOutButton(status) {
+    const container = document.getElementById('checkOutContainer');
+    container.innerHTML = '';
+
+    if (status === 'checked_out') {
+        container.innerHTML = `
+            <div class="text-success fw-semibold">
+                Guest is already checked out
+            </div>
+        `;
+    }
+    else if(status === 'checked_in'){
+         container.innerHTML = `
+              <div class="text-danger fw-semibold">
+                Guest is checked in
+            </div>
+             `;
+    }
+    else {
+        container.innerHTML = `
+            <button onclick="checkOut()" class="btn checkout-btn btn-sm">
+                <i class="fas fa-sign-out-alt me-1"></i>Check-out Guest
+            </button>
+        `;
+    }
+}
+
+     </script>
 </body>
 </html>
 

@@ -30,7 +30,6 @@ document.getElementById('confirmedCheckOut').textContent =
 document.getElementById('confirmedGuests').textContent =
   booking.number_of_guests;
 
-// Use first room guest as main contact
 document.getElementById('confirmedGuestName').textContent =
   booking.rooms[0].guest.name;
 
@@ -40,7 +39,6 @@ document.getElementById('confirmedGuestEmail').textContent =
 document.getElementById('invoiceDate').textContent =
   new Date().toLocaleDateString();
 
-// ---------------- Populate Items Table ----------------
 const tbody = document.querySelector('.table-invoice tbody');
 tbody.innerHTML = '';
 
@@ -88,13 +86,12 @@ booking.rooms.forEach(room => {
 
 // ---------------- Final Booking (API call) ----------------
 async function finalizeBooking(e) {
+  e.preventDefault();
 
-   e.preventDefault();
-    const btn = document.getElementById('confirmBookingBtn');
-    btn.style.pointerEvents = 'none';
-    const originalText = btn.textContent;
-    btn.textContent = 'Processing...';
-
+  const btn = document.getElementById('confirmBookingBtn');
+  btn.style.pointerEvents = 'none';
+  const originalText = btn.textContent;
+  btn.textContent = 'Processing...';
 
   try {
     const res = await fetch('http://localhost:8000/api/guest/bookings', {
@@ -107,16 +104,30 @@ async function finalizeBooking(e) {
       body: JSON.stringify(booking)
     });
 
+    if (res.status === 429) {
+      const retryAfter = res.headers.get("Retry-After");
+      throw new Error(
+        retryAfter
+          ? `Too many attempts. Try again in ${retryAfter} seconds.`
+          : "Too many attempts. Please wait before trying again."
+      );
+    }
+
     const data = await res.json();
-    if (!res.ok) throw data;
+
+    if (!res.ok) {
+      throw new Error(data.message || "Booking failed.");
+    }
 
     sessionStorage.removeItem('pendingBooking');
-    alert(`BOOKING SUCCESSFULLY! REFERENCE NUMBER: ${data.reference_number}`)
+    alert(`BOOKING SUCCESSFULLY! REFERENCE NUMBER: ${data.reference_number}`);
     window.location.href = `/client/manage-booking.html`;
+
   } catch (err) {
     console.error(err);
-    alert('Booking failed. Please try again.');
-  }finally {
+    alert(err.message || 'Booking failed. Please try again.');
+
+  } finally {
     btn.style.pointerEvents = '';
     btn.textContent = originalText;
   }

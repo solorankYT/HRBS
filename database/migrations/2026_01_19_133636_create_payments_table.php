@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('reference')->nullable();
             $table->enum('method', ['gcash', 'maya', 'paypal']);
             $table->enum('status', ['pending', 'paid', 'failed'])->default('pending');
-            // New field
             $table->timestamp('paid_at')->nullable();
             $table->string('proof_image')->nullable();
             $table->timestamps();

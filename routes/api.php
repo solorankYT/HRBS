@@ -29,7 +29,7 @@ Route::prefix('guest')->middleware('api')->group(function () {
     Route::get('/rooms/{room}/booked-dates', [GuestRoomController::class, 'bookedDates']);
 
     // Bookings
-    Route::post('/bookings', [GuestBookingController::class, 'store']);
+    Route::post('/bookings', [GuestBookingController::class, 'store'])->middleware('throttle:2,60');
     Route::get('/bookings/{reference}', [GuestBookingController::class, 'show']);
     Route::get('/bookings/{reference}/showCancel', [GuestBookingController::class, 'showCancel']);
     Route::post('/bookings/{reference}/cancel', [GuestBookingController::class, 'cancel']);

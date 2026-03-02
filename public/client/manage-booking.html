@@ -198,24 +198,24 @@
             </div>
           </div>
 
-          <div class="right-col">
-            <img src="#" class="logo-placeholder" alt="Hotel Logo">
-            <!-- <img src="vm-logo.jpg" class="logo-placeholder" alt="Hotel Logo"> -->
-            <div style="height:10px;"></div>
-            <div class="info-row">
-              <div class="info-label">Booking #</div>
-              <div class="info-value" id="bookingRef"></div>
+              <div class="right-col">
+                <img src="#" class="logo-placeholder" alt="Hotel Logo">
+                <!-- <img src="vm-logo.jpg" class="logo-placeholder" alt="Hotel Logo"> -->
+                <div style="height:10px;"></div>
+                <div class="info-row">
+                  <div class="info-label">Booking #</div>
+                  <div class="info-value" id="bookingRef"></div>
+                </div>
+                <div class="info-row">
+                  <div class="info-label">Booking Date</div>
+                  <div class="info-value">26-07-2025</div>
+                </div>
+                <div class="info-row">
+                  <div class="info-label">Status</div>
+                  <div class="info-value" id="bookingStatus">Confirmed</div>
+                </div>
+              </div>
             </div>
-            <div class="info-row">
-              <div class="info-label">Booking Date</div>
-              <div class="info-value">26-07-2025</div>
-            </div>
-            <div class="info-row">
-              <div class="info-label">Status</div>
-              <div class="info-value" id="bookingStatus">Confirmed</div>
-            </div>
-          </div>
-        </div>
 
         
                   <div class="table-wrapper">
@@ -232,20 +232,6 @@
                         </table>
                     </div>
 
-
-
-     
-
-        <!-- <div class="payment-summary">
-          <div class="section-title" style="margin-top:0; font-size: 1rem;">Payment Summary</div>
-          <div class="payment-method" style="font-size: 0.80rem; font-family: 'poppins',sans-serif;">
-            <strong>Premium Room</strong> — Paid via <strong>Paypal</strong>
-          </div>
-     <div class="payment-method" style="font-size: 0.80rem; font-family: 'poppins',sans-serif;">
-            <strong>Family Room</strong> — Paid via <strong>Paypal</strong>
-          </div>
-        </div> -->
-
         <!-- Payment Proof Section -->
         <div class="payment-proof-section mt-4 p-3 border rounded bg-light">
           <div class="section-title" style="margin-bottom: 15px;">Upload Payment Proof</div>
@@ -258,8 +244,6 @@
                 <option value="gcash">GCash</option>
                 <option value="paypal">PayPal</option>
               </select>
-
-              
             </div>
 
             <div class="mb-3">
@@ -284,11 +268,22 @@
 
           <div id="paymentStatus" class="mt-3 d-none"></div>
         </div>
+        
+        <div class="feedback-section">
+          <div class="section-title" style="margin-bottom: 15px;">Send a Message to the Hotel</div>
+          <form id="feedbackForm">
+            <div class="mb-3">
+              <label for="feedbackMessage" class="form-label">Your Message</label>
+              <textarea class="form-control" id="feedbackMessage" rows="4" placeholder="Enter your message here..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-outline-secondary w-100">
+              <i class="fas fa-paper-plane me-2"></i>Send Message
+            </button>
+          </form>
+        </div>
 
-        <!-- Action Buttons -->
+
         <div class="d-flex justify-content-end gap-3 mt-4">
-          <!-- <a href="cancel-page.html"><button class="request-rebook-btn">Request Rebook</button></a>
-           -->
           <button class="request-cancel-btn" id="requestCancelBtn">
             Request Cancel/Rebook
           </button>

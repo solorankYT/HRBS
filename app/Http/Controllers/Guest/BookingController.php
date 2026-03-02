@@ -8,6 +8,7 @@ use App\Models\BookingRoom;
 use App\Models\BookingGuest;
 use App\Models\Room;
 use App\Services\BookingService;
+use App\Services\UserFeedbackService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -16,6 +17,13 @@ use Illuminate\Support\Str;
 
 class BookingController extends Controller
 {
+
+protected $feedbackService;
+
+    public function __construct(UserFeedbackService $feedbackService)
+    {
+        $this->feedbackService = $feedbackService;
+    }
 
   public function bookingSuccess($reference)
 {
@@ -158,6 +166,7 @@ class BookingController extends Controller
                 'total' => $booking->total_amount,
                 'payment_status' => $booking->payment_status ?? 'pending',
 
+
                 'primary_guest' => [
                     'name' => $primaryGuest->name,
                     'email' => $primaryGuest->email,
@@ -219,9 +228,6 @@ class BookingController extends Controller
                 $booking,
                 $validated['cancellation_reason'] ?? null
             );
-
-            
-
             return response()->json([
                 'message' => 'Booking cancelled successfully'
             ]);
@@ -325,7 +331,6 @@ public function rebook(Request $request, $reference)
         ], 400);
     }
 
-    // 🔍 CHECK AVAILABILITY FOR EACH ROOM
     foreach ($booking->rooms as $bookingRoom) {
 
         $roomId = $bookingRoom->room_id;
@@ -348,11 +353,9 @@ public function rebook(Request $request, $reference)
         }
     }
 
-    // ✅ UPDATE BOOKING DATES
     $booking->update([
         'check_in' => $newCheckIn,
         'check_out' => $newCheckOut,
-        // 'has_rebooked' => true,
         'rebooked_at' => now(),
     ]);
 
@@ -378,4 +381,23 @@ public function rebook(Request $request, $reference)
     ]);
 }
 
+
+  public function submitFeedback(Request $request, $reference)
+    {
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comments' => 'nullable|string|max:1000',
+        ]);
+
+        $booking = Booking::where('reference_number', $reference)->firstOrFail();
+
+        $this->feedbackService->createFeedback($booking, $request->only(['rating', 'comments']));
+
+        return response()->json([
+            'message' => 'Thank you for your feedback!'
+        ]);
+    }
+
 }
+
+

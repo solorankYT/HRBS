@@ -110,11 +110,19 @@ function renderRooms(rooms = []) {
    PAYMENT SECTION
 ================================ */
 function renderPaymentSection(booking) {
+  const paymentSection = document.querySelector('.payment-proof-section');
   const form = document.getElementById('paymentProofForm');
   const statusBox = document.getElementById('paymentStatus');
   if (!form || !statusBox) return;
 
   const status = booking.payment_status || 'pending';
+
+  if (booking.status === 'checked_out') {
+    paymentSection.style.display = 'none';
+    return; 
+  } else {
+    paymentSection.style.display = '';
+  }
 
   if (status === 'pending') {
     form.style.display = '';
@@ -144,8 +152,8 @@ function renderPaymentSection(booking) {
       '<i class="fas fa-times-circle me-2"></i>Payment verification failed. Please resubmit.';
     statusBox.classList.remove('d-none');
   }
-
 }
+
 
 /* ===============================
    PAYMENT PROOF SUBMIT

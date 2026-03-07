@@ -30,13 +30,13 @@ async function loadReservationDetails() {
     }
 
     /* ---------- Rooms ---------- */
-    const roomText = data.rooms
-        .map(r => `${r.room_type} (${r.room_number})`)
-        .join(', ');
+  const roomText = data.rooms
+    ?.map(r => `${r.room_type} (${r.room_number})`)
+    .join(', ') || '';
 
-    document.querySelector('input[placeholder], input[value="Premium Room"]').value = roomText;
-    document.getElementById('roomType').value = roomText;
-
+    const roomTypeInput = document.getElementById('roomType');
+    if (roomTypeInput) roomTypeInput.value = roomText;
+    
     /* ---------- Payment ---------- */
     if (data.payment?.proof_image) {
         const url = `/storage/${data.payment.proof_image}`;

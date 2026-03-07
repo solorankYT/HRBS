@@ -27,6 +27,7 @@ Route::prefix('guest')->middleware('api')->group(function () {
     Route::get('/rooms/availability', [GuestRoomController::class, 'availability']);
     Route::get('/rooms/{room}', [GuestRoomController::class, 'show']);
     Route::get('/rooms/{room}/booked-dates', [GuestRoomController::class, 'bookedDates']);
+    Route::get('/rooms/feedback/by-type', [ReportsController::class, 'feedbackByRoomType']);
 
     // Bookings
     Route::post('/bookings', [GuestBookingController::class, 'store'])->middleware('throttle:2,60');

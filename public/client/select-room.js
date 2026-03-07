@@ -1,6 +1,8 @@
 
 //select-room.js
 
+let roomFeedbackStats = {};
+
 function renderRooms(rooms) {
   const container = document.getElementById('roomsContainer');
   container.innerHTML = '';
@@ -15,12 +17,10 @@ function renderRooms(rooms) {
     const roomTypeSlug = room.type.toLowerCase().replace(/\s+/g, '-');
 
     card.className = 'room-card';
-    // use `data-type` so filtering logic (which reads `dataset.type`) works
     card.dataset.type = roomTypeSlug;
 
     let imageSrc = '/assets/images/room-placeholder.jpg';
 
-    // server stores `image_urls` as an array; handle array or legacy string
     if (room.image_urls) {
       if (Array.isArray(room.image_urls) && room.image_urls.length > 0) {
         const p = room.image_urls[0];
@@ -31,6 +31,20 @@ function renderRooms(rooms) {
       }
     }
 
+    const feedback = roomFeedbackStats[room.type] || null;
+    const ratingStars = feedback ? Array(5).fill('☆').map((star, i) => 
+      i < Math.floor(feedback.average_rating) ? '★' : '☆'
+    ).join('') : '';
+
+    let feedbackHTML = '';
+    if (feedback && feedback.total_reviews > 0) {
+      feedbackHTML = `
+        <div class="room-rating">
+          <span class="rating-stars" style="color: #ffc107;">${ratingStars}</span>
+          <span class="review-count">(${feedback.total_reviews} ${feedback.total_reviews === 1 ? 'review' : 'reviews'})</span>
+        </div>
+      `;
+    }
 
     card.innerHTML = `
       <div class="room-card-grid">
@@ -55,6 +69,8 @@ function renderRooms(rooms) {
                 <div class="room-spec">•<span>${room.capacity} Guests</span></div>
               </div>
             </div>
+
+            ${feedbackHTML}
 
             <p class="room-description">
               ${room.description ?? 'Comfortable and well-appointed room designed for a relaxing stay.'}
@@ -106,20 +122,45 @@ function fetchAvailability() {
     return;
   }
 
-  fetch(`/api/guest/rooms/availability?${params.toString()}`, {
-    headers: { 'Accept': 'application/json' }
-  })
-    .then(res => {
-      if (!res.ok) throw new Error('Failed to fetch availability');
-      return res.json();
+  // Fetch feedback stats and availability in parallel
+  Promise.all([
+    fetch(`/api/guest/rooms/availability?${params.toString()}`, {
+      headers: { 'Accept': 'application/json' }
+    }),
+    fetch('/api/guest/rooms/feedback/by-type', {
+      headers: { 'Accept': 'application/json' }
     })
-    .then(rooms => {
+  ])
+    .then(async (responses) => {
+      if (!responses[0].ok) throw new Error('Failed to fetch availability');
+      if (!responses[1].ok) throw new Error('Failed to fetch feedback data');
+      
+      const rooms = await responses[0].json();
+      const feedbackData = await responses[1].json();
+      
+      // Build feedback stats map by room type
+      if (feedbackData.room_feedback) {
+        feedbackData.room_feedback.forEach(stat => {
+          roomFeedbackStats[stat.room_type] = stat;
+        });
+        console.log('Feedback stats loaded:', roomFeedbackStats);
+      } else {
+        console.log('No feedback data available');
+      }
+      
       renderSearchSummary(params);
       renderRooms(rooms);
     })
     .catch(err => {
-      console.error(err);
-      alert('Error loading room availability');
+      console.error('Error loading data:', err);
+      renderSearchSummary(params);
+      // Still render rooms even if feedback fails
+      fetch(`/api/guest/rooms/availability?${params.toString()}`, {
+        headers: { 'Accept': 'application/json' }
+      })
+        .then(res => res.json())
+        .then(rooms => renderRooms(rooms))
+        .catch(e => alert('Error loading room availability'));
     });
 
     console.log('Rooms API response:', params);

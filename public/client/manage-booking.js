@@ -164,9 +164,6 @@ function renderPaymentSection(booking) {
   }
 }
 
-function RenderFeedback(){
-  
-}
 
 /* ===============================
    FEEDBACK SECTION
@@ -178,13 +175,10 @@ function renderFeedbackSection(booking) {
 
   if (!feedbackSection || !form) return;
 
-  // Show feedback section only if booking is checked out
   if (booking.status === 'checked_out') {
     feedbackSection.style.display = '';
     
-    // Check if feedback already exists
     if (booking.feedback) {
-      // Hide form and show that feedback was already submitted
       form.style.display = 'none';
       statusBox.className = 'alert alert-info';
       statusBox.innerHTML = `
@@ -194,7 +188,6 @@ function renderFeedbackSection(booking) {
       `;
       statusBox.classList.remove('d-none');
     } else {
-      // Show form for new feedback
       form.style.display = '';
       statusBox.classList.add('d-none');
       populateRoomOptions(booking.rooms || []);
@@ -340,7 +333,7 @@ async function submitFeedback(e) {
     const data = await res.json();
     if (!res.ok) throw data;
 
-    // Show success message
+    
     const statusBox = document.getElementById('feedbackStatus');
     statusBox.className = 'alert alert-success';
     statusBox.innerHTML = '<i class="fas fa-check-circle me-2"></i>' + (data.message || 'Thank you for your feedback!');

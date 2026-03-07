@@ -22,6 +22,51 @@
   box-shadow: 0 12px 25px rgba(0,0,0,0.15);
 }
 
+.room-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 0;
+  min-height: 280px;
+}
+
+.room-image-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 15px 0 0 15px;
+}
+
+.room-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.room-card:hover .room-image {
+  transform: scale(1.05);
+}
+
+.room-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.room-card:hover .room-image-overlay {
+  opacity: 1;
+}
+
+.room-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .room-image img {
   width: 100%;
   height: 180px;
@@ -48,6 +93,109 @@
   font-size: 1.25rem;
   color: #333;
   margin: 0;
+}
+
+.room-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.room-spec {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.room-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 5px 0;
+  font-size: 0.9rem;
+}
+
+.rating-stars {
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+}
+
+.rating-value {
+  font-weight: 600;
+  color: #333;
+  min-width: 30px;
+}
+
+.review-count {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.room-description {
+  margin: 15px 0;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.room-pricing {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.pricing-info {
+  flex: 1;
+}
+
+.price-label {
+  font-size: 0.75rem;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.price-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #8B5A3C;
+  line-height: 1.2;
+}
+
+.price-period {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #666;
+}
+
+.btn-show-rates {
+  padding: 10px 20px;
+  background-color: #8B5A3C;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-show-rates:hover:not(:disabled) {
+  background-color: #6b4423;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 90, 60, 0.3);
+}
+
+.btn-show-rates:disabled {
+  background-color: #ccc;
+  color: #999;
+  cursor: not-allowed;
 }
 
 .room-price {

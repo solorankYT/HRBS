@@ -210,6 +210,48 @@
             border: 1px solid #e9ecef;
         }
 
+        #feedbackBreakdownContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.feedback-breakdown-item {
+    padding: 8px 0;
+}
+
+.feedback-breakdown-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.feedback-label {
+    font-weight: 500;
+    color: #444;
+}
+
+.feedback-percentage {
+    font-weight: 600;
+    color: #2c7be5;
+}
+
+.feedback-progress {
+    width: 100%;
+    height: 8px;
+    background: #eee;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.feedback-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    border-radius: 20px;
+    transition: width 0.6s ease;
+}
+
         .report-icon {
             width: 40px;
             height: 40px;
@@ -817,29 +859,32 @@
             container.innerHTML = html;
         }
 
-        function populateFeedbackBreakdown(data) {
-            if (!data || !data.feedback || !data.feedback.breakdown) return;
-            
+            function populateFeedbackBreakdown(data) {
+            if (!data?.feedback?.breakdown) return;
+
             const container = document.getElementById('feedbackBreakdownContainer');
             const breakdown = data.feedback.breakdown;
-            
-            let html = '';
-            breakdown.forEach(item => {
+
+            container.innerHTML = breakdown.map(item => {
                 const percentage = item.percentage || 0;
-                html += `
-                    <div class="breakdown-item">
-                        <div class="breakdown-label">
-                            <span>${item.category || item.rating + ' Star'}</span>
-                            <span class="breakdown-percent">${percentage.toFixed(1)}%</span>
+                const label = item.category || `${item.rating} Star`;
+
+                return `
+                    <div class="feedback-breakdown-item">
+                        <div class="feedback-breakdown-header">
+                            <span class="feedback-label">${label}</span>
+                            <span class="feedback-percentage">${percentage.toFixed(1)}%</span>
                         </div>
-                        <div class="breakdown-bar">
-                            <div class="breakdown-fill" style="width: ${percentage}%;"></div>
+
+                        <div class="feedback-progress">
+                            <div 
+                                class="feedback-progress-fill"
+                                style="width:${percentage}%"
+                            ></div>
                         </div>
                     </div>
                 `;
-            });
-            
-            container.innerHTML = html;
+            }).join('');
         }
 
         async function loadFeedbackData() {

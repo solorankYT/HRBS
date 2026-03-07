@@ -180,6 +180,7 @@ protected $feedbackService;
 
                 'rooms' => $booking->rooms->map(function ($br) {
                     return [
+                        'room_id' => $br->room_id,
                         'room_number' => $br->room->room_number,
                         'type' => $br->room->type,
                         'price_per_night' => $br->price_per_night,

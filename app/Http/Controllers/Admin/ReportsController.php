@@ -485,4 +485,37 @@ class ReportsController extends Controller
             'feedbacks' => $feedbacks
         ]);
     }
+
+    /**
+     * Get feedback statistics grouped by room type
+     */
+    public function feedbackByRoomType(): JsonResponse
+    {
+        // Get all feedbacks with their associated bookings and rooms
+        $feedbacks = Feedback::with(['room', 'booking.rooms.room'])->get();
+        
+        $roomStats = $feedbacks
+            ->groupBy(function ($feedback) {
+                // If feedback has direct room association, use that
+                if ($feedback->room) {
+                    return $feedback->room->type;
+                }
+                // If feedback is for a booking but no specific room, we can't group by room type
+                return null;
+            })
+            ->filter() // Remove null keys
+            ->map(function ($feedbacks, $roomType) {
+                return [
+                    'room_type' => $roomType,
+                    'average_rating' => round($feedbacks->avg('rating'), 1),
+                    'total_reviews' => $feedbacks->count(),
+                    'rating_count' => (int)$feedbacks->avg('rating')
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'room_feedback' => $roomStats
+        ]);
+    }
 }

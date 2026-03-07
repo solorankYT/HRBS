@@ -36,4 +36,9 @@ class Booking extends Model
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function feedback()
+    {
+        return $this->hasOne(Feedback::class);
+    }
 }

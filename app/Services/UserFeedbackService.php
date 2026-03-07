@@ -25,7 +25,20 @@ class UserFeedbackService
             ]);
         }
 
+        if (!empty($data['room_id'])) {
+            $roomBelongsToBooking = $booking->rooms()
+                ->where('room_id', $data['room_id'])
+                ->exists();
+
+            if (!$roomBelongsToBooking) {
+                throw ValidationException::withMessages([
+                    'room_id' => 'The selected room is not part of this booking.'
+                ]);
+            }
+        }
+
         return $booking->feedback()->create([
+            'room_id' => $data['room_id'] ?? null,
             'rating' => $data['rating'],
             'comments' => $data['comments'] ?? null,
         ]);

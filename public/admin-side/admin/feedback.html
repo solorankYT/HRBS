@@ -716,6 +716,14 @@
                     </div>
                 </div>
 
+                <!-- Recent Feedback Section -->
+                <div class="reports-section">
+                    <h2 class="section-title">Recent Feedback</h2>
+                    <div id="recentFeedbackContainer">
+                        <p class="text-muted text-center py-4">Loading feedback...</p>
+                    </div>
+                </div>
+
                 <!-- Export Reports Section -->
                 <!-- <div class="reports-section">
                     <h2 class="section-title">Export Reports</h2>
@@ -852,9 +860,75 @@
                 const data = await response.json();
                 populateFeedback(data);
                 populateFeedbackBreakdown(data);
+                fetchRecentFeedback();
             } catch (error) {
                 console.error('Error loading feedback data:', error);
             }
+        }
+
+        async function fetchRecentFeedback() {
+            try {
+                const token = localStorage.getItem('auth_token');
+                const response = await fetch('/api/admin/reports/feedback-records', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    console.error('Failed to fetch feedback records');
+                    return;
+                }
+
+                const data = await response.json();
+                populateRecentFeedback(data.feedbacks || []);
+            } catch (error) {
+                console.error('Error loading feedback records:', error);
+            }
+        }
+
+        function populateRecentFeedback(feedbacks) {
+            const container = document.getElementById('recentFeedbackContainer');
+            
+            if (!feedbacks || feedbacks.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center py-4">No feedback available</p>';
+                return;
+            }
+
+            let html = '<div class="feedback-list">';
+            feedbacks.forEach(feedback => {
+                const stars = Array(5).fill('☆').map((star, i) => 
+                    i < feedback.rating ? '★' : '☆'
+                ).join('');
+                
+                html += `
+                    <div class="feedback-card p-3 mb-3 border rounded" style="background-color: #f8f9fa;">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h6 class="mb-1 fw-bold">${feedback.guest_name}</h6>
+                                <small class="text-muted">Booking: ${feedback.booking_reference}</small>
+                            </div>
+                            <div class="text-end">
+                                <div class="stars mb-1" style="color: #ffc107; font-size: 14px;">
+                                    ${stars}
+                                    <span class="ms-2 text-dark fw-bold">${feedback.rating}/5</span>
+                                </div>
+                                <small class="text-muted d-block">${feedback.submitted_at_formatted}</small>
+                            </div>
+                        </div>
+                        <p class="mb-2" style="color: #666; font-size: 14px;">${feedback.comments || 'No comments'}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                Room: ${feedback.room_name} | Guest Email: ${feedback.guest_email}
+                            </small>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            container.innerHTML = html;
         }
 
         document.addEventListener('DOMContentLoaded', loadFeedbackData);

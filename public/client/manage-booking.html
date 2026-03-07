@@ -269,17 +269,44 @@
           <div id="paymentStatus" class="mt-3 d-none"></div>
         </div>
         
-        <div class="feedback-section">
-          <div class="section-title" style="margin-bottom: 15px;">Send a Message to the Hotel</div>
+        <div class="feedback-section" id="feedbackSection">
+          <div class="section-title" style="margin-bottom: 15px;">Share Your Feedback</div>
           <form id="feedbackForm">
             <div class="mb-3">
-              <label for="feedbackMessage" class="form-label">Your Message</label>
-              <textarea class="form-control" id="feedbackMessage" rows="4" placeholder="Enter your message here..." required></textarea>
+              <label class="form-label">Rating *</label>
+              <div class="feedback-stars mb-2">
+                <input type="hidden" id="feedbackRating" name="rating" value="" required>
+                <div id="starRating" style="font-size: 2rem; letter-spacing: 0.5rem;">
+                  <span class="feedback-star" data-rating="1" style="cursor: pointer; color: #ddd;">★</span>
+                  <span class="feedback-star" data-rating="2" style="cursor: pointer; color: #ddd;">★</span>
+                  <span class="feedback-star" data-rating="3" style="cursor: pointer; color: #ddd;">★</span>
+                  <span class="feedback-star" data-rating="4" style="cursor: pointer; color: #ddd;">★</span>
+                  <span class="feedback-star" data-rating="5" style="cursor: pointer; color: #ddd;">★</span>
+                </div>
+                <small class="text-muted d-block mt-1">Click to select your rating</small>
+              </div>
             </div>
-            <button type="submit" class="btn btn-outline-secondary w-100">
-              <i class="fas fa-paper-plane me-2"></i>Send Message
+
+            <div class="mb-3">
+              <label for="feedbackRoom" class="form-label">Room Feedback For (Optional)</label>
+              <select class="form-select" id="feedbackRoom" name="room_id">
+                <option value="">-- Select a room or leave blank for overall feedback --</option>
+                <div id="roomOptions"></div>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="feedbackComments" class="form-label">Your Feedback *</label>
+              <textarea class="form-control" id="feedbackComments" name="comments" rows="4" placeholder="Share your experience with us..." required></textarea>
+              <small class="text-muted">Maximum 1000 characters</small>
+            </div>
+
+            <button type="submit" class="btn btn-outline-secondary w-100" id="submitFeedbackBtn">
+              <i class="fas fa-paper-plane me-2"></i>Submit Feedback
             </button>
           </form>
+
+          <div id="feedbackStatus" class="mt-3 d-none"></div>
         </div>
 
 

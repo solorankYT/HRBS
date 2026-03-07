@@ -452,4 +452,37 @@ class ReportsController extends Controller
             'breakdown' => $ratingDistribution
         ]);
     }
+
+    /**
+     * Get individual feedback records for detailed view
+     */
+    public function feedbackRecords(): JsonResponse
+    {
+        $feedbacks = Feedback::with(['booking.guests', 'room'])
+            ->orderBy('created_at', 'desc')
+            ->limit(50)
+            ->get()
+            ->map(function ($feedback) {
+                $guest = $feedback->booking->guests->first();
+                return [
+                    'id' => $feedback->id,
+                    'booking_id' => $feedback->booking_id,
+                    'booking_reference' => $feedback->booking->reference_number,
+                    'rating' => $feedback->rating,
+                    'comments' => $feedback->comments,
+                    'room_id' => $feedback->room_id,
+                    'room_name' => $feedback->room ? $feedback->room->room_number : 'N/A',
+                    'guest_name' => $guest ? $guest->name : 'Unknown Guest',
+                    'guest_email' => $guest ? $guest->email : 'N/A',
+                    'check_in' => $feedback->booking->check_in,
+                    'check_out' => $feedback->booking->check_out,
+                    'submitted_at' => $feedback->created_at->format('Y-m-d H:i:s'),
+                    'submitted_at_formatted' => $feedback->created_at->format('M d, Y \a\t g:i A')
+                ];
+            });
+
+        return response()->json([
+            'feedbacks' => $feedbacks
+        ]);
+    }
 }

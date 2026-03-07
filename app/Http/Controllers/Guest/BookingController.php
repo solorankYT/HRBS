@@ -138,7 +138,7 @@ protected $feedbackService;
                 return response()->json(['message' => 'Email or phone is required'], 422);
             }
 
-            $booking = Booking::with(['rooms.room', 'guests'])
+            $booking = Booking::with(['rooms.room', 'guests', 'feedback'])
                 ->where('reference_number', $reference)
                 ->first();
 
@@ -165,7 +165,13 @@ protected $feedbackService;
                 'guests_count' => $booking->number_of_guests,
                 'total' => $booking->total_amount,
                 'payment_status' => $booking->payment_status ?? 'pending',
-
+                'feedback' => $booking->feedback ? [
+                    'id' => $booking->feedback->id,
+                    'rating' => $booking->feedback->rating,
+                    'comments' => $booking->feedback->comments,
+                    'room_id' => $booking->feedback->room_id,
+                    'created_at' => $booking->feedback->created_at
+                ] : null,
 
                 'primary_guest' => [
                     'name' => $primaryGuest->name,
@@ -385,13 +391,14 @@ public function rebook(Request $request, $reference)
   public function submitFeedback(Request $request, $reference)
     {
         $request->validate([
+            'room_id' => 'nullable|integer|exists:rooms,id',
             'rating' => 'required|integer|min:1|max:5',
             'comments' => 'nullable|string|max:1000',
         ]);
 
         $booking = Booking::where('reference_number', $reference)->firstOrFail();
 
-        $this->feedbackService->createFeedback($booking, $request->only(['rating', 'comments']));
+        $this->feedbackService->createFeedback($booking, $request->only(['room_id', 'rating', 'comments']));
 
         return response()->json([
             'message' => 'Thank you for your feedback!'

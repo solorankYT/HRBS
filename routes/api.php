@@ -37,6 +37,9 @@ Route::prefix('guest')->middleware('api')->group(function () {
     Route::post('/bookings/{reference}/payment-proof', [GuestBookingController::class, 'submitPaymentProof']);
     Route::get('/bookings/success/{reference}', [GuestBookingController::class, 'bookingSuccess']);
     
+    //feedback
+    Route::post('/bookings/{reference}/submitFeedback', [GuestBookingController::class, 'submitFeedback']);
+    
     });
 
 Route::prefix('receptionist')->middleware('api')->group(function () {
@@ -58,6 +61,7 @@ Route::prefix('admin')->middleware('api')->group(function () {
     Route::get('/reports/occupancy', [ReportsController::class, 'occupancyReport']);
     Route::get('/reports/reservations', [ReportsController::class, 'reservationReport']);
     Route::get('/reports/feedback', [ReportsController::class, 'feedbackReport']);
+    Route::get('/reports/feedback-records', [ReportsController::class, 'feedbackRecords']);
     Route::get('/reports/dashboard', [ReportsController::class, 'dashboard']);
 });
 
